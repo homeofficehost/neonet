@@ -13,12 +13,12 @@
   become: true
   tasks:
     - name: send completion alert
-      include_tasks: playbooks/send_completion_alert.yml
+      include_tasks: linux/playbooks/send_completion_alert.yml
       when:
         - task_failed is not defined
 
     - name: send failure alert
-      include_tasks: playbooks/send_failure_alert.yml
+      include_tasks: linux/playbooks/send_failure_alert.yml
       when:
         - task_failed is defined
         - task_failed == true

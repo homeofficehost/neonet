@@ -6,10 +6,12 @@
 
 - name: ansible setup | install required packages
   tags: ansible,ansible-setup,packages
+  when: ansible_distribution != "Darwin"
   package:
     name:
       - "{{ dconf_package }}"
       - "{{ python_psutil_package }}"
+  ignore_errors: true
 
 # Note: For Arch, the requirement is met by a dependency of systemd, only necessary on Debian-based
 - name: ansible setup | install acl package
@@ -22,16 +24,26 @@
   tags: ansible,ansible-setup
   file:
     path: "/var/log/ansible.log"
-    owner: velociraptor
-    group: users
+    owner: "{{ username }}"
+    group: "{{ ansible_user_gid | default(20) }}"
     mode: 0664
     state: touch
   changed_when: False
 
 - name: ansible setup | add logrotate config for ansible log file
   tags: ansible-setup
+  when: ansible_distribution != "Darwin"
   copy:
-    src: files/ansible_setup/logrotate
+    content: |
+      /var/log/ansible.log {
+          daily
+          rotate 7
+          compress
+          delaycompress
+          missingok
+          notifempty
+          create 0644 {{ username }} {{ ansible_user_gid | default(20) }}
+      }
     dest: /etc/logrotate.d/ansible
     owner: root
     group: root

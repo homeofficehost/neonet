@@ -11,7 +11,7 @@
   tags: cron
   cron:
     name: "ansible provision"
-    user: velociraptor
+    user: "{{ username }}"
     hour: "{{ ansible_cron_hour | default('*') }}"
     minute: "{{ ansible_cron_minute | default('*/30') }}"
     job: "{ date; /usr/local/bin/provision; RC=$?; date; echo \"Exit code: $RC\"; } >> /var/log/ansible_provision.log 2>&1 && if [ $RC -eq 0 ]; then echo $(date) > /var/log/ansible_provision_last_run.txt; fi"
@@ -29,6 +29,6 @@
   tags: cron
   cron:
     name: "ansible refresh at boot"
-    user: velociraptor
+    user: "{{ username }}"
     special_time: reboot
     job: "/bin/rm -rf /Users/{{ username }}/.ansible ~/.ansible"

@@ -10,13 +10,19 @@ else
     echo "sudo is not installed or user does not have sudo privileges"
 fi
 
-if [ ! -f ~/.ssh/tgroch_id_rsa ]; then
-    chown $LOCAL_USER:$LOCAL_USER ~/.ssh/tgroch_id_rsa
+# Ensure .ssh directory exists with correct permissions
+if [ ! -d ~/.ssh ]; then
+    mkdir -p ~/.ssh
     chown $LOCAL_USER:$LOCAL_USER ~/.ssh
-
     chmod 700 ~/.ssh
+    echo "Created ~/.ssh directory"
+fi
+
+# Set correct permissions on SSH key if it exists
+if [ -f ~/.ssh/tgroch_id_rsa ]; then
+    chown $LOCAL_USER:$LOCAL_USER ~/.ssh/tgroch_id_rsa
     chmod 600 ~/.ssh/tgroch_id_rsa
-    ssh-add ~/.ssh/tgroch_id_rsa
+    ssh-add ~/.ssh/tgroch_id_rsa 2>/dev/null || echo "Note: Could not add SSH key to agent"
 fi
 
 # Clone password store
@@ -81,4 +87,11 @@ sudo touch /var/log/ansible.log
 sudo chown $USER:$USER /var/log/ansible.log
 
 # Restore ansible
-ansible-pull --vault-password-file ~/.vault_key --url https://github.com/homeofficehost/dotfiles --limit "$(hostname -s).local" --checkout master
+VAULT_KEY="${HOME}/.vault_key"
+if [ -f "$VAULT_KEY" ]; then
+    echo "Running ansible-pull with vault..."
+    ansible-pull --vault-password-file "$VAULT_KEY" --url https://github.com/homeofficehost/dotfiles --limit "$(hostname -s).local" --checkout master
+else
+    echo "Warning: ~/.vault_key not found, running without vault..."
+    ansible-pull --url https://github.com/homeofficehost/dotfiles --limit "$(hostname -s).local" --checkout master
+fi
