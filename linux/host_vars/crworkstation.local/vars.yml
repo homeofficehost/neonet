@@ -1,5 +1,0 @@
----
-enable_dnscrypt_proxy:             false
-site_upstream: https://gitlab.com/camilasrody/my-awesome-portfolio.git
-blog_upstream: https://gitlab.com/camilasrody/my-awesome-portfolio.git
-healthcheck_uuid: f12b6cc7-91fc-4cdf-8a67-c5028052f021

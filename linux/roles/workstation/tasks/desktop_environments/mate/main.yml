@@ -1,9 +1,0 @@
----
-
-- include_tasks: appearance.yml
-- include_tasks: caja.yml
-# - include_tasks: keybindings.yml
-- include_tasks: packages.yml
-- include_tasks: peripherals.yml
-- include_tasks: terminal.yml
-- include_tasks: workspace_settings.yml

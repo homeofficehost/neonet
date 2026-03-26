@@ -1,4 +1,0 @@
-ublock-origin
-adblock-plus
-read-aloud
-vue-js-devtools

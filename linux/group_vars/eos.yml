@@ -1,2 +1,0 @@
-ansible_user: tg
-ansible_become: yes
