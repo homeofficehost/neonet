@@ -980,7 +980,7 @@ Max Concurrent: 6 (Wave 2)
 
 ---
 
-- [ ] 14. Limpar e reduzir ansible.cfg (519 → <100 linhas)
+- [x] 14. Limpar e reduzir ansible.cfg (519 → <100 linhas)
 
   **What to do**:
   - Reduzir `ansible.cfg` de 519 para <100 linhas:
