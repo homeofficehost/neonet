@@ -1,23 +1,17 @@
-# tap "AdoptOpenJDK/openjdk"
-tap "dart-lang/dart"
-tap "heroku/brew"
-tap "homebrew/bundle"
+# tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/core"
 tap "homebrew/services"
 tap "homebrew/cask-versions"
-tap "puma/puma"
-tap "moncho/dry"
-tap "simplydanny/pass-extensions"
-tap "amar1729/formulae"
-tap "Matt-Gleich/homebrew-taps"
 tap "jesseduffield/lazygit/lazygit"
+tap "blacktop/tap"
 ## Shell
-# Encrypted pass-through FUSE file system
-brew "encfs"
+brew "zsh"
+brew "micro"
 # Static analysis and lint tool, for (ba)sh scripts
 brew "shellcheck"
+brew "yamllint"
 # Update of iperf: measures TCP, UDP, and SCTP bandwidth
 brew "iperf3"
 # Monitor a directory for changes and run a shell command. Req by gitwatch
@@ -82,6 +76,14 @@ brew "rg"
 # Utility for directing compilation
 brew "make"
 brew "cmake"
+# Build tools for rbenv/ruby
+brew "autoconf"
+brew "automake"
+brew "gmp"
+brew "libffi"
+brew "libyaml"
+brew "openssl@3"
+brew "zlib"
 # GNU Emacs text editor
 brew "emacs"
 # Free (GNU) replacement for the Pico text editor
@@ -135,6 +137,26 @@ brew "watch"
 brew "awscli"
 # Mac App Store CLI: https://github.com/mas-cli/mas
 brew "mas"
+# Ansible - automation tool
+brew "ansible"
+brew "ansible-lint"
+# duti - default apps for file types
+brew "duti"
+# yq - YAML processor
+brew "yq"
+# libpq - PostgreSQL library
+brew "libpq"
+# unbound - DNS resolver
+brew "unbound"
+# duf - disk usage
+brew "duf"
+# btop, ctop - system monitors
+brew "btop"
+brew "ctop"
+# tidy-html5 - HTML validator
+brew "tidy-html5"
+# wifi-password - get WiFi password
+brew "wifi-password"
 
 ## Languages
 # Safe, concurrent, practical language
@@ -143,13 +165,24 @@ brew "rust"
 brew "python3"
 # Python version management
 brew "pyenv"
+# pipx - Python package runner
+brew "pipx"
+# uv - Modern Python package manager
+brew "uv"
+# pre-commit hooks
+brew "pre-commit"
+# Python 3.14
+brew "python@3.14"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
 # Highly capable, feature-rich programming language
 # Platform built on V8 to build network applications
 brew "node"
+# Node Version Manager
+brew "nvm"
 # Ruby version manager
 brew "rbenv"
+brew "ruby-build"
 brew "ruby"
 
 ## Servers
@@ -454,6 +487,40 @@ brew "npm"
 brew "yarn"
 # Highest-quality GIF encoder based on pngquant
 brew "gifski"
+
+## Dev Tools
+brew "git"
+cask "github"
+cask "chromedriver"
+cask "google-chrome"
+
+## Productivity
+cask "obsidian"
+cask "scrivener"
+cask "timing"
+cask "little-snitch"
+cask "maestral"
+cask "netnewswire"
+
+## Security
+cask "bitwarden"
+cask "authy"
+cask "arq"
+
+## Utilities
+cask "cyberduck"
+cask "fujitsu-scansnap-home"
+cask "hazel"
+cask "maccy"
+cask "macfuse"
+cask "superduper"
+cask "tabula"
+cask "utm"
+cask "microsoft-remote-desktop"
+
+## Chat
+cask "element"
+
 #############################
 cask "keyboard-maestro"
 cask "fork"
@@ -561,3 +628,15 @@ cask "font-hack-nerd-font"
 # mas "Xcode", id: 497799835 # req Mac OS X > 10.14.4
 # mas "Pages", id: 409201541
 # mas "", id:1451177988
+
+## QuickLook Plugins
+cask "qlcolorcode"
+cask "qlimagesize"
+cask "qlmarkdown"
+cask "qlprettypatch"
+cask "qlstephen"
+cask "qlvideo"
+cask "quicklook-csv"
+cask "quicklook-json"
+cask "suspicious-package"
+cask "webpquicklook"
