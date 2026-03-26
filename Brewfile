@@ -498,9 +498,20 @@ brew "gifski"
 
 ## Dev Tools
 brew "git"
+brew "gh"
+brew "neovim"
+brew "yazi"
+brew "fastfetch"
+brew "asitop"
+brew "oco"
+brew "skhd"
+brew "yabai"
+brew "sketchybar"
 cask "github"
 cask "chromedriver"
 cask "google-chrome"
+cask "kitty"
+cask "hammerspoon"
 
 ## Productivity
 cask "obsidian"
