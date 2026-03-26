@@ -1,0 +1,32 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    ansible \
+    git \
+    curl \
+    sudo \
+    python3-pip \
+    software-properties-common \
+    ssh \
+    && rm -rf /var/lib/apt/lists/*
+
+# Criar usuário de teste
+RUN useradd -m -s /bin/bash tg && \
+    echo "tg ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
+    mkdir -p /home/tg/.ssh && \
+    chmod 700 /home/tg/.ssh && \
+    chown -R tg:tg /home/tg
+
+WORKDIR /home/tg/dotfiles
+COPY --chown=tg:tg . .
+
+USER tg
+
+# Criar inventory de teste
+RUN echo "[workstation]" > test_hosts && \
+    echo "localhost ansible_connection=local ansible_user=tg" >> test_hosts && \
+    echo "test" > ~/.vault_key
+
+CMD ["bash"]

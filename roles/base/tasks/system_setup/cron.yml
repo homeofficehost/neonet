@@ -8,7 +8,6 @@
 - name: system setup | cron | schedule automatic ansible provisioning
   tags: cron
   when: ansible_distribution != "Darwin"
-  tags: cron
   cron:
     name: "ansible provision"
     user: "{{ username }}"
