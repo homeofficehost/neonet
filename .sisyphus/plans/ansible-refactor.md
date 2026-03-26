@@ -1101,7 +1101,7 @@ Max Concurrent: 6 (Wave 2)
 
 ---
 
-- [ ] 16. Corrigir bootstrap.sh
+- [x] 16. Corrigir bootstrap.sh
 
   **What to do**:
   - Corrigir `bootstrap.sh`:
@@ -1157,7 +1157,7 @@ Max Concurrent: 6 (Wave 2)
 
 ---
 
-- [ ] 17. Atualizar Brewfile syntax + revisão de pacotes
+- [x] 17. Atualizar Brewfile syntax + revisão de pacotes
 
   **What to do**:
   - Atualizar syntax no `Brewfile`:
@@ -1235,7 +1235,7 @@ Max Concurrent: 6 (Wave 2)
 
 ---
 
-- [ ] 18. Atualizar update.sh syntax brew
+- [x] 18. Atualizar update.sh syntax brew
 
   **What to do**:
   - Corrigir `update.sh`:
@@ -1289,7 +1289,7 @@ Max Concurrent: 6 (Wave 2)
 
 ---
 
-- [ ] 19. Limpar tweak-system-root.sh
+- [x] 19. Limpar tweak-system-root.sh
 
   **What to do**:
   - Limpar `tweak-system-root.sh`:

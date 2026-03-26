@@ -57,8 +57,6 @@ if ! command -v ansible-pull &> /dev/null; then
     fi
 fi
 
-sudo pacman -S --noconfirm xclip
-
 # Update system
 if command -v brew &> /dev/null; then
     echo "Updating Homebrew..."
@@ -83,4 +81,4 @@ sudo touch /var/log/ansible.log
 sudo chown $USER:$USER /var/log/ansible.log
 
 # Restore ansible
-ansible-pull --vault-password-file ~/.vault_key --url https://github.com/homeofficehost/dotfiles --limit "$(cat /etc/hostname).local" --checkout master
+ansible-pull --vault-password-file ~/.vault_key --url https://github.com/homeofficehost/dotfiles --limit "$(hostname -s).local" --checkout master

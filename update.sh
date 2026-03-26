@@ -34,7 +34,7 @@ BEAUTIFUL_LOG_FILE="${CURRENT_LOG_FILE}.png"
 brew update 2>&1 >/dev/null;			code=$?; [[ code -ne 0 ]] && echo "brew update; exit code was ${code}\n"
 # brew upgrade 2>&1 >/dev/null;			code=$?; [[ code -ne 0 ]] && echo "brew upgrade; exit code was ${code}\n"
 
-casks_outdated=`brew cask outdated --greedy --verbose | grep -v '(latest)' | cut -d' ' -f1`
+casks_outdated=`brew outdated --cask --greedy --verbose | grep -v '(latest)' | cut -d' ' -f1`
 delete=(webstorm phpstorm intellij-idea pycharm metasploit)
 for del in ${delete[@]}
 do
@@ -43,7 +43,7 @@ done
 for cask_outdated in ${casks_outdated[@]}
 do
    # brew cask upgrade `echo $cask_outdated` 2>&1 >/dev/null;		code=$?; [[ code -ne 0 ]] && echo "brew upgrade cask outdated: ${cask_outdated}; exit code was ${code}\n"
-   brew cask upgrade `echo $cask_outdated`
+   brew upgrade --cask `echo $cask_outdated`
    code=$?; [[ code -ne 0 ]] && echo "brew upgrade cask outdated: ${cask_outdated}; exit code was ${code}\n"
 done
 

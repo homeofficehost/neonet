@@ -124,6 +124,7 @@ brew "docker-machine-parallels"
 # a Docker manager for the terminal
 brew "dry"
 # Cross platform, open source .NET development framework
+brew "mono"
 brew "todo-txt"
 brew "tree"
 brew "ttyrec"
@@ -146,6 +147,7 @@ brew "pyenv"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
 # Highly capable, feature-rich programming language
+brew "perl@5.18"
 # Platform built on V8 to build network applications
 brew "node"
 # Ruby version manager
@@ -179,6 +181,7 @@ brew "fontconfig"
 # Graph visualization software from AT&T and Bell Labs
 brew 'graphviz'
 # Terminal based YouTube player and downloader
+brew "mps-youtube"
 # Media player based on MPlayer and mplayer2
 brew "mpv"
 # UNIX movie player
@@ -272,12 +275,14 @@ brew "wireguard-tools"
 # Featureful UNIX password cracker
 brew "john"
 # Intercept, modify, replay, save HTTP/S traffic
+brew "mitmproxy"
 # Swiss army knife for network attacks and monitoring
 brew "bettercap"
 # SSL manipulation tools, \`mitmproxy --host\` runs on 8080
 # Man-in-the-middle attacks against SSL encrypted network connections
 brew "sslsplit"
 # Intercept, modify, replay, save HTTP/S traffic
+brew "mitmproxy"
 # DNS benchmark utility
 brew "namebench"
 # Graphical network analyzer and capture tool
@@ -467,6 +472,7 @@ cask "meld"
 cask "unetbootin"
 cask "balenaetcher"
 cask "brave-browser"
+cask "beaker-browser"
 cask "appcleaner"
 cask "ccleaner"
 cask "cryptomator"
@@ -509,10 +515,13 @@ cask "rocket-chat"
 cask "tweet-tray"
 cask "discord"
 cask "telegram"
+cask "robo-3t"
+cask "pibakery"
 cask "sdformatter"
 cask "dbeaver-community"
 cask "sequel-pro"
 # nosqlbooster-for-mongodb
+cask "nosqlbooster-for-mongodb"
 cask "winds"
 cask "postico"
 cask "spectacle"
@@ -537,10 +546,12 @@ cask "zettlr"
 cask "typora"
 cask "vnc-viewer"
 # Free instant messaging that connect to AIM, XMPP (Jabber), ICQ, IRC and more
+cask "adium"
 # Japanese text editor for macOS
 cask "mi"
 cask "oversight"
 # easy to use mac osx image editing application for the rest of us
+cask "seashore"
 cask "transmit-disk"
 cask "karabiner-elements"
 # cask "gpg-suite"
