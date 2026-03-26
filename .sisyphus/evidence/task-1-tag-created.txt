@@ -1,6 +1,0 @@
-Task 1: Git Backup Tag Created
-
-Tag: pre-macos-refactor
-Commit: 82ccbe056ee2961f3de29678978cd0f3bac6d0a4
-HEAD: b65fb27083819b21743f796820f88624f7a8a3f5
-Match: NO
