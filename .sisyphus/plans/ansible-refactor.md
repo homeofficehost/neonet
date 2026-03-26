@@ -1349,7 +1349,7 @@ Max Concurrent: 6 (Wave 2)
 
 ---
 
-- [ ] 20. Validação final — dry-run + relatório preliminar
+- [x] 20. Validação final — dry-run + relatório preliminar
 
   **What to do**:
   - Executar validações finais:
