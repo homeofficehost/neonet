@@ -20,7 +20,7 @@
   # - import_tasks: system_setup/tweaks.yml
 
   ## install software
-  - import_tasks: software/packages_pacman.yml
+  # - import_tasks: software/packages_pacman.yml
   - import_tasks: software/browser_extensions.yml
 
   rescue:
