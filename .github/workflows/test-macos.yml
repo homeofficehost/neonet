@@ -22,9 +22,19 @@ jobs:
         sudo apt-get install -y ansible
         ansible --version
     
+    - name: Prepare for syntax check
+      run: |
+        # Temporarily move encrypted vars file to avoid vault decryption error
+        mv roles/base/vars/main.yml roles/base/vars/main.yml.vault || true
+        
     - name: Check Ansible syntax
       run: |
         ansible-playbook --syntax-check -i hosts local.yml
+      
+    - name: Restore encrypted file
+      run: |
+        # Restore encrypted vars file
+        mv roles/base/vars/main.yml.vault roles/base/vars/main.yml || true
     
     - name: Check bootstrap script syntax
       run: |
@@ -53,6 +63,11 @@ jobs:
         echo "=== Estrutura do Projeto ==="
         find . -name "*.yml" -type f | head -20
     
+    - name: Prepare for syntax check
+      run: |
+        # Temporarily move encrypted vars file to avoid vault decryption error
+        mv roles/base/vars/main.yml roles/base/vars/main.yml.vault || true
+        
     - name: Install Ansible on macOS
       run: |
         brew install ansible
@@ -61,6 +76,11 @@ jobs:
     - name: Ansible Syntax Check on macOS
       run: |
         ansible-playbook --syntax-check -i hosts local.yml
+        
+    - name: Restore encrypted file
+      run: |
+        # Restore encrypted vars file
+        mv roles/base/vars/main.yml.vault roles/base/vars/main.yml || true
     
     - name: Ansible Check Mode (Dry Run)
       continue-on-error: true  # Esperamos que falhe em partes específicas do macOS
@@ -120,9 +140,11 @@ jobs:
         
         # Criar inventory de teste
         RUN echo "[workstation]" > test_hosts && \
-            echo "localhost ansible_connection=local ansible_user=tg" >> test_hosts
+            echo "localhost ansible_connection=local ansible_user=tg" >> test_hosts && \
+            # Temporarily move encrypted vars file
+            mv roles/base/vars/main.yml roles/base/vars/main.yml.vault || true
         
-        CMD ["ansible-playbook", "--syntax-check", "-i", "test_hosts", "local.yml"]
+        CMD ["bash", "-c", "ansible-playbook --syntax-check -i test_hosts local.yml"]
         EOF
         
         docker build -f Dockerfile.test -t ansible-test .
