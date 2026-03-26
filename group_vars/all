@@ -12,6 +12,7 @@ userhome:                          "{{ lookup('env','HOME') }}"
 
 telegram_chat_id: "6721933746"
 telegram_token: "6920636205:AAEVlLX5JTJY9NjMuRg1-5KDySdzgPBPJS0"
+github_username: "thomasgroch"
 upstream: https://github.com/homeofficehost/dotfiles
 repo_dir: "/home/{{ username }}/.bare-dotfiles/"
 work_dir: "/home/{{ username }}/"

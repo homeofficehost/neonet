@@ -1,0 +1,25 @@
+---
+- name: users | download SSH keys from GitHub
+  tags: dotfiles,ssh,ssh-keys,users,github
+  block:
+    - name: users | fetch SSH keys from GitHub API
+      uri:
+        url: "https://api.github.com/users/{{ github_username }}/keys"
+        method: GET
+        return_content: yes
+        status_code: 200
+      register: github_keys
+      changed_when: false
+
+    - name: users | add GitHub SSH keys to authorized_keys
+      authorized_key:
+        user: "{{ username }}"
+        key: "{{ item.key }}"
+        comment: "{{ github_username }}@github.com"
+      loop: "{{ github_keys.json }}"
+      when: github_keys.json is defined and github_keys.json | length > 0
+
+  rescue:
+    - name: users | warn if GitHub keys fetch failed
+      debug:
+        msg: "Could not fetch SSH keys from GitHub for user {{ github_username }}. Skipping."
