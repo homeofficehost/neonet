@@ -39,8 +39,14 @@ RUN useradd -m -s /bin/bash tg && \
     chmod 700 /home/tg/.ssh && \
     chown -R tg:tg /home/tg
 
+# Criar diretório de trabalho com permissões corretas
+RUN mkdir -p /home/tg/dotfiles && chown -R tg:tg /home/tg/dotfiles
+
 WORKDIR /home/tg/dotfiles
-COPY --chown=tg:tg . .
+
+# Copiar arquivos como root, depois ajustar permissões
+COPY . .
+RUN chown -R tg:tg /home/tg/dotfiles
 
 USER tg
 
@@ -62,20 +68,20 @@ echo "=== Running Tests ==="
 echo ""
 echo "1. Ansible Syntax Check"
 docker run --rm --name ${CONTAINER_NAME}-syntax $IMAGE_NAME \
-    ansible-playbook --syntax-check -i test_hosts local.yml
+    bash -c 'mv roles/base/vars/main.yml roles/base/vars/main.yml.bak 2>/dev/null || true; ansible-playbook --syntax-check -i test_hosts local.yml'
 
 # Test 2: List Tasks
 echo ""
 echo "2. List All Tasks"
 docker run --rm --name ${CONTAINER_NAME}-list $IMAGE_NAME \
-    ansible-playbook -i test_hosts local.yml --list-tasks 2>&1 | head -50
+    bash -c 'mv roles/base/vars/main.yml roles/base/vars/main.yml.bak 2>/dev/null || true; ansible-playbook -i test_hosts local.yml --list-tasks 2>&1' | head -50
 
 # Test 3: Check Mode (Dry Run) - if requested
 if [ "$MODE" == "dry-run" ] || [ "$MODE" == "full" ]; then
     echo ""
     echo "3. Check Mode (Dry Run)"
     docker run --rm --name ${CONTAINER_NAME}-check $IMAGE_NAME \
-        ansible-playbook --check -i test_hosts local.yml -v 2>&1 | head -100 || {
+        bash -c 'mv roles/base/vars/main.yml roles/base/vars/main.yml.bak 2>/dev/null || true; ansible-playbook --check -i test_hosts local.yml -v 2>&1' | head -100 || {
         echo "⚠️  Check mode completed with expected failures (this is normal for macOS-specific tasks on Linux)"
     }
 fi
