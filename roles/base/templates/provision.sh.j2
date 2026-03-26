@@ -5,7 +5,7 @@ ANSIBLEUSER="velociraptor"
 BRANCH="{{ branch | default('master') }}"
 LOGFILE="/var/log/ansible.log"
 REPO="{{ upstream | default('https://github.com/homeofficehost/dotfiles') }}"
-COMMON_OPTS="--vault-password-file /home/${ANSIBLEUSER}/.vault_key --url $REPO --limit $(cat /etc/hostname).local --checkout $BRANCH"
+COMMON_OPTS="--vault-password-file /Users/${ANSIBLEUSER}/.vault_key --url $REPO --limit $(hostname -s).local --checkout $BRANCH"
 
 if pgrep -f ansible-pull > /dev/null; then
   printf "\n$(date +"%Y-%m-%d %H:%M:%S") A running ansible-pull process was found.\nExiting.\n" | tee -a "$LOGFILE"

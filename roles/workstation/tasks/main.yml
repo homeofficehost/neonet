@@ -7,12 +7,16 @@
   ## User configs
   - import_tasks: "users/user.yml"
 
-  ## desktop environments
+  ## desktop environments (Linux only)
   - include_tasks: desktop_environments/mate/main.yml
-    when: mate is defined and mate == true
+    when:
+      - mate is defined and mate == true
+      - ansible_distribution != "Darwin"
 
   - include_tasks: desktop_environments/gnome/main.yml
-    when: gnome is defined and gnome == true
+    when:
+      - gnome is defined and gnome == true
+      - ansible_distribution != "Darwin"
 
   ## system setup
   # - import_tasks: system_setup/autofs.yml

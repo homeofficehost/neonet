@@ -5,15 +5,9 @@
       - "{{ cron_package }}"
     state: latest
 
-- name: system setup | cron | start and enable cronie daemon
-  tags: cron
-  service:
-    name: cronie
-    state: started
-    enabled: true
-  when: ansible_distribution == "Archlinux"
-
 - name: system setup | cron | schedule automatic ansible provisioning
+  tags: cron
+  when: ansible_distribution != "Darwin"
   tags: cron
   cron:
     name: "ansible provision"
@@ -37,4 +31,4 @@
     name: "ansible refresh at boot"
     user: velociraptor
     special_time: reboot
-    job: "/bin/rm -rf /home/{{ username }}/.ansible ~/.ansible"
+    job: "/bin/rm -rf /Users/{{ username }}/.ansible ~/.ansible"

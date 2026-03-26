@@ -776,7 +776,7 @@ Max Concurrent: 6 (Wave 2)
 
 ---
 
-- [ ] 11. Adaptar roles/base para macOS (Darwin vars)
+- [x] 11. Adaptar roles/base para macOS (Darwin vars)
 
   **What to do**:
   - Criar `roles/base/vars/Darwin.yml` com variáveis macOS:
@@ -866,7 +866,7 @@ Max Concurrent: 6 (Wave 2)
 
 ---
 
-- [ ] 12. Adaptar roles/workstation para macOS (Darwin vars)
+- [x] 12. Adaptar roles/workstation para macOS (Darwin vars)
 
   **What to do**:
   - Criar `roles/workstation/vars/Darwin.yml` com variáveis macOS:
@@ -928,7 +928,7 @@ Max Concurrent: 6 (Wave 2)
 
 ---
 
-- [ ] 13. Adaptar provision.sh.j2 para macOS
+- [x] 13. Adaptar provision.sh.j2 para macOS
 
   **What to do**:
   - Atualizar `roles/base/templates/provision.sh.j2`:
@@ -1054,7 +1054,7 @@ Max Concurrent: 6 (Wave 2)
 
 ---
 
-- [ ] 15. Adaptar cron setup para macOS
+- [x] 15. Adaptar cron setup para macOS
 
   **What to do**:
   - Adaptar `roles/base/tasks/system_setup/cron.yml` para macOS:
