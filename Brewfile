@@ -9,6 +9,14 @@ tap "blacktop/tap"
 ## Shell
 brew "zsh"
 brew "micro"
+# Update of iperf: measures TCP, UDP, and SCTP bandwidth
+brew "iperf3"
+# Monitor a directory for changes and run a shell command
+brew "fswatch"
+# Program that can automate interactive applications
+brew "expect"
+# Clone of ls with colorful output, file type icons
+brew "lsd"
 # Static analysis and lint tool, for (ba)sh scripts
 brew "shellcheck"
 brew "yamllint"
