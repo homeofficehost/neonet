@@ -11,7 +11,8 @@
     "ses_2d7bf053bfferG5KI72NQFylpf",
     "ses_2d7bec246ffeD4wg0EMbniiBKT",
     "ses_2d7be7730ffe6rgKKJJZsVV3RW",
-    "ses_2d7be9a41ffeCzWKly7TyOtW3H"
+    "ses_2d7be9a41ffeCzWKly7TyOtW3H",
+    "ses_2d7bab413ffe0UGifIgveSetWI"
   ],
   "plan_name": "ansible-refactor",
   "agent": "atlas",
@@ -33,6 +34,15 @@
       "agent": "Sisyphus-Junior",
       "category": "quick",
       "updated_at": "2026-03-26T03:49:49.448Z"
+    },
+    "todo:10": {
+      "task_key": "todo:10",
+      "task_label": "10",
+      "task_title": "Simplificar local.yml para single-host macOS",
+      "session_id": "ses_2d7bab413ffe0UGifIgveSetWI",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-03-26T03:53:01.762Z"
     }
   }
 }

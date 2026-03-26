@@ -3,63 +3,22 @@
   connection: local
   tags: always
   become: true
-
-  # tasks to complete before running roles
-  pre_tasks:
-    - name: pre-run | update repositories equivalent of "pacman -Syu"
-      tags: always
-      pacman:
-        update_cache: yes
-        upgrade: yes
-      changed_when: False
-      when: ansible_distribution == "Archlinux"
-
-    - name: pre-run | update package cache (debian, etc)
-      tags: always
-      apt: update_cache=yes
-      changed_when: False
-      when: ansible_distribution in ["Debian", "Ubuntu"]
-
-# run roles
-- hosts: all
-  tags: base
-  become: true
   roles:
     - base
-
-- hosts: workstation
-  tags: workstation
-  become: true
-  roles:
     - workstation
 
-# end of run cleanup and reporting
-- hosts: all
+- hosts: localhost
+  connection: local
+  tags: always
   become: true
   tasks:
-  - name: cleanup package cache (debian and ubuntu)
-    tags: always
-    apt:
-      autoclean: yes
-    changed_when: false
-    when: ansible_distribution in ["Debian", "Pop!_OS", "Ubuntu"]
+    - name: send completion alert
+      include_tasks: playbooks/send_completion_alert.yml
+      when:
+        - task_failed is not defined
 
-  - name: autoremove orphan packages (debian and ubuntu)
-    tags: always
-    apt:
-      autoremove: yes
-      purge: yes
-    when: ansible_distribution in ["Debian", "Pop!_OS", "Ubuntu"]
-
-  - name: send completion alert
-    include_tasks: playbooks/send_completion_alert.yml
-    tags: always
-    when:
-      - task_failed is not defined
-
-  - name: send failure alert
-    include_tasks: playbooks/send_failure_alert.yml
-    tags: always
-    when:
-      - task_failed is defined
-      - task_failed == true
+    - name: send failure alert
+      include_tasks: playbooks/send_failure_alert.yml
+      when:
+        - task_failed is defined
+        - task_failed == true

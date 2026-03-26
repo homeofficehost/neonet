@@ -714,7 +714,7 @@ Max Concurrent: 6 (Wave 2)
 
 ---
 
-- [ ] 10. Simplificar local.yml para single-host macOS
+- [x] 10. Simplificar local.yml para single-host macOS
 
   **What to do**:
   - Reescrever `local.yml` para:
