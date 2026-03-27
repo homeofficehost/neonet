@@ -13,7 +13,7 @@
     groups: "{{ username }},users,{{ sudo_group }}"
     state: present
     comment: "user"
-    password: "{{ user_password | password_hash('sha512') }}"
+    password: "{{ lookup('community.general.bitwarden', 'user_password', field='password') | password_hash('sha512') }}"
     shell: /usr/bin/zsh
     # shell: /usr/bin/nologin
 
