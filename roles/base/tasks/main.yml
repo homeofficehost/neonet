@@ -11,9 +11,10 @@
 
   - import_tasks: ansible_setup.yml
 
-  - import_tasks: system_setup/cron.yml
-
   rescue:
     - set_fact: task_failed=true
 
   when: ansible_os_family != "Darwin"
+
+# Cron - runs on both Linux and macOS
+- import_tasks: system_setup/cron.yml
