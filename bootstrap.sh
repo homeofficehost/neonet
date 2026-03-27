@@ -98,11 +98,11 @@ if command -v bw &> /dev/null && bw login --check &> /dev/null; then
     if [ -n "$VAULT_KEY" ] && [ "$VAULT_KEY" != "null" ]; then
         echo "$VAULT_KEY" > /tmp/.vault_key_tmp
         chmod 600 /tmp/.vault_key_tmp
-        ansible-pull --vault-password-file /tmp/.vault_key_tmp --url https://github.com/homeofficehost/dotfiles --limit "$(hostname -s).local" --checkout master
+        ansible-pull --vault-password-file /tmp/.vault_key_tmp --url https://github.com/homeofficehost/neonet --limit "$(hostname -s).local" --checkout master
         rm /tmp/.vault_key_tmp
     else
         VAULT_KEY_FILE="${HOME}/.vault_key"
-        [ -f "$VAULT_KEY_FILE" ] && ansible-pull --vault-password-file "$VAULT_KEY_FILE" --url https://github.com/homeofficehost/dotfiles --limit "$(hostname -s).local" --checkout master || ansible-pull --url https://github.com/homeofficehost/dotfiles --limit "$(hostname -s).local" --checkout master
+[ -f "$VAULT_KEY_FILE" ] && ansible-pull --vault-password-file "$VAULT_KEY_FILE" --url https://github.com/homeofficehost/neonet --limit "$(hostname -s).local" --checkout master || ansible-pull --url https://github.com/homeofficehost/neonet --limit "$(hostname -s).local" --checkout master
     fi
 else
     VAULT_KEY_FILE="${HOME}/.vault_key"
