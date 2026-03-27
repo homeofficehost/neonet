@@ -1,6 +1,8 @@
 [base]
+localhost ansible_connection=local
 tgworkmac.local ansible_sudo=True
 
 [workstation]
+localhost ansible_connection=local
 tgworkstation.local ansible_sudo=True
 tgworkmac.local ansible_sudo=True
