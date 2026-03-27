@@ -2,7 +2,7 @@
 - hosts: localhost
   connection: local
   tags: always
-  become: true
+
   roles:
     - base
     - workstation

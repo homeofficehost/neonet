@@ -1,14 +1,12 @@
 ---
 - name: workstation | homebrew | ensure brew is installed
   tags: homebrew
-  when: ansible_user_id | default('root') != "root"
   homebrew:
     name: brew
     state: present
 
 - name: workstation | homebrew | install packages from Brewfile
   tags: homebrew
-  when: ansible_user_id | default('root') != "root"
-  command: brew bundle install --file=/Users/{{ username }}/.dotfiles/Brewfile
+  command: brew bundle install --file={{ ansible_user_dir }}/.dotfiles/Brewfile
   register: brew_bundle_result
   changed_when: "'Installing' in brew_bundle_result.stdout"

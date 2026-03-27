@@ -8,6 +8,7 @@
 
 - name: ansible setup | generate provision script from template
   tags: ansible,ansible-setup,scripts
+  become: true
   template:
     src: provision.sh.j2
     dest: /usr/local/bin/provision
