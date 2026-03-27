@@ -2,3 +2,7 @@
 - name: workstation | macOS | include vars
   include_vars: "{{ ansible_distribution }}.yml"
   tags: always
+
+- name: workstation | macOS | install homebrew packages
+  import_tasks: software/homebrew.yml
+  tags: homebrew
