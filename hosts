@@ -1,4 +1,6 @@
 [base]
+tgworkmac.local ansible_sudo=True
 
 [workstation]
 tgworkstation.local ansible_sudo=True
+tgworkmac.local ansible_sudo=True

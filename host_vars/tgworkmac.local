@@ -1,0 +1,4 @@
+---
+enable_dnscrypt_proxy: false
+site_upstream: https://github.com/thomasgroch/my-site.git
+blog_upstream: https://github.com/thomasgroch/my-blog.git
