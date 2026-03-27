@@ -4,28 +4,22 @@
 
 - block:
 
-  ## User configs
   - import_tasks: "users/user.yml"
+    when: ansible_os_family != "Darwin"
 
-  ## desktop environments (Linux only)
   - include_tasks: desktop_environments/mate/main.yml
     when:
       - mate is defined and mate == true
-      - ansible_distribution != "Darwin"
+      - ansible_os_family != "Darwin"
 
   - include_tasks: desktop_environments/gnome/main.yml
     when:
       - gnome is defined and gnome == true
-      - ansible_distribution != "Darwin"
+      - ansible_os_family != "Darwin"
 
-  ## system setup
-  # - import_tasks: system_setup/autofs.yml
-  # - import_tasks: system_setup/scripts.yml
-  # - import_tasks: system_setup/tweaks.yml
-
-  ## install software
-  # - import_tasks: software/packages_pacman.yml
   - import_tasks: software/browser_extensions.yml
 
   rescue:
     - set_fact: task_failed=true
+
+  when: ansible_os_family != "Darwin"
