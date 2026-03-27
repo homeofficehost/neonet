@@ -1,6 +1,7 @@
 ---
 - name: ansible setup | ensure ansible is installed
   tags: ansible,ansible-setup
+  when: ansible_user != "root"
   homebrew:
     name: ansible
     state: present
