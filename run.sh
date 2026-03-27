@@ -1,1 +1,2 @@
-ansible-playbook -c local local.yml $@
+#!/bin/bash
+ansible-playbook local.yml "$@"

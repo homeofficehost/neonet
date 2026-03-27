@@ -1,10 +1,4 @@
 ---
-- name: workstation | homebrew | ensure brew is installed
-  tags: homebrew
-  homebrew:
-    name: brew
-    state: present
-
 - name: workstation | homebrew | install packages from Brewfile
   tags: homebrew
   command: brew bundle install --file={{ ansible_user_dir }}/.dotfiles/Brewfile
