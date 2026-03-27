@@ -4,6 +4,7 @@
     name:
       - "{{ cron_package }}"
     state: latest
+  when: ansible_os_family != "Darwin"
 
 - name: system setup | cron | schedule automatic ansible provisioning
   tags: cron
