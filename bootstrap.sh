@@ -87,24 +87,4 @@ fi
 sudo touch /var/log/ansible.log
 sudo chown $USER:$LOCAL_GROUP /var/log/ansible.log
 
-get_bitwarden_secret() {
-    local item_name="$1"
-    local field="$2"
-    bw get item "$item_name" 2>/dev/null | jq -r ".login.$field"
-}
-
-if command -v bw &> /dev/null && bw login --check &> /dev/null; then
-    VAULT_KEY=$(get_bitwarden_secret "vault_key" "password")
-    if [ -n "$VAULT_KEY" ] && [ "$VAULT_KEY" != "null" ]; then
-        echo "$VAULT_KEY" > /tmp/.vault_key_tmp
-        chmod 600 /tmp/.vault_key_tmp
-        ansible-pull --vault-password-file /tmp/.vault_key_tmp --url https://github.com/homeofficehost/neonet --limit "$(hostname -s).local" --checkout master
-        rm /tmp/.vault_key_tmp
-    else
-        VAULT_KEY_FILE="${HOME}/.vault_key"
-[ -f "$VAULT_KEY_FILE" ] && ansible-pull --vault-password-file "$VAULT_KEY_FILE" --url https://github.com/homeofficehost/neonet --limit "$(hostname -s).local" --checkout master || ansible-pull --url https://github.com/homeofficehost/neonet --limit "$(hostname -s).local" --checkout master
-    fi
-else
-    VAULT_KEY_FILE="${HOME}/.vault_key"
-    [ -f "$VAULT_KEY_FILE" ] && ansible-pull --vault-password-file "$VAULT_KEY_FILE" --url https://github.com/homeofficehost/dotfiles --limit "$(hostname -s).local" --checkout master || ansible-pull --url https://github.com/homeofficehost/dotfiles --limit "$(hostname -s).local" --checkout master
-fi
+ansible-pull --url https://github.com/homeofficehost/neonet --limit "$(hostname -s).local" --checkout master
