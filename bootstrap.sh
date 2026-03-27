@@ -1,6 +1,7 @@
 #!/bin/bash
 
 LOCAL_USER=${2:-tg}
+LOCAL_GROUP=$(id -gn 2>/dev/null || echo "staff")
 PASSWORD_STORE_REPO=${1:-https://gitlab.com/thomas.groch/password-store.git}
 
 # Check if sudo is installed and the user has sudo privileges
@@ -13,14 +14,14 @@ fi
 # Ensure .ssh directory exists with correct permissions
 if [ ! -d ~/.ssh ]; then
     mkdir -p ~/.ssh
-    chown $LOCAL_USER:$LOCAL_USER ~/.ssh
+    chown $LOCAL_USER:$LOCAL_GROUP ~/.ssh
     chmod 700 ~/.ssh
     echo "Created ~/.ssh directory"
 fi
 
 # Set correct permissions on SSH key if it exists
 if [ -f ~/.ssh/tgroch_id_rsa ]; then
-    chown $LOCAL_USER:$LOCAL_USER ~/.ssh/tgroch_id_rsa
+    chown $LOCAL_USER:$LOCAL_GROUP ~/.ssh/tgroch_id_rsa
     chmod 600 ~/.ssh/tgroch_id_rsa
     ssh-add ~/.ssh/tgroch_id_rsa 2>/dev/null || echo "Note: Could not add SSH key to agent"
 fi
@@ -84,7 +85,7 @@ fi
 # gpg --import "/run/media/${LOCAL_USER}/SAFE/safe/gpg/thomas.groch@gmail.com.public.gpg-key"
 
 sudo touch /var/log/ansible.log
-sudo chown $USER:$USER /var/log/ansible.log
+sudo chown $USER:$LOCAL_GROUP /var/log/ansible.log
 
 # Restore ansible
 VAULT_KEY="${HOME}/.vault_key"
