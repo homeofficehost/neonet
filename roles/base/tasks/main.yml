@@ -1,20 +1,10 @@
-# Load distro-specific variables
-- include_vars: "{{ ansible_distribution }}.yml"
+---
+- name: base | macOS | include vars
+  include_vars: "{{ ansible_distribution }}.yml"
   tags: always
 
-# Linux-only tasks
-- block:
+- name: base | macOS | setup ansible
+  import_tasks: ansible_setup.yml
 
-  - import_tasks: "users/user.yml"
-
-  - import_tasks: users/ssh_github.yml
-
-  - import_tasks: ansible_setup.yml
-
-  rescue:
-    - set_fact: task_failed=true
-
-  when: ansible_os_family != "Darwin"
-
-# Cron - runs on both Linux and macOS
-- import_tasks: system_setup/cron.yml
+- name: base | macOS | setup cron
+  import_tasks: system_setup/cron.yml

@@ -1,25 +1,4 @@
-# Load distro-specific variables
-- include_vars: "{{ ansible_distribution }}.yml"
+---
+- name: workstation | macOS | include vars
+  include_vars: "{{ ansible_distribution }}.yml"
   tags: always
-
-- block:
-
-  - import_tasks: "users/user.yml"
-    when: ansible_os_family != "Darwin"
-
-  - include_tasks: desktop_environments/mate/main.yml
-    when:
-      - mate is defined and mate == true
-      - ansible_os_family != "Darwin"
-
-  - include_tasks: desktop_environments/gnome/main.yml
-    when:
-      - gnome is defined and gnome == true
-      - ansible_os_family != "Darwin"
-
-  - import_tasks: software/browser_extensions.yml
-
-  rescue:
-    - set_fact: task_failed=true
-
-  when: ansible_os_family != "Darwin"

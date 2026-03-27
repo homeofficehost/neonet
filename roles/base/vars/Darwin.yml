@@ -1,24 +1,3 @@
 ---
-# macOS (Darwin) specific variables
-sudo_group: wheel
-cron_package: cron
-shell_package: zsh
-python_package: python3
-python_pip_package: python3-pip
-python_flake8_package: pyflakes
-python_pyflakes_package: pyflakes
-python_virtualenv_package: virtualenv
-ruby_rake_package: rake
-vim_package: vim
-openssh_package: openssh
-openssh_service: com.openssh.sshd
-sftp_path: /usr/libexec/sftp-server
-
-# macOS doesn't use these Linux-specific packages - defined as empty to prevent errors
-# These are skipped via conditions in tasks but need to be defined
-dconf_package: ""
-python_psutil_package: ""
-# lm_sensors_package: N/A on macOS
-# nfs_client_package: nfs-utils not typically used on macOS
-# intel_microcode_package: N/A on macOS
-# amd_microcode_package: N/A on macOS
+cron_package: "cron"
+sudo_group: "wheel"

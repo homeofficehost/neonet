@@ -1,17 +1,11 @@
 #!/bin/bash
 
-LOCALUSER="{{ username | default('user') }}"
-ANSIBLEUSER="{{ username | default('user') }}"
+LOCALUSER="{{ username | default('tg') }}"
 BRANCH="{{ branch | default('master') }}"
-LOGFILE="/var/log/ansible.log"
-REPO="{{ upstream | default('https://github.com/homeofficehost/dotfiles') }}"
-VAULT_KEY="${HOME}/.vault_key"
+LOGFILE="${HOME}/ansible_provision.log"
+REPO="{{ upstream | default('https://github.com/homeofficehost/neonet') }}"
 
-if [ -f "$VAULT_KEY" ]; then
-  COMMON_OPTS="--vault-password-file $VAULT_KEY --url $REPO --limit $(hostname -s).local --checkout $BRANCH"
-else
-  COMMON_OPTS="--url $REPO --limit $(hostname -s).local --checkout $BRANCH"
-fi
+COMMON_OPTS="--url $REPO --limit localhost --checkout $BRANCH"
 
 if pgrep -f ansible-pull > /dev/null; then
   printf "\n$(date +"%Y-%m-%d %H:%M:%S") A running ansible-pull process was found.\nExiting.\n" | tee -a "$LOGFILE"
@@ -21,5 +15,5 @@ fi
 if [[ ! -z "$1" ]]; then
   ansible-pull --tags "$1" $COMMON_OPTS 2>&1
 else
-  ansible-pull --only-if-changed $COMMON_OPTS 2>&1
+  ansible-pull $COMMON_OPTS 2>&1
 fi

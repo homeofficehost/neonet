@@ -1,11 +1,4 @@
-- name: system setup | cron | install cron package
-  tags: packages,cron
-  package:
-    name:
-      - "{{ cron_package }}"
-    state: latest
-  when: ansible_os_family != "Darwin"
-
+---
 - name: system setup | cron | schedule automatic ansible provisioning
   tags: cron
   cron:
@@ -13,27 +6,7 @@
     user: "{{ username }}"
     hour: "{{ ansible_cron_hour | default('*') }}"
     minute: "{{ ansible_cron_minute | default('*/30') }}"
-    job: "{ date; /usr/local/bin/provision; RC=$?; date; echo \"Exit code: $RC\"; } >> /var/log/ansible_provision.log 2>&1 && if [ $RC -eq 0 ]; then echo $(date) > /var/log/ansible_provision_last_run.txt; fi"
-  when: ansible_distribution not in ['Darwin', 'MacOSX']
-
-- name: system setup | cron | schedule automatic ansible provisioning on macOS
-  tags: cron
-  cron:
-    name: "ansible provision"
-    user: "{{ username }}"
-    hour: "{{ ansible_cron_hour | default('*') }}"
-    minute: "{{ ansible_cron_minute | default('*/30') }}"
     job: "{ date; /usr/local/bin/provision; RC=$?; date; echo \"Exit code: $RC\"; } >> /Users/{{ username }}/ansible_provision.log 2>&1 && if [ $RC -eq 0 ]; then echo $(date) > /Users/{{ username }}/ansible_provision_last_run.txt; fi"
-  when: ansible_distribution in ['Darwin', 'MacOSX']
-
-# - name: system setup | cron | close process everyday
-#   tags: cron
-#   cron:
-#     name: "close process everyday"
-#     user: "{{ username }}"
-#     hour: "7"
-#     minute: "0"
-#     job: "top -p $(pgrep -d',' httpd) > /dev/null"
 
 - name: system setup | cron | schedule ansible cleanup at boot
   tags: cron

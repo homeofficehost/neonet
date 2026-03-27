@@ -1,59 +1,9 @@
-- name: ansible setup | ensure ansible is the latest version
+---
+- name: ansible setup | ensure ansible is installed
   tags: ansible,ansible-setup
-  package:
+  homebrew:
     name: ansible
-    state: latest
-
-- name: ansible setup | install required packages
-  tags: ansible,ansible-setup,packages
-  when: ansible_distribution != "Darwin"
-  package:
-    name:
-      - "{{ dconf_package }}"
-      - "{{ python_psutil_package }}"
-  ignore_errors: true
-
-# Note: For Arch, the requirement is met by a dependency of systemd, only necessary on Debian-based
-- name: ansible setup | install acl package
-  tags: ansible,ansible-setup,packages
-  package:
-    name: acl
-  when: ansible_distribution in ["Debian", "Pop!_OS", "Ubuntu"]
-
-- name: ansible setup | create ansible log file
-  tags: ansible,ansible-setup
-  file:
-    path: "/var/log/ansible.log"
-    owner: "{{ username }}"
-    group: "{{ ansible_user_gid | default(20) }}"
-    mode: 0664
-    state: touch
-  changed_when: False
-
-- name: ansible setup | add logrotate config for ansible log file
-  tags: ansible-setup
-  when: ansible_distribution != "Darwin"
-  copy:
-    content: |
-      /var/log/ansible.log {
-          daily
-          rotate 7
-          compress
-          delaycompress
-          missingok
-          notifempty
-          create 0644 {{ username }} {{ ansible_user_gid | default(20) }}
-      }
-    dest: /etc/logrotate.d/ansible
-    owner: root
-    group: root
-    mode: 0644
-
-- name: ansible setup | remove default ansible directory (/etc/ansible) from host
-  tags: ansible,ansible-setup
-  file:
-    path: /etc/ansible
-    state: absent
+    state: present
 
 - name: ansible setup | generate provision script from template
   tags: ansible,ansible-setup,scripts
@@ -61,5 +11,5 @@
     src: provision.sh.j2
     dest: /usr/local/bin/provision
     owner: root
-    group: root
+    group: wheel
     mode: 0755
