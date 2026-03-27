@@ -2,23 +2,18 @@
 - include_vars: "{{ ansible_distribution }}.yml"
   tags: always
 
+# Linux-only tasks
 - block:
 
-  # Make sure user exists on the system (Linux only)
   - import_tasks: "users/user.yml"
-    when: ansible_distribution != "Darwin"
 
-  # Download SSH keys from GitHub
   - import_tasks: users/ssh_github.yml
-    when: ansible_distribution != "Darwin"
 
-  # Set up the ansible environment
   - import_tasks: ansible_setup.yml
-    when: ansible_distribution != "Darwin"
 
-  # install software (Linux only)
   - import_tasks: system_setup/cron.yml
-    when: ansible_distribution != "Darwin"
 
   rescue:
     - set_fact: task_failed=true
+
+  when: ansible_os_family != "Darwin"
