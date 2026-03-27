@@ -87,4 +87,4 @@ fi
 sudo touch /var/log/ansible.log
 sudo chown $USER:$LOCAL_GROUP /var/log/ansible.log
 
-ansible-pull --extra-vars "ansible_stdout_callback=yaml" --url https://github.com/homeofficehost/neonet --limit "$(hostname -s).local" --checkout master
+ansible-pull --url https://github.com/homeofficehost/neonet --limit "$(hostname -s).local" --checkout master
