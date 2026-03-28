@@ -10,7 +10,7 @@ brew "neovim"
 brew "nano"
 brew "emacs"
 brew "ed"
-cask "claude-code"
+brew "claude-code"
 
 ## System Utilities
 brew "coreutils"
