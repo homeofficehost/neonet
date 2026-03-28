@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 LOCALUSER="{{ username | default('tg') }}"
 BRANCH="{{ branch | default('master') }}"
 LOGFILE="${HOME}/ansible_provision.log"
