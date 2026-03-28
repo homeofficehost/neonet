@@ -28,6 +28,7 @@
           ╚════════════════════════════════════════════════════════════════╝
           
       run_once: true
+      when: ansible_playbook_had_changed | bool
 
     - name: "🔔 success | send macOS notification"
       shell: >
@@ -40,12 +41,14 @@
       ignore_errors: true
       run_once: true
       changed_when: false
+      when: ansible_playbook_had_changed | bool
 
     - name: "🔊 success | voice announcement"
       shell: afplay {{ ansible_user_dir }}/.dotfiles/roles/workstation/files/sounds/provisioning-success.mp3
       ignore_errors: true
       run_once: true
       changed_when: false
+      when: ansible_playbook_had_changed | bool
 
     - name: "❌ failure | play failure sound"
       shell: afplay {{ ansible_user_dir }}/.dotfiles/roles/workstation/files/sounds/provisioning-failure.mp3
