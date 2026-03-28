@@ -1,8 +1,5 @@
-# Blacklisted packages — will be removed if installed
-# Format: brew "name" for formulae, cask "name" for casks
-
-cask "emby-server"
-cask "steam"
-cask "epic-games"
-cask "battle-net"
-cask "ea"
+# Blacklisted macOS apps — will be removed from /Applications if present
+Steam
+Epic Games
+Battle.net
+EA
