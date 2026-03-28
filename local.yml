@@ -41,8 +41,7 @@
       changed_when: false
 
     - name: "🔊 success | voice announcement"
-      shell: say -v Daniel "Provisioning complete. All systems are ready for launch."
+      shell: afplay {{ ansible_user_dir }}/.dotfiles/roles/workstation/files/sounds/provisioning-success.mp3
       ignore_errors: true
       run_once: true
       changed_when: false
-      when: ansible_env.TERM is defined and ansible_env.TERM | length > 0
