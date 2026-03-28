@@ -3,6 +3,7 @@
   connection: local
   gather_facts: true
   tags: always
+  any_errors_fatal: true
 
   roles:
     - base
@@ -45,3 +46,9 @@
       ignore_errors: true
       run_once: true
       changed_when: false
+
+    - name: "❌ failure | play failure sound"
+      shell: afplay {{ ansible_user_dir }}/.dotfiles/roles/workstation/files/sounds/provisioning-failure.mp3
+      ignore_errors: true
+      run_once: true
+      when: ansible_failed_task is defined
