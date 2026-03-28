@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: "{{ inventory_hostname }}"
   connection: local
   tags: always
 
