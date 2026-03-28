@@ -1,6 +1,8 @@
 # Taps
 tap "blacktop/tap"
 
+brew "syncthing"
+
 ## Shell & Core
 brew "zsh"
 brew "bash"
