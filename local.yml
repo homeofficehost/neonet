@@ -28,7 +28,7 @@
           ╚════════════════════════════════════════════════════════════════╝
           
       run_once: true
-      when: ansible_playbook_had_changed | bool
+      when: hostvars[groups['all'][0]]['provision_changed'] | default(false)
 
     - name: "🔔 success | send macOS notification"
       shell: >
@@ -41,14 +41,14 @@
       ignore_errors: true
       run_once: true
       changed_when: false
-      when: ansible_playbook_had_changed | bool
+      when: hostvars[groups['all'][0]]['provision_changed'] | default(false)
 
     - name: "🔊 success | voice announcement"
       shell: afplay {{ ansible_user_dir }}/.dotfiles/roles/workstation/files/sounds/provisioning-success.mp3
       ignore_errors: true
       run_once: true
       changed_when: false
-      when: ansible_playbook_had_changed | bool
+      when: hostvars[groups['all'][0]]['provision_changed'] | default(false)
 
     - name: "❌ failure | play failure sound"
       shell: afplay {{ ansible_user_dir }}/.dotfiles/roles/workstation/files/sounds/provisioning-failure.mp3

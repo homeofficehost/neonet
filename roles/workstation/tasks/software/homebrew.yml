@@ -5,6 +5,17 @@
   register: brew_bundle_result
   changed_when: "'Installing' in brew_bundle_result.stdout"
 
+- name: workstation | homebrew | set changed flag
+  set_fact:
+    provision_changed: true
+  when: brew_bundle_result is defined and brew_bundle_result.changed | bool
+
 - name: workstation | apps | remove blacklisted macOS apps
   tags: apps
   shell: "grep -v '^#' {{ ansible_user_dir }}/.dotfiles/Blacklistfile | grep -v '^$' | xargs -I {} rm -rf '/Applications/{}.app' 2>/dev/null || true"
+  register: blacklist_result
+
+- name: workstation | apps | set changed flag
+  set_fact:
+    provision_changed: true
+  when: blacklist_result is defined and blacklist_result.changed | bool
