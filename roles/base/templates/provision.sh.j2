@@ -12,8 +12,25 @@ if pgrep -f ansible-pull > /dev/null; then
   exit 1
 fi
 
+START_TIME=$(date +%s)
+
 if [[ ! -z "$1" ]]; then
   ansible-pull --tags "$1" $COMMON_OPTS 2>&1
+  RC=$?
 else
   ansible-pull $COMMON_OPTS 2>&1
+  RC=$?
 fi
+
+END_TIME=$(date +%s)
+ELAPSED=$(( END_TIME - START_TIME ))
+MINUTES=$(( ELAPSED / 60 ))
+SECONDS=$(( ELAPSED % 60 ))
+
+if [ $RC -eq 0 ]; then
+  osascript -e "display notification \"Completed in ${MINUTES}m ${SECONDS}s — all roles applied\" with title \"🚀 Dotfiles Provisioned!\" sound name \"Glass\"" 2>/dev/null || true
+else
+  osascript -e "display notification \"Exit code ${RC} — check ansible_provision.log\" with title \"❌ Provisioning Failed\" sound name \"Basso\"" 2>/dev/null || true
+fi
+
+exit $RC
