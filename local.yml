@@ -1,7 +1,19 @@
 ---
-- hosts: "{{ inventory_hostname }}"
+- hosts: all
   connection: local
+  gather_facts: true
   tags: always
+
+  pre_tasks:
+    - name: "Skip if this host is not the target"
+      set_fact:
+        is_target_host: "{{ inventory_hostname == ansible_hostname }}"
+      tags: always
+
+    - name: "Skip non-target hosts"
+      meta: end_play
+      when: not is_target_host | bool
+      tags: always
 
   roles:
     - base
