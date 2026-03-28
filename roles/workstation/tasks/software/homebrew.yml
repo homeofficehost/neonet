@@ -4,3 +4,12 @@
   command: brew bundle install --file={{ ansible_user_dir }}/.dotfiles/Brewfile
   register: brew_bundle_result
   changed_when: "'Installing' in brew_bundle_result.stdout"
+
+- name: workstation | homebrew | remove blacklisted packages
+  tags: homebrew
+  shell: |
+    BL={{ ansible_user_dir }}/.dotfiles/Blacklistfile
+    brew uninstall --force --ignore-dependencies $(brew list --formula 2>/dev/null | grep -xFf <(sed -n 's/^brew "\(.*\)"/\1/p' $BL) | tr '\n' ' ') 2>/dev/null
+    brew uninstall --cask --force --ignore-dependencies $(brew list --cask 2>/dev/null | grep -xFf <(sed -n 's/^cask "\(.*\)"/\1/p' $BL) | tr '\n' ' ') 2>/dev/null || true
+  register: result
+  changed_when: result.rc == 0

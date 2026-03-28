@@ -1,0 +1,8 @@
+# Blacklisted packages — will be removed if installed
+# Format: brew "name" for formulae, cask "name" for casks
+
+cask "emby-server"
+cask "steam"
+cask "epic-games"
+cask "battle-net"
+cask "ea"
