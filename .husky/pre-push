@@ -2,4 +2,4 @@
 # Husky pre-push hook
 # Run ansible-playbook syntax check on playbook
 
-ansible-playbook local.yml --syntax-check </dev/null
+ansible-playbook local.yml --syntax-check </dev/null 2>&1
