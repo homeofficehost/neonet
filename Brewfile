@@ -2,7 +2,7 @@
 tap "blacktop/tap"
 
 brew "syncthing"
-cask "minecraft"
+brew "hiddenbar"
 
 ## Shell & Core
 brew "zsh"
