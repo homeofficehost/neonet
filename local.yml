@@ -56,8 +56,8 @@
       run_once: true
       when: ansible_failed_task is defined
 
-    - name: "🔔 idempotent | played when no changes (ran on schedule)"
-      shell: afplay {{ ansible_user_dir }}/.dotfiles/roles/workstation/files/sounds/provisioning-success.mp3
+    - name: "🔔 idempotent | system sound when no changes"
+      shell: afplay /System/Library/Sounds/Tink.aiff
       ignore_errors: true
       run_once: true
       changed_when: false
