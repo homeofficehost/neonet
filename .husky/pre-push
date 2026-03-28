@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# Husky pre-push hook
+# Run ansible-playbook syntax check on playbook
+
+ansible-playbook local.yml --syntax-check
