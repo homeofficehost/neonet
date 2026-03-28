@@ -12,8 +12,14 @@
 
 - name: workstation | apps | remove blacklisted macOS apps
   tags: apps
-  shell: "grep -v '^#' {{ ansible_user_dir }}/.dotfiles/Blacklistfile | grep -v '^$' | xargs -I {} rm -rf '/Applications/{}.app' 2>/dev/null || true"
+  shell: |
+    changed=0
+    for app in $(grep -v '^#' {{ ansible_user_dir }}/.dotfiles/Blacklistfile | grep -v '^$'); do
+      [ -d "/Applications/${app}.app" ] && rm -rf "/Applications/${app}.app" && changed=1
+    done
+    exit $changed
   register: blacklist_result
+  changed_when: blacklist_result.rc | int == 1
 
 - name: workstation | apps | set changed flag
   set_fact:
