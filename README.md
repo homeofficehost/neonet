@@ -1,12 +1,12 @@
 # dotfiles
 
-Configuration and automation for tgworkstation (macOS 14 Sonoma).
+Configuration and automation for tgworkstation (macOS 26).
 
 ## Prerequisites
 
 Before running the setup, ensure you have:
 
-1. **macOS 14 Sonoma** (or later)
+1. **macOS 26** (or later)
 2. **Administrator access** (sudo privileges)
 3. **Internet connection**
 4. **GitHub account** with SSH keys (for automatic SSH key download)
