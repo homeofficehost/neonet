@@ -1,0 +1,27 @@
+CHECK 2: Task Count vs Operations [72/72] PASS
+===============================================
+
+.osx executable commands (72):
+  defaults write: 56
+  PlistBuddy:     6
+  systemsetup:    1
+  osascript:      1
+  chflags:        1
+  killall:        7  (6 in for-loop + 1 mds)
+  Total:          72
+
+macos_defaults.yml - name: tasks: 72 (confirmed by grep count)
+
+Breakdown by type:
+  defaults write:  56 tasks
+  PlistBuddy:       6 tasks
+  systemsetup:      1 task
+  osascript:        1 task
+  chflags:          1 task
+  killall:          7 tasks
+  Total:           72 tasks
+
+Note: .osx `for` loop over 6 apps expanded into 6 individual tasks in Ansible.
+      killall mds (Spotlight section) is a separate task. Total killall: 7.
+
+Discrepancy: NONE. 72 == 72. VERDICT: PASS

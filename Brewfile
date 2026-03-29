@@ -14,6 +14,8 @@ brew "nano"
 brew "emacs"
 brew "ed"
 cask "claude-code"
+brew "lazygit"
+brew "glow"
 
 ## System Utilities
 brew "coreutils"

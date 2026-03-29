@@ -1,0 +1,12 @@
+CHECK 8: AppleShowAllFiles Excluded [PASS]
+============================================
+
+.osx line 119 (COMMENTED OUT):
+  # defaults write com.apple.finder AppleShowAllFiles -bool true
+
+grep "AppleShowAllFiles" in macos_defaults.yml:
+  0 matches
+
+The commented-out line was correctly NOT migrated to Ansible.
+
+VERDICT: PASS

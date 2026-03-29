@@ -1,0 +1,28 @@
+CHECK 3: macOS 26.4 TODO Comments [5/5] PASS
+=================================================
+
+Required TODOs and evidence:
+
+1. PMPrintingExpandedStateForPrint
+   Line  9: # TODO: Verify on macOS 26.4 — may be obsolete since macOS 13+
+   PRESENT on task: "expand print panel by default"  MATCH
+
+2. systemsetup -setrestartfreeze
+   Line 22: # TODO: Verify on macOS 26.4 — may be SIP-restricted on Apple Silicon
+   PRESENT on task: "restart automatically if the computer freezes"  MATCH
+
+3. ApplePressAndHoldEnabled
+   Line 67: # TODO: Verify on macOS 26.4 — behavior redesigned in recent macOS
+   PRESENT on task: "disable press-and-hold for keys"  MATCH
+
+4. NewWindowTarget/NewWindowTargetPath
+   Line 99: # TODO: Verify on macOS 26.4 — NewWindowTarget/NewWindowTargetPath deprecated in macOS 13+ in favor of FinderWindowTargets
+   PRESENT on task: "set new Finder windows target to Desktop"  MATCH
+   NOTE: This TODO covers both NewWindowTarget (line 100) AND NewWindowTargetPath (line 104).
+
+5. reduceTransparency
+   Line 207: # TODO: Verify on macOS 26.4 — moved to Appearance settings in macOS 14+
+   PRESENT on task: "enable reduce transparency"  MATCH
+
+grep confirmed exactly 5 matches for "TODO.*26\.4" pattern.
+VERDICT: PASS

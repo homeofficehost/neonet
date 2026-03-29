@@ -1,0 +1,17 @@
+CHECK 5: PlistBuddy || Add Pattern [6/6] PASS
+================================================
+
+All 6 PlistBuddy commands must have `|| /usr/libexec/PlistBuddy -c "Add ..."` fallback.
+
+Evidence (grep "PlistBuddy.*\\|\\|"):
+
+1. Line 161: Set :DesktopViewSettings:IconViewSettings:arrangeBy grid  || Add ... string grid
+2. Line 165: Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid  || Add ... string grid
+3. Line 169: Set :StandardViewSettings:IconViewSettings:arrangeBy grid  || Add ... string grid
+4. Line 173: Set :DesktopViewSettings:IconViewSettings:iconSize 64  || Add ... integer 64
+5. Line 177: Set :FK_StandardViewSettings:IconViewSettings:iconSize 64  || Add ... integer 64
+6. Line 181: Set :StandardViewSettings:IconViewSettings:iconSize 64  || Add ... integer 64
+
+Note: Type annotations are correct in Add fallbacks (string for arrangeBy, integer for iconSize).
+
+VERDICT: PASS

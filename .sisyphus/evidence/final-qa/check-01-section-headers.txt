@@ -1,0 +1,32 @@
+CHECK 1: Section Headers [12/12] PASS
+=======================================
+
+.osx sections (12):
+  1. General UI/UX
+  2. Trackpad, mouse, keyboard, Bluetooth accessories, and input
+  3. Screen
+  4. Finder
+  5. Dock, Dashboard, and hot corners
+  6. Safari & WebKit
+  7. Mail
+  8. Spotlight
+  9. Activity Monitor
+  10. Messages
+  11. App Store
+  12. Kill/restart affected applications
+
+macos_defaults.yml section comments (12):
+  Line   2: # General UI/UX                          MATCH
+  Line  40: # Trackpad, mouse, keyboard, Bluetooth accessories, and input  MATCH
+  Line  83: # Screen                                  MATCH
+  Line  97: # Finder                                  MATCH
+  Line 192: # Dock, Dashboard, and hot corners        MATCH
+  Line 235: # Safari & WebKit                         MATCH
+  Line 253: # Mail                                    MATCH
+  Line 259: # Spotlight                               MATCH
+  Line 273: # Activity Monitor                        MATCH
+  Line 283: # Messages                                MATCH
+  Line 293: # App Store                               MATCH
+  Line 299: # Kill/restart affected applications      MATCH
+
+Result: All 12 section headers present. VERDICT: PASS

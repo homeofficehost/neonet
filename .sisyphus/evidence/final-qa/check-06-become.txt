@@ -1,0 +1,23 @@
+CHECK 6: become: true [PASS]
+=============================
+
+Tasks requiring elevated privileges must have become: true.
+
+Expected: systemsetup and Spotlight (/.Spotlight-V100/...) tasks.
+
+Evidence (grep "become: true"):
+
+1. Line 23:  become: true  → task "restart automatically if the computer freezes"
+   Command: systemsetup -setrestartfreeze on
+   Guard: when: macos_defaults_root | default(true) | bool
+   MATCHES .osx: if [[ "$RUN_AS_ROOT" = true ]]  CORRECT
+
+2. Line 262: become: true  → task "disable Spotlight indexing for mounted volumes"
+   Command: defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
+   Guard: when: macos_defaults_root | default(true) | bool
+   MATCHES .osx: sudo defaults write /.Spotlight-V100/...  CORRECT
+
+Note: Spotlight killall mds (line 268) does NOT have become:true — correct,
+      killall doesn't need elevation.
+
+VERDICT: PASS

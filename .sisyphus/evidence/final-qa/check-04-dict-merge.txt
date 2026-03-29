@@ -1,0 +1,17 @@
+CHECK 4: dict-merge Fix [PASS]
+===============================
+
+Messages tasks must use -dict-merge (NOT -dict-add from .osx original).
+
+.osx original (line 251):
+  defaults write ... SOInputLineSettings -dict-add "automaticQuoteSubstitutionEnabled" -bool false
+  defaults write ... SOInputLineSettings -dict-add "continuousSpellCheckingEnabled" -bool false
+
+macos_defaults.yml (lines 286, 290):
+  command: defaults write ... SOInputLineSettings -dict-merge "automaticQuoteSubstitutionEnabled" -bool false
+  command: defaults write ... SOInputLineSettings -dict-merge "continuousSpellCheckingEnabled" -bool false
+
+grep "dict-merge": 2 matches (lines 286, 290)  CORRECT
+grep "dict-add": 0 matches  CORRECT (no stale -dict-add)
+
+VERDICT: PASS

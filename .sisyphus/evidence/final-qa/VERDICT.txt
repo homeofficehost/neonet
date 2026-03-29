@@ -1,0 +1,25 @@
+FINAL QA VERDICT
+================
+Run: 2026-03-29
+Source: /Users/tg/dev/dotfiles/.osx (274 lines)
+Target: /Users/tg/.dotfiles/roles/workstation/tasks/system_setup/macos_defaults.yml (335 lines)
+
+CHECK SUMMARY
+─────────────────────────────────────────────────────
+ # | Check                          | Result
+───┼────────────────────────────────┼────────
+ 1 | Section headers [12/12]        | PASS
+ 2 | Operations [72/72]             | PASS
+ 3 | macOS 26.4 TODOs [5/5]        | PASS
+ 4 | dict-merge fix                 | PASS
+ 5 | PlistBuddy || Add [6/6]        | PASS
+ 6 | become: true                   | PASS
+ 7 | killall gating [7/7]           | PASS
+ 8 | AppleShowAllFiles excluded     | PASS
+ 9 | 1:1 spot-check [5/5]          | PASS
+10 | Ansible syntax check           | PASS
+─────────────────────────────────────────────────────
+
+DEFECTS FOUND: 0
+
+Sections [12/12] | Operations [72/72] | TODOs [5/5] | dict-merge [PASS] | PlistBuddy [6/6] | become [PASS] | killall [PASS] | Syntax [PASS] | 1:1 Spot-check [5/5] | VERDICT: APPROVE

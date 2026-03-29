@@ -1,0 +1,35 @@
+CHECK 9: 1:1 Mapping Spot-Check [5/5] PASS
+============================================
+
+5 random defaults write commands verified for exact parameter match.
+
+1. com.apple.springing.enabled
+   .osx line 140: defaults write NSGlobalDomain com.apple.springing.enabled -bool true
+   Ansible line 149: defaults write NSGlobalDomain com.apple.springing.enabled -bool true
+   MATCH ✓
+
+2. WebKitDeveloperExtrasEnabledPreferenceKey
+   .osx line 209: defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+   Ansible line 242: defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+   MATCH ✓
+
+3. FXEnableExtensionChangeWarning
+   .osx line 137: defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+   Ansible line 145: defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+   MATCH ✓
+
+4. ContextMenuGesture
+   .osx line 77: defaults write NSGlobalDomain ContextMenuGesture -int 1
+   Ansible line 63: defaults write NSGlobalDomain ContextMenuGesture -int 1
+   MATCH ✓
+
+5. AddressesIncludeNameOnPasteboard
+   .osx line 220: defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
+   Ansible line 256: defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
+   MATCH ✓
+
+Templating note:
+  ${HOME} in .osx correctly converted to {{ ansible_env.HOME }} in Ansible (lines 86, 105).
+  "Quit When Finished" correctly quoted in both files.
+
+VERDICT: PASS

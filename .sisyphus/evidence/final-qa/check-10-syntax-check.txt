@@ -1,0 +1,14 @@
+CHECK 10: Ansible Syntax Check [PASS]
+=======================================
+
+Command: ansible-playbook --syntax-check /Users/tg/.dotfiles/local.yml
+
+Output:
+  [WARNING]: No inventory was parsed, only implicit localhost is available
+  [WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+  playbook: /Users/tg/.dotfiles/local.yml
+
+Warnings are expected (no inventory provided) — no errors.
+The playbook parses successfully.
+
+VERDICT: PASS

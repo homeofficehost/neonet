@@ -1,0 +1,26 @@
+CHECK 7: killall Gating [PASS]
+================================
+
+All killall tasks must have `when: macos_defaults_restart | default(true) | bool`
+and `failed_when: false`.
+
+Killall tasks (7 total):
+
+1. Line 268: killall mds          when: macos_defaults_restart (line 271)  ✓
+2. Line 302: killall cfprefsd     when: macos_defaults_restart (line 305)  ✓
+3. Line 308: killall Dock         when: macos_defaults_restart (line 311)  ✓
+4. Line 314: killall Finder       when: macos_defaults_restart (line 317)  ✓
+5. Line 320: killall Mail         when: macos_defaults_restart (line 323)  ✓
+6. Line 326: killall SystemUIServer when: macos_defaults_restart (line 329) ✓
+7. Line 332: killall Terminal     when: macos_defaults_restart (line 335)  ✓
+
+All 7 have:
+  - changed_when: false  ✓
+  - failed_when: false   ✓
+  - when: macos_defaults_restart | default(true) | bool  ✓
+
+Corresponds to .osx:
+  - killall mds (line 233) — inside `if [[ "$RUN_AS_ROOT" = true ]]`
+  - for loop over 6 apps (line 269) — inside `if [[ ! ($* == *--no-restart*) ]]`
+
+VERDICT: PASS
