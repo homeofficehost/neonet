@@ -6,3 +6,8 @@
 - name: workstation | macOS | install homebrew packages
   import_tasks: software/homebrew.yml
   tags: homebrew
+
+- name: workstation | macOS | apply system defaults
+  import_tasks: system_setup/macos_defaults.yml
+  when: ansible_system == "Darwin"
+  tags: macos,defaults

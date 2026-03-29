@@ -1,0 +1,335 @@
+---
+# General UI/UX
+
+- name: system setup | macos defaults | expand save panel by default
+  command: defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | expand print panel by default
+  # TODO: Verify on macOS 26.4 — may be obsolete since macOS 13+
+  command: defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | save to disk by default (not iCloud)
+  command: defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | automatically quit printer app when print jobs complete
+  command: defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | restart automatically if the computer freezes
+  # TODO: Verify on macOS 26.4 — may be SIP-restricted on Apple Silicon
+  become: true
+  command: systemsetup -setrestartfreeze on
+  changed_when: false
+  when: macos_defaults_root | default(true) | bool
+
+- name: system setup | macos defaults | disable smart quotes
+  command: defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | disable smart dashes
+  command: defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | set desktop background to stone color
+  command: osascript -e 'tell application "Finder" to set desktop picture to POSIX file "/System/Library/Desktop Pictures/Solid Colors/Stone.png"'
+  changed_when: false
+
+# Trackpad, mouse, keyboard, Bluetooth accessories, and input
+
+- name: system setup | macos defaults | set trackpad haptic feedback click threshold to light
+  command: defaults write com.apple.AppleMultitouchTrackpad FirstClickThreshold -int 0
+  changed_when: false
+
+- name: system setup | macos defaults | set trackpad haptic feedback actuation strength to light
+  command: defaults write com.apple.AppleMultitouchTrackpad ActuationStrength -int 0
+  changed_when: false
+
+- name: system setup | macos defaults | enable trackpad right-click (bluetooth)
+  command: defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | enable trackpad right-click
+  command: defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | set trackpad secondary click to two finger tap
+  command: defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 0
+  changed_when: false
+
+- name: system setup | macos defaults | enable context menu gesture for right-click
+  command: defaults write NSGlobalDomain ContextMenuGesture -int 1
+  changed_when: false
+
+- name: system setup | macos defaults | disable press-and-hold for keys
+  # TODO: Verify on macOS 26.4 — behavior redesigned in recent macOS
+  command: defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | set initial key repeat delay
+  command: defaults write NSGlobalDomain InitialKeyRepeat -int 20
+  changed_when: false
+
+- name: system setup | macos defaults | set key repeat rate
+  command: defaults write NSGlobalDomain KeyRepeat -int 1
+  changed_when: false
+
+- name: system setup | macos defaults | disable auto-correct
+  command: defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+  changed_when: false
+
+# Screen
+
+- name: system setup | macos defaults | save screenshots to downloads folder
+  command: defaults write com.apple.screencapture location -string "{{ ansible_env.HOME }}/Downloads"
+  changed_when: false
+
+- name: system setup | macos defaults | save screenshots in PNG format
+  command: defaults write com.apple.screencapture type -string "png"
+  changed_when: false
+
+- name: system setup | macos defaults | disable screenshot shadow
+  command: defaults write com.apple.screencapture disable-shadow -bool true
+  changed_when: false
+
+# Finder
+
+# TODO: Verify on macOS 26.4 — NewWindowTarget/NewWindowTargetPath deprecated in macOS 13+ in favor of FinderWindowTargets
+- name: system setup | macos defaults | set new Finder windows target to Desktop
+  command: defaults write com.apple.finder NewWindowTarget -string "PfDe"
+  changed_when: false
+
+- name: system setup | macos defaults | set new Finder windows target path to Desktop
+  command: defaults write com.apple.finder NewWindowTargetPath -string "file://{{ ansible_env.HOME }}/Desktop/"
+  changed_when: false
+
+- name: system setup | macos defaults | show external hard drives on desktop
+  command: defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | show hard drives on desktop
+  command: defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | show mounted servers on desktop
+  command: defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | show removable media on desktop
+  command: defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | show all filename extensions
+  command: defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | show Finder status bar
+  command: defaults write com.apple.finder ShowStatusBar -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | enable text selection in Quick Look
+  command: defaults write com.apple.finder QLEnableTextSelection -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | display full POSIX path in Finder title
+  command: defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | search current folder by default in Finder
+  command: defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+  changed_when: false
+
+- name: system setup | macos defaults | disable warning when changing file extension
+  command: defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | enable spring loading for directories
+  command: defaults write NSGlobalDomain com.apple.springing.enabled -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | remove spring loading delay for directories
+  command: defaults write NSGlobalDomain com.apple.springing.delay -float 0.1
+  changed_when: false
+
+- name: system setup | macos defaults | avoid creating .DS_Store files on network volumes
+  command: defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | enable snap-to-grid for desktop icons
+  command: /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist || /usr/libexec/PlistBuddy -c "Add :DesktopViewSettings:IconViewSettings:arrangeBy string grid" ~/Library/Preferences/com.apple.finder.plist
+  changed_when: false
+
+- name: system setup | macos defaults | enable snap-to-grid for icon views (Generic)
+  command: /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist || /usr/libexec/PlistBuddy -c "Add :FK_StandardViewSettings:IconViewSettings:arrangeBy string grid" ~/Library/Preferences/com.apple.finder.plist
+  changed_when: false
+
+- name: system setup | macos defaults | enable snap-to-grid for icon views (Standard)
+  command: /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist || /usr/libexec/PlistBuddy -c "Add :StandardViewSettings:IconViewSettings:arrangeBy string grid" ~/Library/Preferences/com.apple.finder.plist
+  changed_when: false
+
+- name: system setup | macos defaults | set desktop icon size to 64
+  command: /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:iconSize 64" ~/Library/Preferences/com.apple.finder.plist || /usr/libexec/PlistBuddy -c "Add :DesktopViewSettings:IconViewSettings:iconSize integer 64" ~/Library/Preferences/com.apple.finder.plist
+  changed_when: false
+
+- name: system setup | macos defaults | set icon size to 64 (Generic)
+  command: /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:iconSize 64" ~/Library/Preferences/com.apple.finder.plist || /usr/libexec/PlistBuddy -c "Add :FK_StandardViewSettings:IconViewSettings:iconSize integer 64" ~/Library/Preferences/com.apple.finder.plist
+  changed_when: false
+
+- name: system setup | macos defaults | set icon size to 64 (Standard)
+  command: /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:iconSize 64" ~/Library/Preferences/com.apple.finder.plist || /usr/libexec/PlistBuddy -c "Add :StandardViewSettings:IconViewSettings:iconSize integer 64" ~/Library/Preferences/com.apple.finder.plist
+  changed_when: false
+
+- name: system setup | macos defaults | use column view in Finder by default
+  command: defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+  changed_when: false
+
+- name: system setup | macos defaults | unhide Library folder
+  command: chflags nohidden ~/Library
+  changed_when: false
+
+# Dock, Dashboard, and hot corners
+
+- name: system setup | macos defaults | set Dock icon size to 30
+  command: defaults write com.apple.dock tilesize -int 30
+  changed_when: false
+
+- name: system setup | macos defaults | speed up Mission Control animations
+  command: defaults write com.apple.dock expose-animation-duration -float 0.15
+  changed_when: false
+
+- name: system setup | macos defaults | show translucent Dock icons for hidden apps
+  command: defaults write com.apple.dock showhidden -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | enable reduce transparency
+  # TODO: Verify on macOS 26.4 — moved to Appearance settings in macOS 14+
+  command: defaults write com.apple.universalaccess reduceTransparency -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | set bottom-right hot corner to Mission Control
+  command: defaults write com.apple.dock wvous-br-corner -int 2
+  changed_when: false
+
+- name: system setup | macos defaults | set bottom-right hot corner modifier to none
+  command: defaults write com.apple.dock wvous-br-modifier -int 0
+  changed_when: false
+
+- name: system setup | macos defaults | set top-right hot corner to display sleep
+  command: defaults write com.apple.dock wvous-tr-corner -int 10
+  changed_when: false
+
+- name: system setup | macos defaults | set top-right hot corner modifier to none
+  command: defaults write com.apple.dock wvous-tr-modifier -int 0
+  changed_when: false
+
+- name: system setup | macos defaults | set bottom-left hot corner to Desktop
+  command: defaults write com.apple.dock wvous-bl-corner -int 4
+  changed_when: false
+
+- name: system setup | macos defaults | set bottom-left hot corner modifier to none
+  command: defaults write com.apple.dock wvous-bl-modifier -int 0
+  changed_when: false
+
+# Safari & WebKit
+
+- name: system setup | macos defaults | enable Safari Develop menu
+  command: defaults write com.apple.Safari IncludeDevelopMenu -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | enable Safari WebKit developer extras
+  command: defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | enable Safari WebKit2 developer extras
+  command: defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | enable WebKit developer extras in web views
+  command: defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
+  changed_when: false
+
+# Mail
+
+- name: system setup | macos defaults | copy email addresses without name in Mail
+  command: defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
+  changed_when: false
+
+# Spotlight
+
+- name: system setup | macos defaults | disable Spotlight indexing for mounted volumes
+  become: true
+  command: defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
+  changed_when: false
+  when: macos_defaults_root | default(true) | bool
+
+- name: system setup | macos defaults | restart Spotlight
+  command: killall mds
+  changed_when: false
+  failed_when: false
+  when: macos_defaults_restart | default(true) | bool
+
+# Activity Monitor
+
+- name: system setup | macos defaults | show Activity Monitor main window on launch
+  command: defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | show all processes in Activity Monitor
+  command: defaults write com.apple.ActivityMonitor ShowCategory -int 0
+  changed_when: false
+
+# Messages
+
+- name: system setup | macos defaults | disable smart quotes in Messages
+  command: defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-merge "automaticQuoteSubstitutionEnabled" -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | disable continuous spell checking in Messages
+  command: defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-merge "continuousSpellCheckingEnabled" -bool false
+  changed_when: false
+
+# App Store
+
+- name: system setup | macos defaults | disable in-app rating requests in App Store
+  command: defaults write com.apple.appstore InAppReviewEnabled -int 0
+  changed_when: false
+
+# Kill/restart affected applications
+
+- name: system setup | macos defaults | restart cfprefsd
+  command: killall cfprefsd
+  changed_when: false
+  failed_when: false
+  when: macos_defaults_restart | default(true) | bool
+
+- name: system setup | macos defaults | restart Dock
+  command: killall Dock
+  changed_when: false
+  failed_when: false
+  when: macos_defaults_restart | default(true) | bool
+
+- name: system setup | macos defaults | restart Finder
+  command: killall Finder
+  changed_when: false
+  failed_when: false
+  when: macos_defaults_restart | default(true) | bool
+
+- name: system setup | macos defaults | restart Mail
+  command: killall Mail
+  changed_when: false
+  failed_when: false
+  when: macos_defaults_restart | default(true) | bool
+
+- name: system setup | macos defaults | restart SystemUIServer
+  command: killall SystemUIServer
+  changed_when: false
+  failed_when: false
+  when: macos_defaults_restart | default(true) | bool
+
+- name: system setup | macos defaults | restart Terminal
+  command: killall Terminal
+  changed_when: false
+  failed_when: false
+  when: macos_defaults_restart | default(true) | bool
