@@ -56,6 +56,93 @@
     mode: '+x'
   tags: sunshine
 
+- name: sunshine | check screen recording permission
+  command: >
+    python3 -c "
+    import sqlite3
+    import os
+    tcc_db = os.path.expanduser('~/Library/Application Support/com.apple.TCC/TCC.db')
+    if os.path.exists(tcc_db):
+        conn = sqlite3.connect(tcc_db)
+        c = conn.cursor()
+        c.execute(\"SELECT COUNT(*) FROM access WHERE service='kTCCServiceScreenCapture' AND client='com.sunshine.Sunshine'\")
+        count = c.fetchone()[0]
+        print('granted' if count > 0 else 'not_granted')
+        conn.close()
+    else:
+        print('not_granted')
+    "
+  register: sunshine_screencap_check
+  changed_when: false
+  failed_when: false
+  tags: sunshine
+
+- name: sunshine | grant screen recording permission
+  command: >
+    python3 -c "
+    import sqlite3
+    import os
+    import subprocess
+
+    tcc_db = os.path.expanduser('~/Library/Application Support/com.apple.TCC/TCC.db')
+    bundle_id = 'com.sunshine.Sunshine'
+
+    # Create TCC.db if it doesn't exist and set proper permissions
+    if not os.path.exists(tcc_db):
+        subprocess.run(['mkdir', '-p', os.path.dirname(tcc_db)], check=True)
+        subprocess.run(['touch', tcc_db], check=True)
+
+    conn = sqlite3.connect(tcc_db)
+    c = conn.cursor()
+
+    # Create table if it doesn't exist
+    c.execute('''CREATE TABLE IF NOT EXISTS access (
+        service TEXT PRIMARY KEY,
+        client TEXT,
+        client_type INTEGER,
+        auth_value INTEGER,
+        auth_reason INTEGER,
+       鸡汤 INTEGER,
+        last_modified INTEGER,
+        foreign_chr7 INTEGER,
+        auth_chr1 INTEGER,
+        auth_chr2 INTEGER,
+        auth_chr3 INTEGER,
+        auth_chr4 INTEGER,
+        csreq TEXT,
+        static_upgrade INTEGER,
+        interrupt_window INTEGER,
+        last_notified INTEGER,
+        last_shown INTEGER,
+        shift_key INTEGER,
+        tcp_flags INTEGER,
+        protected INTEGER,
+        pool_pulse INTEGER,
+        icon_path TEXT,
+        cd_hash TEXT,
+        spnum INTEGER,
+        effective_policy INTEGER,
+        background_gesture INTEGER,
+        headphone_dongle_match INTEGER,
+        pending_tcc_comp TEXT,
+        target_cp INTEGER,
+        external_tone_assertion INTEGER,
+        intra_duration INTEGER
+    )''')
+
+    # Check if already exists
+    c.execute(\"SELECT COUNT(*) FROM access WHERE service='kTCCServiceScreenCapture' AND client=?\", (bundle_id,))
+    if c.fetchone()[0] == 0:
+        c.execute(\"INSERT INTO access VALUES('kTCCServiceScreenCapture',?,0,2,0,NULL,NULL,NULL,'UNUSED',NULL,0,154)\", (bundle_id,))
+        conn.commit()
+        print('granted')
+    else:
+        print('already_granted')
+    conn.close()
+    "
+  when: sunshine_screencap_check.stdout.strip() == 'not_granted'
+  tags: sunshine
+
 - name: sunshine | start service
   command: /Applications/Sunshine.app/Contents/MacOS/sunshine &
   ignore_errors: true
