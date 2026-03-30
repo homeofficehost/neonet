@@ -340,3 +340,36 @@
 #     recursive: yes
 #   when: not subrepo_directory.stat.exists
 #   tags: dotfiles,users,submodules
+
+- name: Dotfiles | Check if dotfiles bare repo exists
+  stat:
+    path: "/home/{{ username }}/.dotfiles-bare"
+  register: dotfiles_bare_directory
+  tags: dotfiles,users,personal
+
+- name: Dotfiles | Clone dotfiles repository as bare repo
+  become_user: "{{ username }}"
+  git:
+    repo: "https://github.com/homeofficehost/dotfiles.git"
+    dest: "/home/{{ username }}/.dotfiles-bare"
+    version: "main"
+    bare: yes
+    recursive: yes
+    force: yes
+  when: not dotfiles_bare_directory.stat.exists
+  tags: dotfiles,users,personal
+
+- name: Dotfiles | Configure bare repo (no worktree setting for bare repos)
+  become_user: "{{ username }}"
+  command: "git --git-dir=/home/{{ username }}/.dotfiles-bare config core.bare true"
+  tags: dotfiles,users,personal
+
+- name: Dotfiles | Checkout dotfiles files to home
+  become_user: "{{ username }}"
+  command: "git --git-dir=/home/{{ username }}/.dotfiles-bare --work-tree=/home/{{ username }} checkout"
+  tags: dotfiles,users,personal
+
+- name: Dotfiles | Set hide untracked files
+  become_user: "{{ username }}"
+  command: "git --git-dir=/home/{{ username }}/.dotfiles-bare --work-tree=/home/{{ username }} config status.showUntrackedFiles no"
+  tags: dotfiles,users,personal

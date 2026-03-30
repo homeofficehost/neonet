@@ -309,15 +309,7 @@
   command: defaults write -g QLPanelAnimationDuration -float 0
   changed_when: false
 
-- name: system setup | macos defaults | set bottom-right hot corner to Desktop
-  command: defaults write com.apple.dock wvous-br-corner -int 4
-  changed_when: false
-
-- name: system setup | macos defaults | set bottom-right hot corner modifier to none
-  command: defaults write com.apple.dock wvous-br-modifier -int 0
-  changed_when: false
-
-- name: system setup | macos defaults | set top-left hot corner to Desktop
+- name: system setup | macos defaults | set top-left hot corner to Mission Control
   command: defaults write com.apple.dock wvous-tl-corner -int 4
   changed_when: false
 
@@ -325,7 +317,7 @@
   command: defaults write com.apple.dock wvous-tl-modifier -int 0
   changed_when: false
 
-- name: system setup | macos defaults | set top-right hot corner to Desktop
+- name: system setup | macos defaults | set top-right hot corner to Mission Control
   command: defaults write com.apple.dock wvous-tr-corner -int 4
   changed_when: false
 
@@ -334,11 +326,19 @@
   changed_when: false
 
 - name: system setup | macos defaults | set bottom-left hot corner to Desktop
-  command: defaults write com.apple.dock wvous-bl-corner -int 4
+  command: defaults write com.apple.dock wvous-bl-corner -int 6
   changed_when: false
 
 - name: system setup | macos defaults | set bottom-left hot corner modifier to none
   command: defaults write com.apple.dock wvous-bl-modifier -int 0
+  changed_when: false
+
+- name: system setup | macos defaults | set bottom-right hot corner to Desktop
+  command: defaults write com.apple.dock wvous-br-corner -int 6
+  changed_when: false
+
+- name: system setup | macos defaults | set bottom-right hot corner modifier to none
+  command: defaults write com.apple.dock wvous-br-modifier -int 0
   changed_when: false
 
 # Safari & WebKit
