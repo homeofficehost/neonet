@@ -56,17 +56,61 @@
   command: defaults write NSGlobalDomain ContextMenuGesture -int 1
   changed_when: false
 
+- name: system setup | macos defaults | enable tap to click for login screen
+  command: defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+  changed_when: false
+
+- name: system setup | macos defaults | enable tap to click for this user
+  command: defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+  changed_when: false
+
+- name: system setup | macos defaults | enable three finger drag (bluetooth)
+  command: defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | enable three finger drag
+  command: defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | enable tap-and-a-half to drag (bluetooth)
+  command: defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -int 1
+  changed_when: false
+
+- name: system setup | macos defaults | enable tap-and-a-half to drag
+  command: defaults write com.apple.AppleMultitouchTrackpad Dragging -int 1
+  changed_when: false
+
 - name: system setup | macos defaults | disable press-and-hold for keys
   # TODO: Verify on macOS 26.4 — behavior redesigned in recent macOS
   command: defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
   changed_when: false
 
 - name: system setup | macos defaults | set initial key repeat delay
-  command: defaults write NSGlobalDomain InitialKeyRepeat -int 20
+  command: defaults write NSGlobalDomain InitialKeyRepeat -int 10
   changed_when: false
 
 - name: system setup | macos defaults | set key repeat rate
   command: defaults write NSGlobalDomain KeyRepeat -int 1
+  changed_when: false
+
+- name: system setup | macos defaults | enable natural scrolling (Lion-style)
+  command: defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | increase window resize speed for Cocoa applications
+  command: defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
+  changed_when: false
+
+- name: system setup | macos defaults | enable full keyboard access for all controls
+  command: defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+  changed_when: false
+
+- name: system setup | macos defaults | enable subpixel font rendering on non-Apple LCDs
+  command: defaults write NSGlobalDomain AppleFontSmoothing -int 2
+  changed_when: false
+
+- name: system setup | macos defaults | disable automatic termination of inactive apps
+  command: defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
   changed_when: false
 
 - name: system setup | macos defaults | disable auto-correct
@@ -188,6 +232,30 @@
   command: chflags nohidden "{{ ansible_env.HOME }}/Library"
   changed_when: false
 
+- name: system setup | macos defaults | keep folders on top when sorting by name
+  command: defaults write com.apple.finder _FXSortFoldersFirst -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | allow quitting Finder via Cmd+Q
+  command: defaults write com.apple.finder QuitMenuItem -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | disable Finder window animations
+  command: defaults write com.apple.finder DisableAllAnimations -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | disable warning when emptying Trash
+  command: defaults write com.apple.finder WarnOnEmptyTrash -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | automatically open Finder window when volume mounted
+  command: defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | expand File Info panes (General, Open with, Sharing)
+  command: defaults write com.apple.finder FXInfoPanesExpanded -dict General -bool true OpenWith -bool true Privileges -bool true
+  changed_when: false
+
 # Dock, Dashboard, and hot corners
 
 - name: system setup | macos defaults | set Dock icon size to 36
@@ -200,6 +268,45 @@
 
 - name: system setup | macos defaults | show translucent Dock icons for hidden apps
   command: defaults write com.apple.dock showhidden -bool true
+
+- name: system setup | macos defaults | enable highlight hover effect for grid view stacks
+  command: defaults write com.apple.dock mouse-over-hilite-stack -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | change minimize/maximize window effect to scale
+  command: defaults write com.apple.dock mineffect -string scale
+  changed_when: false
+
+- name: system setup | macos defaults | minimize windows into their application icon
+  command: defaults write com.apple.dock minimize-to-application -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | enable spring loading for all Dock items
+  command: defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | show indicator lights for open applications
+  command: defaults write com.apple.dock show-process-indicators -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | disable animations when opening applications
+  command: defaults write com.apple.dock launchanim -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | remove the auto-hiding Dock delay
+  command: defaults write com.apple.dock autohide-delay -float 0
+  changed_when: false
+
+- name: system setup | macos defaults | disable animations when hiding/showing the Dock
+  command: defaults write com.apple.dock autohide-time-modifier -float 0
+  changed_when: false
+
+- name: system setup | macos defaults | make Dock more transparent
+  command: defaults write com.apple.dock hide-mirror -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | disable Quick Look animations
+  command: defaults write -g QLPanelAnimationDuration -float 0
   changed_when: false
 
 - name: system setup | macos defaults | set bottom-right hot corner to Desktop
