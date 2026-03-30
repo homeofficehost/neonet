@@ -268,6 +268,7 @@
 
 - name: system setup | macos defaults | show translucent Dock icons for hidden apps
   command: defaults write com.apple.dock showhidden -bool true
+  changed_when: false
 
 - name: system setup | macos defaults | enable highlight hover effect for grid view stacks
   command: defaults write com.apple.dock mouse-over-hilite-stack -bool true
