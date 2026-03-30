@@ -190,8 +190,8 @@
 
 # Dock, Dashboard, and hot corners
 
-- name: system setup | macos defaults | set Dock icon size to 30
-  command: defaults write com.apple.dock tilesize -int 30
+- name: system setup | macos defaults | set Dock icon size to 36
+  command: defaults write com.apple.dock tilesize -int 36
   changed_when: false
 
 - name: system setup | macos defaults | speed up Mission Control animations
@@ -202,16 +202,24 @@
   command: defaults write com.apple.dock showhidden -bool true
   changed_when: false
 
-- name: system setup | macos defaults | set bottom-right hot corner to Mission Control
-  command: defaults write com.apple.dock wvous-br-corner -int 2
+- name: system setup | macos defaults | set bottom-right hot corner to Desktop
+  command: defaults write com.apple.dock wvous-br-corner -int 4
   changed_when: false
 
 - name: system setup | macos defaults | set bottom-right hot corner modifier to none
   command: defaults write com.apple.dock wvous-br-modifier -int 0
   changed_when: false
 
-- name: system setup | macos defaults | set top-right hot corner to display sleep
-  command: defaults write com.apple.dock wvous-tr-corner -int 10
+- name: system setup | macos defaults | set top-left hot corner to Desktop
+  command: defaults write com.apple.dock wvous-tl-corner -int 4
+  changed_when: false
+
+- name: system setup | macos defaults | set top-left hot corner modifier to none
+  command: defaults write com.apple.dock wvous-tl-modifier -int 0
+  changed_when: false
+
+- name: system setup | macos defaults | set top-right hot corner to Desktop
+  command: defaults write com.apple.dock wvous-tr-corner -int 4
   changed_when: false
 
 - name: system setup | macos defaults | set top-right hot corner modifier to none
@@ -266,9 +274,9 @@
   ignore_errors: true
 
 - name: system setup | macos defaults | restart SystemUIServer
-  command: killall SystemUIServer || true
+  shell: killall SystemUIServer || true
   changed_when: false
 
 - name: system setup | macos defaults | restart Terminal
-  command: killall Terminal || true
+  shell: killall Terminal || true
   changed_when: false
