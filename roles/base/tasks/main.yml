@@ -6,5 +6,8 @@
 - name: base | macOS | setup ansible
   import_tasks: ansible_setup.yml
 
+- name: base | macOS | setup user
+  import_tasks: users/user.yml
+
 - name: base | macOS | setup cron
   import_tasks: system_setup/cron.yml

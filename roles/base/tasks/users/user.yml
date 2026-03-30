@@ -1,31 +1,25 @@
 - name: users | create group
   tags: groups,users
-  become_user: "{{ username }}"
+  become: yes
   group:
     name: "{{ username }}"
     state: present
 
 - name: users | create user
   tags: sudo,users
+  become: yes
   user:
     name: "{{ username }}"
     group: "{{ username }}"
-    groups: "{{ username }},users,{{ sudo_group }}"
+    groups: "{{ username }},staff,{{ sudo_group | default('admin') }}"
     state: present
     comment: "user"
-    password: "{{ lookup('community.general.bitwarden', 'user_password', field='password') | password_hash('sha512') }}"
     shell: /usr/bin/zsh
-    # shell: /usr/bin/nologin
 
 - name: users | add sudoers file
   tags: settings,sudo,system,users
+  become: yes
   command: "rm -f /etc/sudoers.d/{{ username }}; echo '{{ username }} ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/{{ username }}"
-  # copy:
-  #   src: "users/sudoers_{{ username }}"
-  #   dest: "/etc/sudoers.d/{{ username }}"
-  #   owner: root
-  #   group: root
-  #   mode: 0440
 
 - name: users | create .ssh directory
   tags: dotfiles,ssh,users
@@ -36,7 +30,7 @@
     group: "{{ username }}"
     mode: 0700
   with_items:
-    - { dir: "/home/{{ username }}/.ssh" }
+    - { dir: "{{ userhome }}/.ssh" }
 
 - name: users | add all public keys
   tags: dotfiles,ssh,ssh-keys,users
@@ -45,7 +39,6 @@
     key: "{{ lookup('file', item) }}"
   with_fileglob:
     - "users/{{ username }}/ssh/*.pub"
-    # - "users/{{ username }}/ssh/*_id_ed25519.pub"
 
 - name: Dotfiles - Get home directory
   user:
@@ -75,7 +68,6 @@
     bare: yes
     track_submodules: yes
     recursive: yes
-    force: yes
   when: not repo_directory.stat.exists
   tags: dotfiles,users,barerepo
 
@@ -84,20 +76,6 @@
   command: "git reset --hard"
   when: not repo_directory.stat.exists
   tags: dotfiles,users,barerepo
-  # changed_when: "git_result.after|default('after') != git_result.before|default('before')"
-
-# - name: Dotfiles - Clone repository
-#   command: "git clone --bare {{ dotfiles_repo }} {{ repo_dir }}"
-#   become: yes
-#   become_user: "{{ username }}"
-#   when: not repo_directory.stat.exists
-#   tags: dotfiles,users,barerepo
-
-# - name: Dotfiles - Update submodules
-#   command: "git --git-dir={{ repo_dir }} --work-tree={{ work_dir }} -C {{ work_dir }} submodule update --init --recursive {{ item }}" # Git wants to cd into the directory first before using the submodule command
-#   become: yes
-#   become_user: "{{ username }}"
-#   loop: "{{ dotfiles_checkout | map('regex_replace', '^.*\\/\\*', '~/') | list }}" # Recurse through all files/directories and attempt to recursively clone submodules. Just does nothing if there are none. Regex replace /* to ~/ for compatability with dotfiles_checkout.
 
 - name: Dotfiles - Unset bare option to prevent fatal error (must be run in a work tree)
   command: "git --git-dir={{ repo_dir }} --work-tree={{ work_dir }} config --local core.bare false"
@@ -117,85 +95,6 @@
   become_user: "{{ username }}"
   tags: dotfiles,users,barerepo
 
-# Copy the dotfiles_checkout variable into a file for checkout
-# - name: Dotfiles - Configure Git sparse checkout
-#   copy:
-#     dest: "{{ repo_dir }}info/sparse-checkout"
-#     content: "{{ dotfiles_checkout | join('\n') }}"
-#   become: yes
-#   become_user: "{{ username }}"
-#   tags: dotfiles,users,barerepo
-
-
-# - name: Dotfiles - Checkout Git repository
-#   command: "git --git-dir={{ repo_dir }} --work-tree={{ work_dir }} checkout --force" # This will overwrite existing files!
-#   become: yes
-#   become_user: "{{ username }}"
-#   tags: dotfiles,users,barerepo
-
-# - name: Dotfiles - Pull Git repository
-#   command: "git --git-dir={{ repo_dir }} --work-tree={{ work_dir }} pull"
-#   become: yes
-#   become_user: "{{ username }}"
-#   tags: dotfiles,users,barerepo
-
-# - name: Dotfiles - Updating submodules
-#   command: "git --git-dir={{ repo_dir }} --work-tree={{ work_dir }} submodule update -f --init --recursive"
-#   become: yes
-#   become_user: "{{ username }}"
-#   tags: dotfiles,users,barerepo,update
-
-
-# - name: Git | Ensure repository set properly
-#   lineinfile: dest={{ repo_dir }}config
-#               regexp="^\s*bare.?="
-#               line="    bare = false"
-#   tags: dotfiles,users,barerepo
-
-# - name: Git | Ensure proper worktree
-#   lineinfile: dest={{ repo_dir }}config
-#               regexp='^\s*worktree.?='
-#               line="    worktree = {{ work_dir }}"
-#   tags: dotfiles,users,barerepo
-
-# - name: Git | Ensure work dir
-#   file: path={{ work_dir }} state=directory
-#         mode=0775
-#   tags: dotfiles,users,barerepo
-
-
-# # fetch/checkout
-# - name: Git | Fetching new changes
-#   shell: chdir={{ repo_dir }} git fetch --prune && git fetch --tags
-#   become_user: "{{ username }}"
-#   tags: dotfiles,users,barerepo
-
-# # - name: Git | Checkout version
-# #   command: "chdir={{ work_dir }} git --git-dir={{ repo_dir }} checkout -f {{ version | default('HEAD') }}"
-# #   become_user: "{{ username }}"
-# #   tags: dotfiles,users,barerepo
-
-# # - name: Git | Checkout dotfiles updates
-# #   command: "chdir={{ work_dir }} git fetch && git checkout master && git merge upstream/master"
-# #   become_user: "{{ username }}"
-# #   tags: dotfiles,users,barerepo
-
-# git submodules
-# - name: Git | Submodules | Syncing
-#   command: chdir={{ work_dir }} git --git-dir={{ repo_dir }} submodule sync
-#   become_user: "{{ username }}"
-#   tags: dotfiles,users,barerepo,update
-
-# - name: Git | Submodules | Updating
-#   command: chdir={{ work_dir }} git --git-dir={{ repo_dir }} submodule update -f --init --recursive
-#   become_user: "{{ username }}"
-#   tags: dotfiles,users,barerepo,update
-
-# - name: Git | Ensure untracked files are hidden
-#   command: chdir={{ work_dir }} git --git-dir={{ repo_dir }} config --local status.showUntrackedFiles no
-#   become_user: "{{ username }}"
-#   tags: dotfiles,users,barerepo,update
-
 - name: Git | Create symbolic link
   file:
     src: "{{ repo_dir }}"
@@ -209,7 +108,7 @@
 - name: users | copy config directory
   copy:
     src: "{{ item }}"
-    dest: "/home/{{ username }}/.config/git/"
+    dest: "{{ userhome }}/.config/git/"
     owner: "{{ username }}"
     group: "{{ username }}"
   with_items:
@@ -218,48 +117,35 @@
 - name: users | copy config directory pass
   copy:
     src: "{{ item }}"
-    dest: "/home/{{ username }}/.config/pass-git-helper/"
+    dest: "{{ userhome }}/.config/pass-git-helper/"
     owner: "{{ username }}"
     group: "{{ username }}"
   with_items:
     ["users/{{ username }}/config/pass-git-helper/git-pass-mapping.ini" ]
 
-# - name: users | copy config directory
-#   copy:
-#     src: "{{ item }}"
-#     dest: "/home/{{ username }}/.config"
-#     owner: "{{ username }}"
-#     group: "{{ username }}"
-#     mode: 0644
-#   with_fileglob:
-#     - "users/{{ username }}/config/*"
-#   tags: dotfiles,users,barerepo
-
-
 - name: Dotfiles - Clone z-zsh
   stat:
-    path: "/home/{{ username }}/z-zsh"
+    path: "{{ userhome }}/z-zsh"
   register: subrepo_directory
   tags: dotfiles,users,submodules
 - name: Git | Checkout z-zsh repository
   become_user: "{{ username }}"
   git:
     repo: "https://github.com/sjl/z-zsh.git"
-    dest: "/home/{{ username }}/z-zsh"
-    # update: yes
+    dest: "{{ userhome }}/z-zsh"
   when: not subrepo_directory.stat.exists
   tags: dotfiles,users,submodules
 
 - name: Dotfiles - Clone .vim
   stat:
-    path: "/home/{{ username }}/.vim"
+    path: "{{ userhome }}/.vim"
   register: subrepo_directory
   tags: dotfiles,users,submodules
 - name: Git | Checkout .vim repository
   become_user: "{{ username }}"
   git:
     repo: "https://github.com/homeofficehost/.vim.git"
-    dest: "/home/{{ username }}/.vim"
+    dest: "{{ userhome }}/.vim"
     update: yes
     track_submodules: yes
     recursive: yes
@@ -268,41 +154,40 @@
 
 - name: Dotfiles - Clone setup-keys
   stat:
-    path: "/home/{{ username }}/setup-keys"
+    path: "{{ userhome }}/setup-keys"
   register: subrepo_directory
   tags: dotfiles,users,submodules
 - name: Git | Checkout setup-keys repository
   become_user: "{{ username }}"
   git:
     repo: "https://github.com/homeofficehost/setup-keys.git"
-    dest: "/home/{{ username }}/setup-keys"
-    # update: yes
+    dest: "{{ userhome }}/setup-keys"
   when: not subrepo_directory.stat.exists
   tags: dotfiles,users,submodules
 
 - name: Dotfiles - Clone .oh-my-zsh
   stat:
-    path: "/home/{{ username }}/.oh-my-zsh"
+    path: "{{ userhome }}/.oh-my-zsh"
   register: subrepo_directory
   tags: dotfiles,users,submodules
 - name: Git | Checkout .oh-my-zsh repository
   become_user: "{{ username }}"
   git:
     repo: "https://github.com/robbyrussell/oh-my-zsh.git"
-    dest: "/home/{{ username }}/.oh-my-zsh"
+    dest: "{{ userhome }}/.oh-my-zsh"
   when: not subrepo_directory.stat.exists
   tags: dotfiles,users,submodules
 
 - name: Dotfiles - Clone .oh-my-zsh-custom
   stat:
-    path: "/home/{{ username }}/.oh-my-zsh-custom"
+    path: "{{ userhome }}/.oh-my-zsh-custom"
   register: subrepo_directory
   tags: dotfiles,users,submodules
 - name: Git | Checkout .oh-my-zsh-custom repository
   become_user: "{{ username }}"
   git:
     repo: "https://github.com/homeofficehost/oh-my-zsh-custom.git"
-    dest: "/home/{{ username }}/.oh-my-zsh-custom"
+    dest: "{{ userhome }}/.oh-my-zsh-custom"
     update: yes
     track_submodules: yes
     recursive: yes
@@ -311,65 +196,57 @@
 
 - name: Dotfiles - Clone personal site
   stat:
-    path: "/home/{{ username }}/site"
+    path: "{{ userhome }}/site"
   register: subrepo_directory
   tags: dotfiles,users,submodules
 - name: Git | Clone personal
   become_user: "{{ username }}"
   git:
-    repo: "{{ site_upstream }}"
-    dest: "/home/{{ username }}/site"
+    repo: "{{ site_upstream | default('https://github.com/homeofficehost/homeofficehost.github.io') }}"
+    dest: "{{ userhome }}/site"
     update: yes
     track_submodules: yes
     recursive: yes
   when: not subrepo_directory.stat.exists
   tags: dotfiles,users,submodules
 
-# - name: Dotfiles - Clone personal blog
-#   stat:
-#     path: "/home/{{ username }}/blog"
-#   register: subrepo_directory
-#   tags: dotfiles,users,submodules
-# - name: Git | Clone personal
-#   become_user: "{{ username }}"
-#   git:
-#     repo: "{{ blog_upstream }}"
-#     dest: "/home/{{ username }}/blog"
-#     update: yes
-#     track_submodules: yes
-#     recursive: yes
-#   when: not subrepo_directory.stat.exists
-#   tags: dotfiles,users,submodules
-
 - name: Dotfiles | Check if dotfiles bare repo exists
   stat:
-    path: "/home/{{ username }}/.dotfiles-bare"
+    path: "{{ userhome }}/.dotfiles-bare"
   register: dotfiles_bare_directory
   tags: dotfiles,users,personal
 
 - name: Dotfiles | Clone dotfiles repository as bare repo
   become_user: "{{ username }}"
   git:
-    repo: "https://github.com/homeofficehost/dotfiles.git"
-    dest: "/home/{{ username }}/.dotfiles-bare"
+    repo: "{{ dotfiles_repo }}"
+    dest: "{{ userhome }}/.dotfiles-bare"
     version: "main"
     bare: yes
     recursive: yes
-    force: yes
   when: not dotfiles_bare_directory.stat.exists
   tags: dotfiles,users,personal
 
-- name: Dotfiles | Configure bare repo (no worktree setting for bare repos)
+- name: Dotfiles | Configure bare repo
   become_user: "{{ username }}"
-  command: "git --git-dir=/home/{{ username }}/.dotfiles-bare config core.bare true"
+  command: "git --git-dir={{ userhome }}/.dotfiles-bare config core.bare true"
+  when: not dotfiles_bare_directory.stat.exists
   tags: dotfiles,users,personal
 
 - name: Dotfiles | Checkout dotfiles files to home
   become_user: "{{ username }}"
-  command: "git --git-dir=/home/{{ username }}/.dotfiles-bare --work-tree=/home/{{ username }} checkout"
+  command: "git --git-dir={{ userhome }}/.dotfiles-bare --work-tree={{ userhome }} checkout"
+  when: not dotfiles_bare_directory.stat.exists
   tags: dotfiles,users,personal
 
 - name: Dotfiles | Set hide untracked files
   become_user: "{{ username }}"
-  command: "git --git-dir=/home/{{ username }}/.dotfiles-bare --work-tree=/home/{{ username }} config status.showUntrackedFiles no"
+  command: "git --git-dir={{ userhome }}/.dotfiles-bare --work-tree={{ userhome }} config status.showUntrackedFiles no"
+  when: not dotfiles_bare_directory.stat.exists
+  tags: dotfiles,users,personal
+
+- name: Dotfiles | Mark provision as changed
+  set_fact:
+    provision_changed: true
+  when: not dotfiles_bare_directory.stat.exists
   tags: dotfiles,users,personal

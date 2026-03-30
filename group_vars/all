@@ -12,7 +12,7 @@ userhome:                          "{{ lookup('env','HOME') }}"
 
 github_username: "thomasgroch"
 upstream: https://github.com/homeofficehost/neonet
-repo_dir: "/home/{{ username }}/.bare-dotfiles/"
-work_dir: "/home/{{ username }}/"
+repo_dir: "{{ userhome }}/.bare-dotfiles/"
+work_dir: "{{ userhome }}/"
 ansible_cron_hour: "*"
 ansible_cron_minute: "*/5"
