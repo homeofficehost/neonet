@@ -1,0 +1,24 @@
+---
+- name: zerotier | check if installed
+  command: brew list --cask zerotier
+  register: zerotier_installed
+  failed_when: false
+  changed_when: false
+  tags: zerotier
+
+- name: zerotier | install via homebrew
+  command: brew install --cask zerotier
+  when: zerotier_installed.rc != 0
+  tags: zerotier
+
+- name: zerotier | start service
+  command: sudo launchctl load /Library/LaunchDaemons/com.zerotier.one.plist
+  ignore_errors: true
+  changed_when: true
+  tags: zerotier
+
+- name: zerotier | enable menu bar icon
+  command: /Library/Application\ Support/ZeroTier/One/zertctl setram -D
+  ignore_errors: true
+  changed_when: false
+  tags: zerotier

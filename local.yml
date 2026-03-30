@@ -9,6 +9,7 @@
     - base
     - workstation
     - sunshine
+    - zerotier
 
   post_tasks:
     - name: "🚀 success | provisioning complete"
