@@ -26,18 +26,20 @@
   when: not sunshine_app.stat.exists
   tags: sunshine
 
-- name: sunshine | mount dmg
-  command: hdiutil attach /tmp/sunshine.dmg -nobrowse -mountpoint /Volumes/sunshine
+- name: sunshine | extract dmg using 7z
+  command: 7z x /tmp/sunshine.dmg -o/tmp/sunshine_extract -y
   when: not sunshine_app.stat.exists
   tags: sunshine
 
 - name: sunshine | copy to Applications
-  command: cp -R /Volumes/sunshine/Sunshine.app /Applications/
+  command: cp -R /tmp/sunshine_extract/Sunshine/Sunshine.app /Applications/
   when: not sunshine_app.stat.exists
   tags: sunshine
 
-- name: sunshine | unmount dmg
-  command: hdiutil detach /Volumes/sunshine
+- name: sunshine | cleanup extract directory
+  file:
+    path: "/tmp/sunshine_extract"
+    state: absent
   when: not sunshine_app.stat.exists
   tags: sunshine
 
