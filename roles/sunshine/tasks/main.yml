@@ -50,6 +50,13 @@
   when: not sunshine_app.stat.exists
   tags: sunshine
 
+- name: sunshine | make executable
+  file:
+    path: /Applications/Sunshine.app/Contents/MacOS/sunshine
+    mode: '+x'
+  when: not sunshine_app.stat.exists
+  tags: sunshine
+
 - name: sunshine | start service
   command: /Applications/Sunshine.app/Contents/MacOS/sunshine &
   ignore_errors: true
