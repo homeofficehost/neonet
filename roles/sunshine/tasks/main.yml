@@ -5,18 +5,23 @@
   register: sunshine_app
   tags: sunshine
 
-- name: sunshine | get latest version
-  uri:
-    url: "https://api.github.com/repos/LizardByte/Sunshine/releases/latest"
-    return_content: true
-  register: sunshine_release
-  when: not sunshine_app.stat.exists
+- name: sunshine | check for running process
+  command: pgrep -f Sunshine
+  register: sunshine_running
+  failed_when: false
+  changed_when: false
   tags: sunshine
 
 - name: sunshine | set version fact
   set_fact:
-    sunshine_version: "{{ sunshine_release.json.tag_name | regex_replace('v', '') }}"
-    sunshine_download_url: "{{ sunshine_release.json.assets | selectattr('name', 'search', 'macos.*\\.dmg') | map(attribute='browser_download_url') | list | first }}"
+    sunshine_version: "0.23.1"
+    sunshine_download_url: "https://github.com/LizardByte/Sunshine/releases/download/v0.23.1/Sunshine-macos-{{ sunshine_version }}.dmg"
+  when: not sunshine_app.stat.exists
+  tags: sunshine
+
+- name: sunshine | debug download url
+  debug:
+    msg: "Downloading Sunshine from {{ sunshine_download_url }}"
   when: not sunshine_app.stat.exists
   tags: sunshine
 
@@ -45,7 +50,7 @@
 
 - name: sunshine | cleanup dmg
   file:
-    path: /tmp/sunshine.dmg
+    path: "/tmp/sunshine.dmg"
     state: absent
   when: not sunshine_app.stat.exists
   tags: sunshine
@@ -54,6 +59,7 @@
   command: /Applications/Sunshine.app/Contents/MacOS/sunshine &
   ignore_errors: true
   changed_when: true
+  when: sunshine_running.rc != 0
   tags: sunshine
 
 - name: sunshine | wait for service
