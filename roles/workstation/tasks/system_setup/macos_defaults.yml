@@ -266,11 +266,9 @@
   ignore_errors: true
 
 - name: system setup | macos defaults | restart SystemUIServer
-  command: killall SystemUIServer
+  command: killall SystemUIServer || true
   changed_when: false
-  ignore_errors: true
 
 - name: system setup | macos defaults | restart Terminal
-  command: killall Terminal
+  command: killall Terminal || true
   changed_when: false
-  ignore_errors: true
