@@ -1,0 +1,24 @@
+---
+- name: sunshine | check if installed
+  command: brew list --cask sunshine
+  register: sunshine_installed
+  failed_when: false
+  changed_when: false
+  tags: sunshine
+
+- name: sunshine | install via homebrew
+  command: brew install --cask sunshine
+  when: sunshine_installed.rc != 0
+  tags: sunshine
+
+- name: sunshine | start service
+  command: brew services start sunshine
+  when: sunshine_installed.rc != 0
+  tags: sunshine
+
+- name: sunshine | wait for service
+  wait_for:
+    port: 47984
+    delay: 5
+    timeout: 60
+  tags: sunshine

@@ -1,0 +1,8 @@
+---
+- name: sunshine | restart service
+  command: brew services restart sunshine
+  listen: "restart sunshine"
+
+- name: sunshine | stop service
+  command: brew services stop sunshine
+  listen: "stop sunshine"

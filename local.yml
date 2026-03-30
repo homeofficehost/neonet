@@ -8,6 +8,7 @@
   roles:
     - base
     - workstation
+    - sunshine
 
   post_tasks:
     - name: "🚀 success | provisioning complete"
