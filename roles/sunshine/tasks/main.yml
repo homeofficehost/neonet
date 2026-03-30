@@ -1,19 +1,59 @@
 ---
 - name: sunshine | check if installed
-  command: brew list --cask sunshine
-  register: sunshine_installed
-  failed_when: false
-  changed_when: false
+  stat:
+    path: /Applications/Sunshine.app
+  register: sunshine_app
   tags: sunshine
 
-- name: sunshine | install via homebrew
-  command: brew install --cask sunshine
-  when: sunshine_installed.rc != 0
+- name: sunshine | get latest version
+  uri:
+    url: "https://api.github.com/repos/LizardByte/Sunshine/releases/latest"
+    return_content: true
+  register: sunshine_release
+  when: not sunshine_app.stat.exists
+  tags: sunshine
+
+- name: sunshine | set version fact
+  set_fact:
+    sunshine_version: "{{ sunshine_release.json.tag_name | regex_replace('v', '') }}"
+    sunshine_download_url: "{{ sunshine_release.json.assets | selectattr('name', 'search', 'macos.*\\.dmg') | map(attribute='browser_download_url') | list | first }}"
+  when: not sunshine_app.stat.exists
+  tags: sunshine
+
+- name: sunshine | download dmg
+  get_url:
+    url: "{{ sunshine_download_url }}"
+    dest: "/tmp/sunshine.dmg"
+    mode: '0644'
+  when: not sunshine_app.stat.exists
+  tags: sunshine
+
+- name: sunshine | mount dmg
+  command: hdiutil attach /tmp/sunshine.dmg -nobrowse -mountpoint /Volumes/sunshine
+  when: not sunshine_app.stat.exists
+  tags: sunshine
+
+- name: sunshine | copy to Applications
+  command: cp -R /Volumes/sunshine/Sunshine.app /Applications/
+  when: not sunshine_app.stat.exists
+  tags: sunshine
+
+- name: sunshine | unmount dmg
+  command: hdiutil detach /Volumes/sunshine
+  when: not sunshine_app.stat.exists
+  tags: sunshine
+
+- name: sunshine | cleanup dmg
+  file:
+    path: /tmp/sunshine.dmg
+    state: absent
+  when: not sunshine_app.stat.exists
   tags: sunshine
 
 - name: sunshine | start service
-  command: brew services start sunshine
-  when: sunshine_installed.rc != 0
+  command: /Applications/Sunshine.app/Contents/MacOS/sunshine &
+  ignore_errors: true
+  changed_when: true
   tags: sunshine
 
 - name: sunshine | wait for service
