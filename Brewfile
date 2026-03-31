@@ -7,7 +7,7 @@ cask "hiddenbar"
 ## Shell & Core
 brew "zsh"
 brew "bash"
-brew "micro"
+#brew "micro"
 brew "vim"
 brew "neovim"
 brew "nano"

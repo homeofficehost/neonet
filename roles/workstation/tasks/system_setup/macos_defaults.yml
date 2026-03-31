@@ -52,6 +52,18 @@
   command: defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 0
   changed_when: false
 
+- name: system setup | macos defaults | enable trackpad corner click behavior (bluetooth)
+  command: defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 2
+  changed_when: false
+
+- name: system setup | macos defaults | enable trackpad secondary click globally
+  command: defaults write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | enable trackpad corner click behavior
+  command: defaults write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
+  changed_when: false
+
 - name: system setup | macos defaults | enable context menu gesture for right-click
   command: defaults write NSGlobalDomain ContextMenuGesture -int 1
   changed_when: false
@@ -99,6 +111,14 @@
 
 - name: system setup | macos defaults | increase window resize speed for Cocoa applications
   command: defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
+  changed_when: false
+
+- name: system setup | macos defaults | disable automatic window open/close animations
+  command: defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | disable resume windows animation when logging in
+  command: defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false
   changed_when: false
 
 - name: system setup | macos defaults | enable full keyboard access for all controls
@@ -348,6 +368,18 @@
   command: defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
   changed_when: false
 
+# Terminal
+
+- name: system setup | macos defaults | set Terminal to use UTF-8 encoding
+  command: defaults write com.apple.terminal StringEncodings -array 4
+  changed_when: false
+
+# Downloads & Quarantine
+
+- name: system setup | macos defaults | disable file quarantine (download warning)
+  command: defaults write com.apple.LaunchServices LSQuarantine -bool false
+  changed_when: false
+
 # Activity Monitor
 
 - name: system setup | macos defaults | show Activity Monitor main window on launch
@@ -363,6 +395,11 @@
 - name: system setup | macos defaults | disable in-app rating requests in App Store
   command: defaults write com.apple.appstore InAppReviewEnabled -int 0
   changed_when: false
+
+- name: system setup | macos defaults | hide serial number in About This Mac
+  command: defaults write /Library/Preferences/com.apple.SystemProfiler "Hide Serial Number" -bool true
+  changed_when: false
+  become: yes
 
 # Kill/restart affected applications
 
