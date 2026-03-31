@@ -20,6 +20,7 @@
   command: hs -c "hs.reload()"
   changed_when: false
   when: hammerspoon_config.changed
+  ignore_errors: true
 
 - name: system setup | karabiner | ensure complex_modifications directory exists
   file:

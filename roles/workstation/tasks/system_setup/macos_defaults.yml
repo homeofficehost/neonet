@@ -140,6 +140,7 @@
 - name: system setup | macos defaults | disable transparency in menu bar and elsewhere
   command: defaults write com.apple.universalaccess reduceTransparency -bool true
   changed_when: false
+  ignore_errors: true
 
 - name: system setup | macos defaults | set highlight color to green
   command: defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600"
@@ -480,16 +481,16 @@
   command: defaults write -g QLPanelAnimationDuration -float 0
   changed_when: false
 
-- name: system setup | macos defaults | set top-left hot corner to Mission Control
-  command: defaults write com.apple.dock wvous-tl-corner -int 4
+- name: system setup | macos defaults | set top-left hot corner to Application Windows
+  command: defaults write com.apple.dock wvous-tl-corner -int 2
   changed_when: false
 
 - name: system setup | macos defaults | set top-left hot corner modifier to none
   command: defaults write com.apple.dock wvous-tl-modifier -int 0
   changed_when: false
 
-- name: system setup | macos defaults | set top-right hot corner to Mission Control
-  command: defaults write com.apple.dock wvous-tr-corner -int 4
+- name: system setup | macos defaults | set top-right hot corner to Application Windows
+  command: defaults write com.apple.dock wvous-tr-corner -int 2
   changed_when: false
 
 - name: system setup | macos defaults | set top-right hot corner modifier to none
@@ -555,6 +556,10 @@
 
 - name: system setup | macos defaults | disable annoying line marks in Terminal
   command: defaults write com.apple.Terminal ShowLineMarks -int 0
+  changed_when: false
+
+- name: system setup | macos defaults | enable focus follows mouse in Terminal
+  command: defaults write com.apple.Terminal FocusFollowsMouse -bool true
   changed_when: false
 
 # Downloads & Quarantine
@@ -670,6 +675,7 @@
   command: defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
   changed_when: false
   become: yes
+  ignore_errors: true
 
 - name: system setup | macos defaults | change Spotlight indexing order and disable some results
   command: >
