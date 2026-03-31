@@ -102,7 +102,7 @@
   changed_when: false
 
 - name: system setup | macos defaults | set key repeat rate
-  command: defaults write NSGlobalDomain KeyRepeat -int 1
+  command: defaults write NSGlobalDomain KeyRepeat -int 2
   changed_when: false
 
 - name: system setup | macos defaults | enable natural scrolling (Lion-style)
