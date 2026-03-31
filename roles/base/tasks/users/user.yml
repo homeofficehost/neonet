@@ -72,30 +72,38 @@
     track_submodules: yes
     recursive: yes
   when: not repo_directory.stat.exists
+  check_mode: no
   tags: dotfiles,users,barerepo
 
 - name: Git | Overwrite distro default dotfiles on the first run
   become_user: "{{ username }}"
   command: "git reset --hard"
   when: not repo_directory.stat.exists
+  check_mode: no
   tags: dotfiles,users,barerepo
 
 - name: Dotfiles - Unset bare option to prevent fatal error (must be run in a work tree)
   command: "git --git-dir={{ repo_dir }} --work-tree={{ work_dir }} config --local core.bare false"
   become: yes
   become_user: "{{ username }}"
+  when: not repo_directory.stat.exists
+  check_mode: no
   tags: dotfiles,users,barerepo
 
 - name: Dotfiles - Enable sparse checkout
   command: "git --git-dir={{ repo_dir }} --work-tree={{ work_dir }} config --local core.sparseCheckout true"
   become: yes
   become_user: "{{ username }}"
+  when: not repo_directory.stat.exists
+  check_mode: no
   tags: dotfiles,users,barerepo
 
 - name: Dotfiles - Disable showing untracked files
   command: "git --git-dir={{ repo_dir }} --work-tree={{ work_dir }} config --local status.showUntrackedFiles no"
   become: yes
   become_user: "{{ username }}"
+  when: not repo_directory.stat.exists
+  check_mode: no
   tags: dotfiles,users,barerepo
 
 - name: Git | Create symbolic link
@@ -106,6 +114,8 @@
     group: "{{ username }}"
     state: link
   become_user: "{{ username }}"
+  when: not repo_directory.stat.exists
+  check_mode: no
   tags: dotfiles,users,barerepo
 
 - name: users | copy config directory
