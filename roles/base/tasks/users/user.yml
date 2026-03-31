@@ -15,7 +15,7 @@
     groups: "{{ username }},staff,{{ sudo_group | default('admin') }}"
     state: present
     comment: "user"
-    shell: /usr/bin/zsh
+    shell: /bin/zsh
 
 - name: users | add sudoers file
   tags: settings,sudo,system,users
