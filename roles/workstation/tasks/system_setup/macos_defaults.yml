@@ -137,6 +137,70 @@
   command: defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
   changed_when: false
 
+- name: system setup | macos defaults | disable transparency in menu bar and elsewhere
+  command: defaults write com.apple.universalaccess reduceTransparency -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | set highlight color to green
+  command: defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600"
+  changed_when: false
+
+- name: system setup | macos defaults | set sidebar icon size to medium
+  command: defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
+  changed_when: false
+
+- name: system setup | macos defaults | always show scrollbars
+  command: defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
+  changed_when: false
+
+- name: system setup | macos defaults | disable over-the-top focus ring animation
+  command: defaults write NSGlobalDomain NSUseAnimatedFocusRing -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | adjust toolbar title rollover delay
+  command: defaults write NSGlobalDomain NSToolbarTitleViewRolloverDelay -float 0
+  changed_when: false
+
+- name: system setup | macos defaults | display ASCII control characters using caret notation
+  command: defaults write NSGlobalDomain NSTextShowsControlCharacters -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | disable automatic capitalization
+  command: defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | disable automatic period substitution
+  command: defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | set Help Viewer windows to non-floating mode
+  command: defaults write com.apple.helpviewer DevMode -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | increase sound quality for Bluetooth headphones
+  command: defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
+  changed_when: false
+
+- name: system setup | macos defaults | disable Notification Center
+  command: launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist
+  changed_when: false
+  ignore_errors: true
+
+- name: system setup | macos defaults | reveal IP address and hostname in login window
+  command: defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
+  changed_when: false
+  become: yes
+
+- name: system setup | macos defaults | show language menu in boot screen
+  command: defaults write /Library/Preferences/com.apple.loginwindow showInputMenu -bool true
+  changed_when: false
+  become: yes
+
+- name: system setup | macos defaults | remove duplicates in Open With menu
+  command: /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+  changed_when: false
+  ignore_errors: true
+
 # Screen
 
 - name: system setup | macos defaults | save screenshots to downloads folder
@@ -150,6 +214,19 @@
 - name: system setup | macos defaults | disable screenshot shadow
   command: defaults write com.apple.screencapture disable-shadow -bool true
   changed_when: false
+
+- name: system setup | macos defaults | require password immediately after sleep or screensaver
+  command: defaults write com.apple.screensaver askForPassword -int 1
+  changed_when: false
+
+- name: system setup | macos defaults | set screensaver password delay to immediate
+  command: defaults write com.apple.screensaver askForPasswordDelay -int 0
+  changed_when: false
+
+- name: system setup | macos defaults | enable HiDPI display modes
+  command: defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
+  changed_when: false
+  become: yes
 
 # Finder
 
@@ -276,6 +353,79 @@
   command: defaults write com.apple.finder FXInfoPanesExpanded -dict General -bool true OpenWith -bool true Privileges -bool true
   changed_when: false
 
+- name: system setup | macos defaults | avoid creating .DS_Store files on USB volumes
+  command: defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | show Finder path bar
+  command: defaults write com.apple.finder ShowPathbar -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | show item info near icons on desktop
+  command: /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:showItemInfo true" "{{ ansible_env.HOME }}/Library/Preferences/com.apple.finder.plist"
+  changed_when: false
+  ignore_errors: true
+
+- name: system setup | macos defaults | show item info near icons (Generic)
+  command: /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:showItemInfo true" "{{ ansible_env.HOME }}/Library/Preferences/com.apple.finder.plist"
+  changed_when: false
+  ignore_errors: true
+
+- name: system setup | macos defaults | show item info near icons (Standard)
+  command: /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:showItemInfo true" "{{ ansible_env.HOME }}/Library/Preferences/com.apple.finder.plist"
+  changed_when: false
+  ignore_errors: true
+
+- name: system setup | macos defaults | show item info to the right of icons on desktop
+  command: /usr/libexec/PlistBuddy -c "Set DesktopViewSettings:IconViewSettings:labelOnBottom false" "{{ ansible_env.HOME }}/Library/Preferences/com.apple.finder.plist"
+  changed_when: false
+  ignore_errors: true
+
+- name: system setup | macos defaults | increase grid spacing for desktop icons
+  command: /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:gridSpacing 100" "{{ ansible_env.HOME }}/Library/Preferences/com.apple.finder.plist"
+  changed_when: false
+  ignore_errors: true
+
+- name: system setup | macos defaults | increase grid spacing (Generic)
+  command: /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:gridSpacing 100" "{{ ansible_env.HOME }}/Library/Preferences/com.apple.finder.plist"
+  changed_when: false
+  ignore_errors: true
+
+- name: system setup | macos defaults | increase grid spacing (Standard)
+  command: /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:gridSpacing 100" "{{ ansible_env.HOME }}/Library/Preferences/com.apple.finder.plist"
+  changed_when: false
+  ignore_errors: true
+
+- name: system setup | macos defaults | enable AirDrop over Ethernet
+  command: defaults write com.apple.NetworkBrowser BrowseAllInterfaces -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | show the /Volumes folder
+  command: sudo chflags nohidden /Volumes
+  changed_when: false
+  become: yes
+  ignore_errors: true
+
+- name: system setup | macos defaults | disable disk image verification
+  command: defaults write com.apple.frameworks.diskimages skip-verify -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | disable disk image verification (locked)
+  command: defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | disable disk image verification (remote)
+  command: defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | auto-open Finder for read-only disk images
+  command: defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | auto-open Finder for read-write disk images
+  command: defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
+  changed_when: false
+
 # Dock, Dashboard, and hot corners
 
 - name: system setup | macos defaults | set Dock icon size to 36
@@ -362,6 +512,31 @@
   command: defaults write com.apple.dock wvous-br-modifier -int 0
   changed_when: false
 
+- name: system setup | macos defaults | do not automatically rearrange Spaces
+  command: defaults write com.apple.dock mru-spaces -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | disable Dashboard
+  command: defaults write com.apple.dashboard mcx-disabled -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | do not show Dashboard as a Space
+  command: defaults write com.apple.dock dashboard-in-overlay -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | do not show recent applications in Dock
+  command: defaults write com.apple.dock show-recents -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | do not group windows by application in Mission Control
+  command: defaults write com.apple.dock expose-group-by-app -bool false
+  changed_when: false
+
+- name: system setup | macos defaults | reset Launchpad but keep wallpaper intact
+  command: find "{{ ansible_env.HOME }}/Library/Application Support/Dock" -name "*-*.db" -maxdepth 1 -delete
+  changed_when: false
+  ignore_errors: true
+
 # Safari & WebKit
 
 - name: system setup | macos defaults | enable WebKit developer extras in web views
@@ -372,6 +547,14 @@
 
 - name: system setup | macos defaults | set Terminal to use UTF-8 encoding
   command: defaults write com.apple.terminal StringEncodings -array 4
+  changed_when: false
+
+- name: system setup | macos defaults | enable Secure Keyboard Entry in Terminal
+  command: defaults write com.apple.terminal SecureKeyboardEntry -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | disable annoying line marks in Terminal
+  command: defaults write com.apple.Terminal ShowLineMarks -int 0
   changed_when: false
 
 # Downloads & Quarantine
@@ -390,6 +573,18 @@
   command: defaults write com.apple.ActivityMonitor ShowCategory -int 0
   changed_when: false
 
+- name: system setup | macos defaults | visualize CPU usage in Activity Monitor Dock icon
+  command: defaults write com.apple.ActivityMonitor IconType -int 5
+  changed_when: false
+
+- name: system setup | macos defaults | sort Activity Monitor by CPU usage
+  command: defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
+  changed_when: false
+
+- name: system setup | macos defaults | set Activity Monitor sort direction to descending
+  command: defaults write com.apple.ActivityMonitor SortDirection -int 0
+  changed_when: false
+
 # App Store
 
 - name: system setup | macos defaults | disable in-app rating requests in App Store
@@ -400,6 +595,183 @@
   command: defaults write /Library/Preferences/com.apple.SystemProfiler "Hide Serial Number" -bool true
   changed_when: false
   become: yes
+
+- name: system setup | macos defaults | enable WebKit Developer Tools in App Store
+  command: defaults write com.apple.appstore WebKitDeveloperExtras -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | enable Debug Menu in App Store
+  command: defaults write com.apple.appstore ShowDebugMenu -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | enable automatic update check
+  command: defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | check for software updates daily
+  command: defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
+  changed_when: false
+
+- name: system setup | macos defaults | download updates in background
+  command: defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1
+  changed_when: false
+
+- name: system setup | macos defaults | install system data files and security updates
+  command: defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
+  changed_when: false
+
+- name: system setup | macos defaults | automatically download apps purchased on other Macs
+  command: defaults write com.apple.SoftwareUpdate ConfigDataInstall -int 1
+  changed_when: false
+
+- name: system setup | macos defaults | turn on app auto-update
+  command: defaults write com.apple.commerce AutoUpdate -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | allow App Store to reboot on macOS updates
+  command: defaults write com.apple.commerce AutoUpdateRestartRequired -bool true
+  changed_when: false
+
+# Energy Saving (desktop — no battery settings)
+
+- name: system setup | macos defaults | enable restart automatically on power loss
+  command: pmset -a autorestart 1
+  changed_when: false
+  become: yes
+
+- name: system setup | macos defaults | restart automatically if the computer freezes
+  command: systemsetup -setrestartfreeze on
+  changed_when: false
+  become: yes
+
+- name: system setup | macos defaults | sleep the display after 15 minutes
+  command: pmset -a displaysleep 15
+  changed_when: false
+  become: yes
+
+- name: system setup | macos defaults | disable computer sleep
+  command: pmset -a sleep 0
+  changed_when: false
+  become: yes
+
+- name: system setup | macos defaults | never go into computer sleep mode
+  command: systemsetup -setcomputersleep Off
+  changed_when: false
+  become: yes
+
+- name: system setup | macos defaults | set hibernation mode to 3 (safe sleep enabled)
+  command: pmset -a hibernatemode 3
+  changed_when: false
+  become: yes
+
+# Spotlight
+
+- name: system setup | macos defaults | disable Spotlight indexing for mounted volumes
+  command: defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
+  changed_when: false
+  become: yes
+
+- name: system setup | macos defaults | change Spotlight indexing order and disable some results
+  command: >
+    defaults write com.apple.spotlight orderedItems -array
+    '{"enabled" = 1;"name" = "APPLICATIONS";}'
+    '{"enabled" = 1;"name" = "SYSTEM_PREFS";}'
+    '{"enabled" = 1;"name" = "DIRECTORIES";}'
+    '{"enabled" = 1;"name" = "PDF";}'
+    '{"enabled" = 1;"name" = "FONTS";}'
+    '{"enabled" = 0;"name" = "DOCUMENTS";}'
+    '{"enabled" = 0;"name" = "MESSAGES";}'
+    '{"enabled" = 0;"name" = "CONTACT";}'
+    '{"enabled" = 0;"name" = "EVENT_TODO";}'
+    '{"enabled" = 0;"name" = "IMAGES";}'
+    '{"enabled" = 0;"name" = "BOOKMARKS";}'
+    '{"enabled" = 0;"name" = "MUSIC";}'
+    '{"enabled" = 0;"name" = "MOVIES";}'
+    '{"enabled" = 0;"name" = "PRESENTATIONS";}'
+    '{"enabled" = 0;"name" = "SPREADSHEETS";}'
+    '{"enabled" = 0;"name" = "SOURCE";}'
+  changed_when: false
+
+- name: system setup | macos defaults | reload Spotlight
+  command: killall mds
+  changed_when: false
+  ignore_errors: true
+
+- name: system setup | macos defaults | enable Spotlight indexing for main volume
+  command: mdutil -i on /
+  changed_when: false
+  become: yes
+  ignore_errors: true
+
+- name: system setup | macos defaults | rebuild Spotlight index from scratch
+  command: mdutil -E /
+  changed_when: false
+  become: yes
+  ignore_errors: true
+
+# Time Machine
+
+- name: system setup | macos defaults | prevent Time Machine from prompting to use new disks
+  command: defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+  changed_when: false
+
+# Photos (disabled by default — uncomment to enable)
+
+# - name: system setup | macos defaults | prevent Photos from opening automatically when devices are plugged in
+#   command: defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
+#   changed_when: false
+
+# Google Chrome
+
+- name: system setup | macos defaults | disable backswipe on trackpads in Chrome
+  command: defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
+  changed_when: false
+  ignore_errors: true
+
+- name: system setup | macos defaults | disable backswipe on Magic Mouse in Chrome
+  command: defaults write com.google.Chrome AppleEnableMouseSwipeNavigateWithScrolls -bool false
+  changed_when: false
+  ignore_errors: true
+
+- name: system setup | macos defaults | use system-native print preview in Chrome
+  command: defaults write com.google.Chrome DisablePrintPreview -bool true
+  changed_when: false
+  ignore_errors: true
+
+- name: system setup | macos defaults | expand print dialog by default in Chrome
+  command: defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true
+  changed_when: false
+  ignore_errors: true
+
+# TextEdit
+
+- name: system setup | macos defaults | use plain text mode for new TextEdit documents
+  command: defaults write com.apple.TextEdit RichText -int 0
+  changed_when: false
+
+- name: system setup | macos defaults | open and save files as UTF-8 in TextEdit
+  command: defaults write com.apple.TextEdit PlainTextEncoding -int 4
+  changed_when: false
+
+- name: system setup | macos defaults | save files as UTF-8 in TextEdit
+  command: defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
+  changed_when: false
+
+# Disk Utility
+
+- name: system setup | macos defaults | enable debug menu in Disk Utility
+  command: defaults write com.apple.DiskUtility DUDebugMenuEnabled -bool true
+  changed_when: false
+
+- name: system setup | macos defaults | enable advanced image options in Disk Utility
+  command: defaults write com.apple.DiskUtility advanced-image-options -bool true
+  changed_when: false
+
+# QuickTime Player
+
+- name: system setup | macos defaults | auto-play videos when opened with QuickTime
+  command: defaults write com.apple.QuickTimePlayerX MGPlayMovieOnOpen -bool true
+  changed_when: false
 
 # Kill/restart affected applications
 
