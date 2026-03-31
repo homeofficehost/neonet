@@ -1,9 +1,10 @@
 # Taps
 tap "blacktop/tap"
+tap "deskflow/tap"
 
 brew "syncthing"
 cask "hiddenbar"
-brew "deskflow"
+cask "deskflow"
 
 ## Shell & Core
 brew "zsh"
