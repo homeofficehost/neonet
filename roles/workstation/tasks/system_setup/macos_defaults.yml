@@ -433,8 +433,16 @@
   command: defaults write com.apple.dock tilesize -int 36
   changed_when: false
 
-- name: system setup | macos defaults | speed up Mission Control animations
-  command: defaults write com.apple.dock expose-animation-duration -float 0.15
+- name: system setup | macos defaults | disable Mission Control animations
+  command: defaults write com.apple.dock expose-animation-duration -float 0
+  changed_when: false
+
+- name: system setup | macos defaults | disable Spaces switching animation
+  command: defaults write com.apple.dock spaces-animation-delay -float 0
+  changed_when: false
+
+- name: system setup | macos defaults | enable Reduce Motion for fullscreen and transition animations
+  command: defaults write com.apple.Accessibility ReduceMotionEnabled -int 1
   changed_when: false
 
 - name: system setup | macos defaults | show translucent Dock icons for hidden apps
