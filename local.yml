@@ -15,20 +15,20 @@
     - name: "🚀 success | provisioning complete"
       debug:
         msg: |
-          
           ╔════════════════════════════════════════════════════════════════╗
           ║                                                                ║
           ║          🚀  PROVISIONING COMPLETE  🚀                         ║
           ║                                                                ║
           ║          Host:        {{ ansible_hostname }}                   ║
-          ║          System:      {{ ansible_distribution }} {{ ansible_distribution_version }}  ║
-          ║          Completed:   {{ ansible_date_time.date }} {{ ansible_date_time.time }}     ║
+          ║          System:      {{ ansible_distribution }}                ║
+          ║                      {{ ansible_distribution_version }}          ║
+          ║          Completed:   {{ ansible_date_time.date }}              ║
+          ║                      {{ ansible_date_time.time }}                ║
           ║          Roles:       base ✓  workstation ✓                   ║
           ║                                                                ║
           ║          All systems nominal. Ready for action! 🎯            ║
           ║                                                                ║
           ╚════════════════════════════════════════════════════════════════╝
-          
       run_once: true
       when: hostvars[groups['all'][0]]['provision_changed'] | default(false)
 
@@ -46,14 +46,18 @@
       when: hostvars[groups['all'][0]]['provision_changed'] | default(false)
 
     - name: "🔊 success | voice announcement"
-      shell: afplay {{ ansible_user_dir }}/.dotfiles/roles/workstation/files/sounds/provisioning-success.mp3
+      shell: >
+        afplay {{ ansible_user_dir
+        }}/.dotfiles/roles/workstation/files/sounds/provisioning-success.mp3
       ignore_errors: true
       run_once: true
       changed_when: false
       when: hostvars[groups['all'][0]]['provision_changed'] | default(false)
 
     - name: "❌ failure | play failure sound"
-      shell: afplay {{ ansible_user_dir }}/.dotfiles/roles/workstation/files/sounds/provisioning-failure.mp3
+      shell: >
+        afplay {{ ansible_user_dir
+        }}/.dotfiles/roles/workstation/files/sounds/provisioning-failure.mp3
       ignore_errors: true
       run_once: true
       when: ansible_failed_task is defined
@@ -63,4 +67,5 @@
       ignore_errors: true
       run_once: true
       changed_when: false
-      when: not (hostvars[groups['all'][0]]['provision_changed'] | default(false))
+      when: >
+        not (hostvars[groups['all'][0]]['provision_changed'] | default(false))

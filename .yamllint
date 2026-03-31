@@ -1,0 +1,11 @@
+---
+rules:
+  line-length:
+    level: warning
+  trailing-spaces: disable
+  new-lines:
+    type: unix
+  indentation:
+    spaces: 2
+  new-line-at-end-of-file:
+    level: warning
