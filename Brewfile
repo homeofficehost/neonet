@@ -3,6 +3,7 @@ tap "blacktop/tap"
 
 brew "syncthing"
 cask "hiddenbar"
+brew "deskflow"
 
 ## Shell & Core
 brew "zsh"

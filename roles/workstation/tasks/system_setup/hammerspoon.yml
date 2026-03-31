@@ -1,0 +1,54 @@
+---
+- name: system setup | hammerspoon | ensure hammerspoon config directory exists
+  file:
+    path: "{{ userhome }}/.hammerspoon"
+    state: directory
+    mode: "0755"
+
+- name: system setup | hammerspoon | install init.lua
+  copy:
+    src: hammerspoon/init.lua
+    dest: "{{ userhome }}/.hammerspoon/init.lua"
+    mode: "0644"
+  register: hammerspoon_config
+
+- name: system setup | hammerspoon | ensure hammerspoon is running
+  command: open -a Hammerspoon
+  changed_when: false
+
+- name: system setup | hammerspoon | reload config
+  command: hs -c "hs.reload()"
+  changed_when: false
+  when: hammerspoon_config.changed
+
+- name: system setup | karabiner | ensure complex_modifications directory exists
+  file:
+    path: "{{ userhome }}/.config/karabiner/assets/complex_modifications"
+    state: directory
+    mode: "0755"
+
+- name: system setup | karabiner | install caps_lock_to_f18 complex modification
+  copy:
+    src: karabiner/caps_lock_to_f18.json
+    dest: "{{ userhome }}/.config/karabiner/assets/complex_modifications/caps_lock_to_f18.json"
+    mode: "0644"
+  register: karabiner_mod
+
+- name: system setup | karabiner | enable caps_lock_to_f18 rule in active profile
+  shell: >
+    KARABINER="{{ userhome }}/.config/karabiner/karabiner.json" &&
+    RULE_TITLE="Caps Lock to F18 (for Hammerspoon)" &&
+    if ! python3 -c "
+    import json, sys
+    with open('$KARABINER') as f: cfg = json.load(f)
+    rules = next((p['complex_modifications']['rules'] for p in cfg.get('profiles',[]) if p.get('selected')), [])
+    if any(r.get('description','').startswith('Map Caps Lock') for r in rules): sys.exit(1)
+    with open('{{ userhome }}/.config/karabiner/assets/complex_modifications/caps_lock_to_f18.json') as f: mod = json.load(f)
+    for rule in mod.get('rules', []): rules.append(rule)
+    with open('$KARABINER','w') as f: json.dump(cfg, f, indent=2)
+    "; then
+      echo "Rule already enabled or karabiner.json not found, skipping"
+      exit 0
+    fi
+  when: karabiner_mod.changed
+  changed_when: true

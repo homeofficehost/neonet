@@ -11,3 +11,8 @@
   import_tasks: system_setup/macos_defaults.yml
   when: ansible_system == "Darwin"
   tags: macos,defaults
+
+- name: workstation | macOS | configure hammerspoon and karabiner
+  import_tasks: system_setup/hammerspoon.yml
+  when: ansible_system == "Darwin"
+  tags: hammerspoon,karabiner
