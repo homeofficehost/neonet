@@ -1,0 +1,20 @@
+---
+
+# Colima VM configuration
+docker_colima_cpu: 4
+docker_colima_memory: 4
+docker_colima_disk: 60
+docker_colima_arch: aarch64
+docker_colima_runtime: docker
+docker_colima_kubernetes: false
+docker_colima_network_address: 192.168.5.0/24
+docker_colima_mount_type: sshfs
+docker_colima_ssh_port: 0
+
+# Docker configuration
+docker_creds_store: osxkeychain
+docker_cli_plugins_dir: /opt/homebrew/lib/docker/cli-plugins
+
+# Colima start options
+docker_colima_autostart: false
+docker_colima_profile: default

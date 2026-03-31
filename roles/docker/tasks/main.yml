@@ -1,0 +1,45 @@
+---
+- name: docker | check if colima is running
+  command: colima status {{ docker_colima_profile }}
+  register: colima_status
+  failed_when: false
+  changed_when: false
+  tags: docker
+
+- name: docker | configure docker config
+  copy:
+    content: |
+      {
+        "auths": {},
+        "credsStore": "{{ docker_creds_store }}",
+        "cliPluginsExtraDirs": [
+          "{{ docker_cli_plugins_dir }}"
+        ]
+      }
+    dest: "{{ ansible_user_dir }}/.docker/config.json"
+    mode: "0600"
+  tags: docker
+
+- name: docker | start colima if not running and autostart enabled
+  command: >
+    colima start {{ docker_colima_profile }}
+    --cpu {{ docker_colima_cpu }}
+    --memory {{ docker_colima_memory }}
+    --disk {{ docker_colima_disk }}
+    --arch {{ docker_colima_arch }}
+    --runtime {{ docker_colima_runtime }}
+    --network-address
+    --mount-type {{ docker_colima_mount_type }}
+    {{ '--kubernetes' if docker_colima_kubernetes else '' }}
+  when:
+    - docker_colima_autostart | bool
+    - colima_status.rc != 0
+  tags: docker
+
+- name: docker | set changed flag
+  set_fact:
+    provision_changed: true
+  when:
+    - docker_colima_autostart | bool
+    - colima_status.rc != 0
+  tags: docker
