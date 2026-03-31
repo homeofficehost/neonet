@@ -1,6 +1,7 @@
 # Taps
 tap "blacktop/tap"
 tap "deskflow/tap"
+tap "LizardByte/homebrew"
 
 brew "syncthing"
 cask "hiddenbar"
@@ -253,7 +254,7 @@ brew "todo-txt"
 brew "autojump"
 brew "z"
 
-cask "sunshine"
+brew "sunshine"
 cask "zerotier-one"
 
 ## macOS Casks - Development
