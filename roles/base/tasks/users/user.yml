@@ -33,14 +33,6 @@
   with_items:
     - { dir: "{{ userhome }}/.ssh" }
 
-- name: users | add all public keys
-  tags: dotfiles,ssh,ssh-keys,users
-  authorized_key:
-    user: "{{ username }}"
-    key: "{{ lookup('file', item) }}"
-  with_fileglob:
-    - "users/{{ username }}/ssh/*.pub"
-
 - name: Dotfiles - Get home directory
   user:
     name: "{{ username }}"

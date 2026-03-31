@@ -1,14 +1,8 @@
 ---
-- name: zerotier | check if installed
-  command: brew list --cask zerotier-one
-  register: zerotier_installed
-  failed_when: false
-  changed_when: false
-  tags: zerotier
-
 - name: zerotier | install via homebrew
-  command: brew install --cask zerotier-one
-  when: zerotier_installed.rc != 0
+  homebrew_cask:
+    name: zerotier-one
+    state: present
   tags: zerotier
 
 - name: zerotier | start service

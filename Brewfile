@@ -253,6 +253,9 @@ brew "todo-txt"
 brew "autojump"
 brew "z"
 
+cask "sunshine"
+cask "zerotier-one"
+
 ## macOS Casks - Development
 cask "kitty"
 cask "iterm2"
