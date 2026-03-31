@@ -1,6 +1,7 @@
 - name: users | create group
   tags: groups,users
   become: yes
+  check_mode: no
   group:
     name: "{{ username }}"
     state: present
