@@ -46,6 +46,7 @@
     name: "{{ username }}"
     state: present
   register: dotfiles_user_registered
+  check_mode: no
   tags: dotfiles,users,barerepo
 
 - name: Dotfiles - Set checkout if undefined
@@ -58,6 +59,7 @@
   stat:
     path: "{{ repo_dir }}"
   register: repo_directory
+  check_mode: no
   tags: dotfiles,users,barerepo
 
 - name: Git | Ensure bare repo is checked out
@@ -128,6 +130,7 @@
   stat:
     path: "{{ userhome }}/z-zsh"
   register: subrepo_directory
+  check_mode: no
   tags: dotfiles,users,submodules
 - name: Git | Checkout z-zsh repository
   become_user: "{{ username }}"
@@ -141,6 +144,7 @@
   stat:
     path: "{{ userhome }}/.vim"
   register: subrepo_directory
+  check_mode: no
   tags: dotfiles,users,submodules
 - name: Git | Checkout .vim repository
   become_user: "{{ username }}"
@@ -157,6 +161,7 @@
   stat:
     path: "{{ userhome }}/setup-keys"
   register: subrepo_directory
+  check_mode: no
   tags: dotfiles,users,submodules
 - name: Git | Checkout setup-keys repository
   become_user: "{{ username }}"
@@ -170,6 +175,7 @@
   stat:
     path: "{{ userhome }}/.oh-my-zsh"
   register: subrepo_directory
+  check_mode: no
   tags: dotfiles,users,submodules
 - name: Git | Checkout .oh-my-zsh repository
   become_user: "{{ username }}"
@@ -183,6 +189,7 @@
   stat:
     path: "{{ userhome }}/.oh-my-zsh-custom"
   register: subrepo_directory
+  check_mode: no
   tags: dotfiles,users,submodules
 - name: Git | Checkout .oh-my-zsh-custom repository
   become_user: "{{ username }}"
@@ -199,6 +206,7 @@
   stat:
     path: "{{ userhome }}/site"
   register: subrepo_directory
+  check_mode: no
   tags: dotfiles,users,submodules
 - name: Git | Clone personal
   become_user: "{{ username }}"
@@ -215,6 +223,7 @@
   stat:
     path: "{{ userhome }}/.dotfiles-bare"
   register: dotfiles_bare_directory
+  check_mode: no
   tags: dotfiles,users,personal
 
 - name: Dotfiles | Clone dotfiles repository as bare repo
