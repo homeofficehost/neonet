@@ -38,7 +38,9 @@
 | Minimizar no ícone do app | com.apple.dock | `minimize-to-application` | bool | `true` |
 | Auto-hide delay | com.apple.dock | `autohide-delay` | float | `0` |
 | Auto-hide animação | com.apple.dock | `autohide-time-modifier` | float | `0` |
-| Mission Control animação | com.apple.dock | `expose-animation-duration` | float | `0.15` |
+| Mission Control animação | com.apple.dock | `expose-animation-duration` | float | `0` |
+| Spaces switching animação | com.apple.dock | `spaces-animation-delay` | float | `0` |
+| Reduce Motion (fullscreen/Spaces) | com.apple.Accessibility | `ReduceMotionEnabled` | int | `1` |
 | Launch animação | com.apple.dock | `launchanim` | bool | `false` |
 | Dock transparente p/ apps hidden | com.apple.dock | `showhidden` | bool | `true` |
 | Resize speed (Cocoa) | NSGlobalDomain | `NSWindowResizeTime` | float | `0.001` |
@@ -50,8 +52,8 @@
 
 | Canto | Ação | Valor |
 |---|---|---|
-| Top-left | Mission Control | `4` |
-| Top-right | Mission Control | `4` |
+| Top-left | Application Windows | `2` |
+| Top-right | Application Windows | `2` |
 | Bottom-left | Desktop | `6` |
 | Bottom-right | Desktop | `6` |
 
