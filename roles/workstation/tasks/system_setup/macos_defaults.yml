@@ -177,6 +177,9 @@
 - name: system setup | macos defaults | set Help Viewer windows to non-floating mode
   command: defaults write com.apple.helpviewer DevMode -bool true
   changed_when: false
+  async: 5
+  poll: 1
+  ignore_errors: true
 
 - name: system setup | macos defaults | increase sound quality for Bluetooth headphones
   command: defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
