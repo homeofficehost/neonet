@@ -11,6 +11,7 @@
   when: brew_bundle_result is defined and brew_bundle_result.changed | bool
 
 - name: workstation | apps | remove blacklisted macOS apps
+  become: yes
   tags: apps
   shell: |
     changed=0
