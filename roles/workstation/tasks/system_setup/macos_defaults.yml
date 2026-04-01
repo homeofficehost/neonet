@@ -4,27 +4,39 @@
 - name: system setup | macos defaults | expand save panel by default
   command: defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | expand print panel by default
   # TODO: Verify on macOS 26.4 — may be obsolete since macOS 13+
   command: defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | save to disk by default (not iCloud)
   command: defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | automatically quit printer app when print jobs complete
   command: defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable smart quotes
   command: defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable smart dashes
   command: defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set desktop background to stone color
   command: osascript -e 'tell application "Finder" to set desktop picture to POSIX file "/System/Library/Desktop Pictures/Solid Colors/Stone.png"'
@@ -35,144 +47,214 @@
 - name: system setup | macos defaults | set trackpad haptic feedback click threshold to light
   command: defaults write com.apple.AppleMultitouchTrackpad FirstClickThreshold -int 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set trackpad haptic feedback actuation strength to light
   command: defaults write com.apple.AppleMultitouchTrackpad ActuationStrength -int 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable trackpad right-click (bluetooth)
   command: defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable trackpad right-click
   command: defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set trackpad secondary click to two finger tap
   command: defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable trackpad corner click behavior (bluetooth)
   command: defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 2
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable trackpad secondary click globally
   command: defaults write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable trackpad corner click behavior
   command: defaults write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable context menu gesture for right-click
   command: defaults write NSGlobalDomain ContextMenuGesture -int 1
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable tap to click for login screen
   command: defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable tap to click for this user
   command: defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable three finger drag (bluetooth)
   command: defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable three finger drag
   command: defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable tap-and-a-half to drag (bluetooth)
   command: defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -int 1
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable tap-and-a-half to drag
   command: defaults write com.apple.AppleMultitouchTrackpad Dragging -int 1
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable press-and-hold for keys
   # TODO: Verify on macOS 26.4 — behavior redesigned in recent macOS
   command: defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set initial key repeat delay
   command: defaults write NSGlobalDomain InitialKeyRepeat -int 10
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set key repeat rate
   command: defaults write NSGlobalDomain KeyRepeat -int 2
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable natural scrolling (Lion-style)
   command: defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | increase window resize speed for Cocoa applications
   command: defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable automatic window open/close animations
   command: defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable resume windows animation when logging in
   command: defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable full keyboard access for all controls
   command: defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable subpixel font rendering on non-Apple LCDs
   command: defaults write NSGlobalDomain AppleFontSmoothing -int 2
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable automatic termination of inactive apps
   command: defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable auto-correct
   command: defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable transparency in menu bar and elsewhere
   command: defaults write com.apple.universalaccess reduceTransparency -bool true
   changed_when: false
+  async: 10
+  poll: 1
   ignore_errors: true
 
 - name: system setup | macos defaults | set highlight color to green
   command: defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600"
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set sidebar icon size to medium
   command: defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | always show scrollbars
   command: defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable over-the-top focus ring animation
   command: defaults write NSGlobalDomain NSUseAnimatedFocusRing -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | adjust toolbar title rollover delay
   command: defaults write NSGlobalDomain NSToolbarTitleViewRolloverDelay -float 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | display ASCII control characters using caret notation
   command: defaults write NSGlobalDomain NSTextShowsControlCharacters -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable automatic capitalization
   command: defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable automatic period substitution
   command: defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set Help Viewer windows to non-floating mode
   command: defaults write com.apple.helpviewer DevMode -bool true
@@ -184,6 +266,8 @@
 - name: system setup | macos defaults | increase sound quality for Bluetooth headphones
   command: defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable Notification Center
   command: launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist
@@ -193,11 +277,15 @@
 - name: system setup | macos defaults | reveal IP address and hostname in login window
   command: defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
   changed_when: false
+  async: 10
+  poll: 1
   become: yes
 
 - name: system setup | macos defaults | show language menu in boot screen
   command: defaults write /Library/Preferences/com.apple.loginwindow showInputMenu -bool true
   changed_when: false
+  async: 10
+  poll: 1
   become: yes
 
 - name: system setup | macos defaults | remove duplicates in Open With menu
@@ -210,26 +298,38 @@
 - name: system setup | macos defaults | save screenshots to downloads folder
   command: defaults write com.apple.screencapture location -string "{{ ansible_env.HOME }}/Downloads"
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | save screenshots in PNG format
   command: defaults write com.apple.screencapture type -string "png"
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable screenshot shadow
   command: defaults write com.apple.screencapture disable-shadow -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | require password immediately after sleep or screensaver
   command: defaults write com.apple.screensaver askForPassword -int 1
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set screensaver password delay to immediate
   command: defaults write com.apple.screensaver askForPasswordDelay -int 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable HiDPI display modes
   command: defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
   changed_when: false
+  async: 10
+  poll: 1
   become: yes
 
 # Finder
@@ -238,62 +338,92 @@
 - name: system setup | macos defaults | set new Finder windows target to Desktop
   command: defaults write com.apple.finder NewWindowTarget -string "PfDe"
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set new Finder windows target path to Desktop
   command: defaults write com.apple.finder NewWindowTargetPath -string "file://{{ ansible_env.HOME }}/Desktop/"
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | show external hard drives on desktop
   command: defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | show hard drives on desktop
   command: defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | show mounted servers on desktop
   command: defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | show removable media on desktop
   command: defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | show all filename extensions
   command: defaults write NSGlobalDomain AppleShowAllExtensions -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | show Finder status bar
   command: defaults write com.apple.finder ShowStatusBar -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable text selection in Quick Look
   command: defaults write com.apple.finder QLEnableTextSelection -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | display full POSIX path in Finder title
   command: defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | search current folder by default in Finder
   command: defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable warning when changing file extension
   command: defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable spring loading for directories
   command: defaults write NSGlobalDomain com.apple.springing.enabled -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | remove spring loading delay for directories
   command: defaults write NSGlobalDomain com.apple.springing.delay -float 0.1
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | avoid creating .DS_Store files on network volumes
   command: defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable snap-to-grid for desktop icons
   command: /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" "{{ ansible_env.HOME }}/Library/Preferences/com.apple.finder.plist"
@@ -328,6 +458,8 @@
 - name: system setup | macos defaults | use column view in Finder by default
   command: defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | unhide Library folder
   command: chflags nohidden "{{ ansible_env.HOME }}/Library"
@@ -336,34 +468,50 @@
 - name: system setup | macos defaults | keep folders on top when sorting by name
   command: defaults write com.apple.finder _FXSortFoldersFirst -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | allow quitting Finder via Cmd+Q
   command: defaults write com.apple.finder QuitMenuItem -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable Finder window animations
   command: defaults write com.apple.finder DisableAllAnimations -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable warning when emptying Trash
   command: defaults write com.apple.finder WarnOnEmptyTrash -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | automatically open Finder window when volume mounted
   command: defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | expand File Info panes (General, Open with, Sharing)
   command: defaults write com.apple.finder FXInfoPanesExpanded -dict General -bool true OpenWith -bool true Privileges -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | avoid creating .DS_Store files on USB volumes
   command: defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | show Finder path bar
   command: defaults write com.apple.finder ShowPathbar -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | show item info near icons on desktop
   command: /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:showItemInfo true" "{{ ansible_env.HOME }}/Library/Preferences/com.apple.finder.plist"
@@ -403,6 +551,8 @@
 - name: system setup | macos defaults | enable AirDrop over Ethernet
   command: defaults write com.apple.NetworkBrowser BrowseAllInterfaces -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | show the /Volumes folder
   command: sudo chflags nohidden /Volumes
@@ -413,136 +563,202 @@
 - name: system setup | macos defaults | disable disk image verification
   command: defaults write com.apple.frameworks.diskimages skip-verify -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable disk image verification (locked)
   command: defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable disk image verification (remote)
   command: defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | auto-open Finder for read-only disk images
   command: defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | auto-open Finder for read-write disk images
   command: defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 # Dock, Dashboard, and hot corners
 
 - name: system setup | macos defaults | set Dock icon size to 36
   command: defaults write com.apple.dock tilesize -int 36
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable Mission Control animations
   command: defaults write com.apple.dock expose-animation-duration -float 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable Spaces switching animation
   command: defaults write com.apple.dock spaces-animation-delay -float 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable Reduce Motion for fullscreen and transition animations
   command: defaults write com.apple.Accessibility ReduceMotionEnabled -int 1
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | show translucent Dock icons for hidden apps
   command: defaults write com.apple.dock showhidden -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable highlight hover effect for grid view stacks
   command: defaults write com.apple.dock mouse-over-hilite-stack -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | change minimize/maximize window effect to scale
   command: defaults write com.apple.dock mineffect -string scale
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | minimize windows into their application icon
   command: defaults write com.apple.dock minimize-to-application -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable spring loading for all Dock items
   command: defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | show indicator lights for open applications
   command: defaults write com.apple.dock show-process-indicators -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable animations when opening applications
   command: defaults write com.apple.dock launchanim -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | remove the auto-hiding Dock delay
   command: defaults write com.apple.dock autohide-delay -float 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable animations when hiding/showing the Dock
   command: defaults write com.apple.dock autohide-time-modifier -float 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | make Dock more transparent
   command: defaults write com.apple.dock hide-mirror -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable Quick Look animations
   command: defaults write -g QLPanelAnimationDuration -float 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set top-left hot corner to Application Windows
   command: defaults write com.apple.dock wvous-tl-corner -int 2
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set top-left hot corner modifier to none
   command: defaults write com.apple.dock wvous-tl-modifier -int 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set top-right hot corner to Application Windows
   command: defaults write com.apple.dock wvous-tr-corner -int 2
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set top-right hot corner modifier to none
   command: defaults write com.apple.dock wvous-tr-modifier -int 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set bottom-left hot corner to Desktop
   command: defaults write com.apple.dock wvous-bl-corner -int 6
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set bottom-left hot corner modifier to none
   command: defaults write com.apple.dock wvous-bl-modifier -int 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set bottom-right hot corner to Desktop
   command: defaults write com.apple.dock wvous-br-corner -int 6
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set bottom-right hot corner modifier to none
   command: defaults write com.apple.dock wvous-br-modifier -int 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | do not automatically rearrange Spaces
   command: defaults write com.apple.dock mru-spaces -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable Dashboard
   command: defaults write com.apple.dashboard mcx-disabled -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | do not show Dashboard as a Space
   command: defaults write com.apple.dock dashboard-in-overlay -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | do not show recent applications in Dock
   command: defaults write com.apple.dock show-recents -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | do not group windows by application in Mission Control
   command: defaults write com.apple.dock expose-group-by-app -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | reset Launchpad but keep wallpaper intact
   command: find "{{ ansible_env.HOME }}/Library/Application Support/Dock" -name "*-*.db" -maxdepth 1 -delete
@@ -554,99 +770,143 @@
 - name: system setup | macos defaults | enable WebKit developer extras in web views
   command: defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 # Terminal
 
 - name: system setup | macos defaults | set Terminal to use UTF-8 encoding
   command: defaults write com.apple.terminal StringEncodings -array 4
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable Secure Keyboard Entry in Terminal
   command: defaults write com.apple.terminal SecureKeyboardEntry -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | disable annoying line marks in Terminal
   command: defaults write com.apple.Terminal ShowLineMarks -int 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable focus follows mouse in Terminal
   command: defaults write com.apple.Terminal FocusFollowsMouse -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 # Downloads & Quarantine
 
 - name: system setup | macos defaults | disable file quarantine (download warning)
   command: defaults write com.apple.LaunchServices LSQuarantine -bool false
   changed_when: false
+  async: 10
+  poll: 1
 
 # Activity Monitor
 
 - name: system setup | macos defaults | show Activity Monitor main window on launch
   command: defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | show all processes in Activity Monitor
   command: defaults write com.apple.ActivityMonitor ShowCategory -int 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | visualize CPU usage in Activity Monitor Dock icon
   command: defaults write com.apple.ActivityMonitor IconType -int 5
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | sort Activity Monitor by CPU usage
   command: defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | set Activity Monitor sort direction to descending
   command: defaults write com.apple.ActivityMonitor SortDirection -int 0
   changed_when: false
+  async: 10
+  poll: 1
 
 # App Store
 
 - name: system setup | macos defaults | disable in-app rating requests in App Store
   command: defaults write com.apple.appstore InAppReviewEnabled -int 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | hide serial number in About This Mac
   command: defaults write /Library/Preferences/com.apple.SystemProfiler "Hide Serial Number" -bool true
   changed_when: false
+  async: 10
+  poll: 1
   become: yes
 
 - name: system setup | macos defaults | enable WebKit Developer Tools in App Store
   command: defaults write com.apple.appstore WebKitDeveloperExtras -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable Debug Menu in App Store
   command: defaults write com.apple.appstore ShowDebugMenu -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable automatic update check
   command: defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | check for software updates daily
   command: defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | download updates in background
   command: defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | install system data files and security updates
   command: defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | automatically download apps purchased on other Macs
   command: defaults write com.apple.SoftwareUpdate ConfigDataInstall -int 1
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | turn on app auto-update
   command: defaults write com.apple.commerce AutoUpdate -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | allow App Store to reboot on macOS updates
   command: defaults write com.apple.commerce AutoUpdateRestartRequired -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 # Energy Saving (desktop — no battery settings)
 
@@ -685,6 +945,8 @@
 - name: system setup | macos defaults | disable Spotlight indexing for mounted volumes
   command: defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
   changed_when: false
+  async: 10
+  poll: 1
   become: yes
   failed_when: false
 
@@ -731,6 +993,8 @@
 - name: system setup | macos defaults | prevent Time Machine from prompting to use new disks
   command: defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 # Photos (disabled by default — uncomment to enable)
 
@@ -743,21 +1007,29 @@
 - name: system setup | macos defaults | disable backswipe on trackpads in Chrome
   command: defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
   changed_when: false
+  async: 10
+  poll: 1
   ignore_errors: true
 
 - name: system setup | macos defaults | disable backswipe on Magic Mouse in Chrome
   command: defaults write com.google.Chrome AppleEnableMouseSwipeNavigateWithScrolls -bool false
   changed_when: false
+  async: 10
+  poll: 1
   ignore_errors: true
 
 - name: system setup | macos defaults | use system-native print preview in Chrome
   command: defaults write com.google.Chrome DisablePrintPreview -bool true
   changed_when: false
+  async: 10
+  poll: 1
   ignore_errors: true
 
 - name: system setup | macos defaults | expand print dialog by default in Chrome
   command: defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true
   changed_when: false
+  async: 10
+  poll: 1
   ignore_errors: true
 
 # TextEdit
@@ -765,30 +1037,42 @@
 - name: system setup | macos defaults | use plain text mode for new TextEdit documents
   command: defaults write com.apple.TextEdit RichText -int 0
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | open and save files as UTF-8 in TextEdit
   command: defaults write com.apple.TextEdit PlainTextEncoding -int 4
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | save files as UTF-8 in TextEdit
   command: defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
   changed_when: false
+  async: 10
+  poll: 1
 
 # Disk Utility
 
 - name: system setup | macos defaults | enable debug menu in Disk Utility
   command: defaults write com.apple.DiskUtility DUDebugMenuEnabled -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 - name: system setup | macos defaults | enable advanced image options in Disk Utility
   command: defaults write com.apple.DiskUtility advanced-image-options -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 # QuickTime Player
 
 - name: system setup | macos defaults | auto-play videos when opened with QuickTime
   command: defaults write com.apple.QuickTimePlayerX MGPlayMovieOnOpen -bool true
   changed_when: false
+  async: 10
+  poll: 1
 
 # Kill/restart affected applications
 
