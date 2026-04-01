@@ -683,7 +683,7 @@
   command: defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
   changed_when: false
   become: yes
-  ignore_errors: true
+  failed_when: false
 
 - name: system setup | macos defaults | change Spotlight indexing order and disable some results
   command: >
@@ -707,9 +707,9 @@
   changed_when: false
 
 - name: system setup | macos defaults | reload Spotlight
-  command: killall mds
+  shell: killall mds 2>/dev/null || true
   changed_when: false
-  ignore_errors: true
+  become: yes
 
 - name: system setup | macos defaults | enable Spotlight indexing for main volume
   command: /usr/bin/mdutil -i on /
