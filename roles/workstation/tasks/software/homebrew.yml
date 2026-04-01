@@ -1,7 +1,7 @@
 ---
 - name: workstation | homebrew | install packages from Brewfile
   tags: homebrew
-  command: brew bundle install --file={{ ansible_user_dir }}/.dotfiles/Brewfile
+  command: brew bundle install --file={{ playbook_dir }}/Brewfile
   register: brew_bundle_result
   changed_when: "'Installing' in brew_bundle_result.stdout"
 
@@ -15,7 +15,7 @@
   tags: apps
   shell: |
     changed=0
-    for app in $(grep -v '^#' {{ ansible_user_dir }}/.dotfiles/Blacklistfile | grep -v '^$'); do
+    for app in $(grep -v '^#' {{ playbook_dir }}/Blacklistfile | grep -v '^$'); do
       [ -d "/Applications/${app}.app" ] && rm -rf "/Applications/${app}.app" && changed=1
     done
     exit $changed
