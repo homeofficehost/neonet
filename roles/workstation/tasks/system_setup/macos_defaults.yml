@@ -648,32 +648,32 @@
 # Energy Saving (desktop — no battery settings)
 
 - name: system setup | macos defaults | enable restart automatically on power loss
-  command: pmset -a autorestart 1
+  command: /usr/bin/pmset -a autorestart 1
   changed_when: false
   become: yes
 
 - name: system setup | macos defaults | restart automatically if the computer freezes
-  command: systemsetup -setrestartfreeze on
+  command: /usr/sbin/systemsetup -setrestartfreeze on
   changed_when: false
   become: yes
 
 - name: system setup | macos defaults | sleep the display after 15 minutes
-  command: pmset -a displaysleep 15
+  command: /usr/bin/pmset -a displaysleep 15
   changed_when: false
   become: yes
 
 - name: system setup | macos defaults | disable computer sleep
-  command: pmset -a sleep 0
+  command: /usr/bin/pmset -a sleep 0
   changed_when: false
   become: yes
 
 - name: system setup | macos defaults | never go into computer sleep mode
-  command: systemsetup -setcomputersleep Off
+  command: /usr/sbin/systemsetup -setcomputersleep Off
   changed_when: false
   become: yes
 
 - name: system setup | macos defaults | set hibernation mode to 3 (safe sleep enabled)
-  command: pmset -a hibernatemode 3
+  command: /usr/bin/pmset -a hibernatemode 3
   changed_when: false
   become: yes
 
@@ -712,13 +712,13 @@
   ignore_errors: true
 
 - name: system setup | macos defaults | enable Spotlight indexing for main volume
-  command: mdutil -i on /
+  command: /usr/bin/mdutil -i on /
   changed_when: false
   become: yes
   ignore_errors: true
 
 - name: system setup | macos defaults | rebuild Spotlight index from scratch
-  command: mdutil -E /
+  command: /usr/bin/mdutil -E /
   changed_when: false
   become: yes
   ignore_errors: true
