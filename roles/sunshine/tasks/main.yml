@@ -1,39 +1,26 @@
 ---
-- name: sunshine | check if installed
-  stat:
-    path: /Applications/Sunshine.app
-  register: sunshine_app
-  tags: sunshine
-
-- name: sunshine | check for running process
-  command: pgrep -f Sunshine
-  register: sunshine_running
-  failed_when: false
+- name: sunshine | check if service is running
+  command: brew services info lizardbyte/homebrew/sunshine-beta --json
+  register: sunshine_service_info
   changed_when: false
+  failed_when: false
   tags: sunshine
 
-- name: sunshine | install via homebrew
-  homebrew_cask:
-    name: sunshine
-    state: present
+- name: sunshine | parse service status
+  set_fact:
+    sunshine_running: >-
+      {{ (sunshine_service_info.stdout | from_json)[0].running | default(false) }}
+  when: sunshine_service_info.rc == 0 and sunshine_service_info.stdout | length > 0
   tags: sunshine
 
-- name: sunshine | make executable
-  file:
-    path: /Applications/Sunshine.app/Contents/MacOS/sunshine
-    mode: '+x'
-  tags: sunshine
-
-- name: sunshine | start service
-  command: /Applications/Sunshine.app/Contents/MacOS/sunshine &
-  ignore_errors: true
-  changed_when: true
-  when: sunshine_running.rc != 0
+- name: sunshine | ensure service is started
+  command: brew services start lizardbyte/homebrew/sunshine-beta
+  when: not (sunshine_running | default(false) | bool)
   tags: sunshine
 
 - name: sunshine | wait for service
   wait_for:
-    port: 47984
+    port: "{{ sunshine_port }}"
     delay: 5
     timeout: 60
   tags: sunshine

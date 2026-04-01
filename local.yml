@@ -9,6 +9,7 @@
     - base
     - workstation
     - docker
+    - sunshine
     - zerotier
 
   post_tasks:
