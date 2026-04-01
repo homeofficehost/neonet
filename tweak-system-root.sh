@@ -65,6 +65,10 @@ fi
 # sudo rm /private/var/vm/swapfile*
 
 # [Sure Remove] Disabled - not keeping the default, disable
+# NOTE: Privacy defaults (SubmitDiagInfo, Siri, Apple Intelligence, telemetry,
+# Location Services, lookup suggestions, rtcreportingd) are now managed by
+# roles/workstation/tasks/system_setup/privacy.yml in the Ansible playbook.
+# The launchctl unload + plist rename below is still needed for these agents.
 # Photos.app
 # the devil itself. image recognition that slowly eats away at your cpu and your soul.
 AGENTS+=('com.apple.photoanalysisd')
@@ -74,7 +78,7 @@ AGENTS+=('com.apple.cloudphotosd')
 AGENTS+=('com.apple.gamed')
 # find my friends daemon
 AGENTS+=('com.apple.icloud.fmfd')
-# siri.
+# siri. (defaults-level disable now in Ansible privacy.yml; launchctl unload still needed here)
 AGENTS+=('com.apple.assistant_service')
 # AOSPushRelay BAD for your privacy.
 AGENTS+=('com.apple.AOSPushRelay')
@@ -96,8 +100,7 @@ AGENTS+=('com.apple.soagent')
 AGENTS+=('com.apple.librariand')
 AGENTS+=('com.apple.icloud.AOSNotificationAgent')
 AGENTS+=('com.apple.icloud.AOSNotificationLoginAgent')
-# itunes home sharing and other junk.
-sudo launchctl disable system/rtcreportingd
+# rtcreportingd — also disabled via launchctl in Ansible privacy.yml
 AGENTS+=('com.apple.Maps.mapspushd')
 AGENTS+=('com.apple.Maps.pushdaemon')
 
