@@ -20,6 +20,7 @@
     done
     exit $changed
   register: blacklist_result
+  failed_when: blacklist_result.rc > 1
   changed_when: blacklist_result.rc | int == 1
 
 - name: workstation | apps | set changed flag
