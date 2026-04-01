@@ -198,7 +198,7 @@
   become: yes
 
 - name: system setup | macos defaults | remove duplicates in Open With menu
-  command: /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+  command: /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -r -domain local -domain system -domain user
   changed_when: false
   ignore_errors: true
 
