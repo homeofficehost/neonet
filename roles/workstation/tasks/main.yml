@@ -12,6 +12,11 @@
   when: ansible_system == "Darwin"
   tags: macos,defaults
 
+- name: workstation | macOS | apply privacy hardening
+  import_tasks: system_setup/privacy.yml
+  when: ansible_system == "Darwin"
+  tags: privacy
+
 - name: workstation | macOS | configure hammerspoon and karabiner
   import_tasks: system_setup/hammerspoon.yml
   when: ansible_system == "Darwin"

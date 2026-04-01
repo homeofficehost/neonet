@@ -1,0 +1,63 @@
+---
+# Privacy, telemetry, and Apple Intelligence hardening.
+# Supersedes most defaults-write commands previously only in tweak-system-root.sh.
+# See also: tweak-system-root.sh for launchctl unload/plist rename of agents/daemons.
+
+# Apple Intelligence (macOS 26+)
+
+- name: privacy | disable Apple Intelligence
+  command: defaults write com.apple.Siri AppleIntelligenceEnabled -bool false
+  changed_when: false
+
+- name: privacy | disable Apple Intelligence LLM backend
+  command: defaults write com.apple.Siri LLMEnable -bool false
+  changed_when: false
+
+# Siri
+
+- name: privacy | disable Siri assistant
+  command: defaults write com.apple.assistant.support Assistant Enabled -bool false
+  changed_when: false
+
+- name: privacy | hide Siri status menu
+  command: defaults write com.apple.Siri StatusMenuVisible -bool false
+  changed_when: false
+
+# Telemetry & Analytics
+
+- name: privacy | disable diagnostic data auto-submission
+  command: defaults write /Library/Preferences/com.apple.SubmitDiagInfo AutoSubmit -bool false
+  become: yes
+  changed_when: false
+
+- name: privacy | disable crash reporter dialogs
+  command: defaults write com.apple.CrashReporter DialogType none
+  changed_when: false
+
+- name: privacy | disable usage tracking — iCloud analytics
+  command: defaults write com.apple.UsageTracking CoreDonationsEnabled -bool false
+  changed_when: false
+
+- name: privacy | disable usage tracking — UDC automation
+  command: defaults write com.apple.UsageTracking UDCAutomationEnabled -bool false
+  changed_when: false
+
+# Location Services
+
+- name: privacy | disable location services
+  command: defaults write /Library/Preferences/com.apple.locationd.plist LocationServicesEnabled -int 0
+  become: yes
+  changed_when: false
+
+# Suggestions
+
+- name: privacy | disable Spotlight / Safari lookup suggestions
+  command: defaults write com.apple.lookup.shared LookupSuggestionsDisabled -bool true
+  changed_when: false
+
+# Telemetry daemons (system-level)
+
+- name: privacy | disable rtcreportingd telemetry daemon
+  command: launchctl disable system/rtcreportingd
+  become: yes
+  changed_when: false
