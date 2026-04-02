@@ -65,10 +65,6 @@ fi
 # sudo rm /private/var/vm/swapfile*
 
 # [Sure Remove] Disabled - not keeping the default, disable
-# NOTE: Privacy defaults (SubmitDiagInfo, Siri, Apple Intelligence, telemetry,
-# Location Services, lookup suggestions, rtcreportingd) are now managed by
-# roles/workstation/tasks/system_setup/privacy.yml in the Ansible playbook.
-# The launchctl unload + plist rename below is still needed for these agents.
 # Photos.app
 # the devil itself. image recognition that slowly eats away at your cpu and your soul.
 AGENTS+=('com.apple.photoanalysisd')
@@ -78,7 +74,7 @@ AGENTS+=('com.apple.cloudphotosd')
 AGENTS+=('com.apple.gamed')
 # find my friends daemon
 AGENTS+=('com.apple.icloud.fmfd')
-# siri. (defaults-level disable now in Ansible privacy.yml; launchctl unload still needed here)
+# siri.
 AGENTS+=('com.apple.assistant_service')
 # AOSPushRelay BAD for your privacy.
 AGENTS+=('com.apple.AOSPushRelay')
@@ -100,7 +96,8 @@ AGENTS+=('com.apple.soagent')
 AGENTS+=('com.apple.librariand')
 AGENTS+=('com.apple.icloud.AOSNotificationAgent')
 AGENTS+=('com.apple.icloud.AOSNotificationLoginAgent')
-# rtcreportingd — also disabled via launchctl in Ansible privacy.yml
+# itunes home sharing and other junk.
+sudo launchctl disable system/rtcreportingd
 AGENTS+=('com.apple.Maps.mapspushd')
 AGENTS+=('com.apple.Maps.pushdaemon')
 
@@ -228,10 +225,16 @@ running "Deleting useless apps"
 # sudo rm -rf /Applications/Calendar.app/
 # sudo rm -rf /System/Library/Screen\ Savers
 sudo rm -rf /Applications/TextEdit.app/
+sudo rm -rf /Applications/iBooks.app/
 sudo rm -rf /Applications/Reminders.app/
 sudo rm -rf /Applications/Stickies.app/
 sudo rm -rf /Applications/Photo\ Booth.app/
 sudo rm -rf /Applications/DVD\ Player.app/
+sudo rm -rf /Applications/Mission\ Control.app/
+sudo rm -rf /Applications/Dashboard.app/
+sudo rm -rf /Applications/Dictionary.app/
+sudo rm -rf /Applications/Game\ Center.app/
+sudo rm -rf /Applications/Chess.app/
 sudo rm -rf /Applications/Mail.app/
 sudo rm -rf /Applications/Messages.app/
 sudo rm -rf /Applications/Maps.app/
