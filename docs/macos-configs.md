@@ -125,17 +125,6 @@
 
 ---
 
-## Karabiner + Hammerspoon (input remapping)
-
-| Camada | O que faz | Arquivo fonte |
-|---|---|---|
-| Karabiner | Caps Lock → Ctrl (hold) / F18 (tap solo, 250ms timeout) | `files/karabiner/caps_lock_to_f18.json` |
-| Hammerspoon | F18 → toggle kitty (quake-style, lança opencode se necessário) | `files/hammerspoon/init.lua` |
-
-> Resultado: Caps Lock segurado = Ctrl. Caps Lock tap = abre/fecha kitty com opencode.
-
----
-
 ## Editores/Shell instalados
 
 | Tool | Tipo | Nota |
@@ -146,7 +135,6 @@
 | oh-my-zsh | git clone | Framework zsh |
 | starship | brew | Prompt customizável |
 | z-zsh | git clone | Directory jumping |
-| karabiner-elements | cask | Key remapping |
 | hammerspoon | cask | Automation Lua |
 
 ## Linguagens & Runtimes
