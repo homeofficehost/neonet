@@ -33,32 +33,15 @@
       run_once: true
       when: hostvars[groups['all'][0]]['provision_changed'] | default(false)
 
-    - name: "🔔 success | send macOS notification"
-      shell: >
-        osascript -e '
-        display notification
-        "Host {{ ansible_hostname }} — all roles applied successfully"
-        with title "🚀 Dotfiles Provisioned!"
-        subtitle "{{ ansible_date_time.date }} {{ ansible_date_time.time }}"
-        sound name "Glass"'
-      ignore_errors: true
-      run_once: true
-      changed_when: false
-      when: hostvars[groups['all'][0]]['provision_changed'] | default(false)
-
     - name: "🔊 success | voice announcement"
-      shell: >
-        afplay {{ playbook_dir
-         }}/roles/workstation/files/sounds/provisioning-success.mp3
+      command: say "Provisioning complete"
       ignore_errors: true
       run_once: true
       changed_when: false
       when: hostvars[groups['all'][0]]['provision_changed'] | default(false)
 
-    - name: "❌ failure | play failure sound"
-      shell: >
-        afplay {{ playbook_dir
-         }}/roles/workstation/files/sounds/provisioning-failure.mp3
+    - name: "❌ failure | voice announcement"
+      command: say "Provisioning failed"
       ignore_errors: true
       run_once: true
       when: ansible_failed_task is defined
