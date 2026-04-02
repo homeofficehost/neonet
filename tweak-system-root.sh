@@ -1,8 +1,28 @@
 #!/bin/bash
-# https://vilimpoc.org/blog/2014/01/15/provisioning-os-x-and-disabling-unnecessary-services/
-# https://github.com/JayBrown/Disable-and-toggle-WebRTC-in-macOS-Safari
+# =============================================================================
+# macOS Service Disabler — macOS 26+ (Apple Silicon, SIP Enabled)
+# =============================================================================
+#
+# Uses modern `launchctl disable`/`enable` + `bootout`/`bootstrap` instead of
+# the deprecated `load`/`unload` approach. Works with SIP enabled because
+# `launchctl disable` persists state in /private/var/db/com.apple.xpc.launchd/
+# (not SIP-protected), rather than modifying /System/Library/ plists.
+#
+# To revert ALL disables: sudo rm -r /private/var/db/com.apple.xpc.launchd/*
+# Then reboot.
+#
+# NOTE: Some of these overlap with Ansible privacy.yml (defaults-level settings).
+# This script handles launchctl-level disabling; Ansible handles defaults writes.
+# They can coexist — both layers of hardening apply independently.
+#
+# References:
+#   - https://gist.github.com/b0gdanw/0c20c2fd5d0a7e6cff01849b57108967 (Tahoe)
+#   - https://gist.github.com/b0gdanw/b349f5f72097955cf18d6e7d8035c665 (Sequoia)
+#   - https://ernw.de/en/blog/ernw-hardening-guide-apple-macos-14-sonoma
+#   - https://vilimpoc.org/blog/2014/01/15/provisioning-os-x-and-disabling-unnecessary-services/
+#
+# =============================================================================
 
-# Ask for the administrator password upfront
 sudo -v
 
 function ok() {
@@ -17,91 +37,59 @@ function running() {
     echo -en " → "$1": "
 }
 
-bot "This script will disable some agents and daemon. What would you like to do?"
+
+bot "This script will disable some agents and daemons. What would you like to do?"
 read -r -p "(E)xecute your Disable script, (R)estore default or (Q)uit  [default=E] " response
 response=${response:-E}
 if [[ $response =~ (e|E) ]];then
-    # Execute disable
-    CMD_TO_RUN="load"
+    ACTION="disable"
 elif [[ $response =~ (r|R) ]];then
-    # Restore backup
-    CMD_TO_RUN="unload"
+    ACTION="enable"
 elif [[ $response =~ (q|Q) ]];then
     echo "Quitting.." >&2
     exit 0
 fi
 
-#---------------------------------------------------------------------
-# Agents
-#---------------------------------------------------------------------
-# [Sure Keep] Enable - keeping the default, dont disable
-# AGENTS=('com.apple.security.keychainsyncingoveridsproxy')
-# AGENTS+=('com.apple.DictationIM')
-# AGENTS+=('com.apple.icloud.findmydeviced.findmydevice-user-agent')
-# # dictation
-# AGENTS+=('com.apple.DictationIM')
-# calendar agent... calendar still seems to work fine with this off (EXPERIMENTAL)
-# AGENTS+=('com.apple.CalendarAgent')
-# telephony.... this may cause 100% cpu issues if SIP is not disabled (reboot into safe mode, csrutil disable)
-# used for facetime and handover with calls/sms. garbage.
-# AGENTS+=('com.apple.telephonyutilities.callservicesd')
-# airplay - you can always load it if you end up needing it
-# AGENTS+=('com.apple.AirPlayUIAgent')
-# airport basestation client - you don't need it if you don't run an airport base station.
-# AGENTS+=('com.apple.AirPortBaseStationAgent')
-# this appears to be for talking to airport basestations... could also include other stuff? experiment.
-# sudo launchctl disable system/airportd
-# Speech & Voice
-# sudo rm -rf /System/Library/Speech/Voices/
-# AGENTS+=('com.apple.VoiceOver')
-# AGENTS+=('com.apple.speech.voiceinstallerd')
-# AGENTS+=('com.apple.speech.synthesisserver')
-# AGENTS+=('com.apple.speech.recognitionserver')
-# AGENTS+=('com.apple.speech.feedbackservicesserver')
-# AGENTS+=('com.apple.speech.speechsynthesisd')
-# AGENTS+=('com.apple.speech.speechdatainstallerd')
-# Disable SWAP
-# sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.dynamic_pager.plist
-# sudo rm /private/var/vm/swapfile*
+UID=$(id -u)
 
-# [Sure Remove] Disabled - not keeping the default, disable
-# Photos.app
-# the devil itself. image recognition that slowly eats away at your cpu and your soul.
-AGENTS+=('com.apple.photoanalysisd')
-# background uploading of photos.
-AGENTS+=('com.apple.cloudphotosd')
-# game Center
+# =========================================================================
+# USER AGENTS — Active (exist on macOS 26.4, safe to disable)
+# =========================================================================
+# Photos.app — the devil itself. image recognition that slowly eats away at your cpu and your soul.
+AGENTS=('com.apple.photoanalysisd')
+# Game Center
 AGENTS+=('com.apple.gamed')
-# find my friends daemon
-AGENTS+=('com.apple.icloud.fmfd')
-# siri.
+# Siri
 AGENTS+=('com.apple.assistant_service')
-# AOSPushRelay BAD for your privacy.
+# AOSPushRelay — BAD for your privacy.
 AGENTS+=('com.apple.AOSPushRelay')
-# seedusage daemon - used by feedback assistant.
+# seedusage daemon — used by feedback assistant.
 AGENTS+=('com.apple.appleseed.seedusaged')
-# parental controls (see the prefs page, it's shit)
+# parental controls
 AGENTS+=('com.apple.parentalcontrols.check')
-# same
 AGENTS+=('com.apple.familycontrols.useragent')
-# cloudkit. not needed for syncing.
-AGENTS+=('com.apple.cloudd')
+# Siri backend
 AGENTS+=('com.apple.assistantd')
 # location suggestions for siri, spotlight + messages suggestions, safari lookup
 AGENTS+=('com.apple.parsecd')
 AGENTS+=('com.apple.identityservicesd')
-# iChat / messages.app stuff... if you don't use it, disable it... surprisingly the app still works but you won't get updates if it's closed.
-AGENTS+=('com.apple.soagent')
-# iCloud Notifications
-AGENTS+=('com.apple.librariand')
-AGENTS+=('com.apple.icloud.AOSNotificationAgent')
-AGENTS+=('com.apple.icloud.AOSNotificationLoginAgent')
-# itunes home sharing and other junk.
-sudo launchctl disable system/rtcreportingd
-AGENTS+=('com.apple.Maps.mapspushd')
+# Maps
 AGENTS+=('com.apple.Maps.pushdaemon')
 
-# [EXPERIMENTAL] Enable - keeping the default, dont disable TODO: Try do disable this
+# =========================================================================
+# USER AGENTS — Legacy (no longer exist on macOS 26.4, kept for reference)
+# =========================================================================
+# AGENTS+=('com.apple.cloudphotosd')      # removed
+# AGENTS+=('com.apple.icloud.fmfd')       # removed
+# AGENTS+=('com.apple.soagent')           # removed
+# AGENTS+=('com.apple.librariand')        # removed
+# AGENTS+=('com.apple.icloud.AOSNotificationAgent')          # removed
+# AGENTS+=('com.apple.icloud.AOSNotificationLoginAgent')     # removed
+# AGENTS+=('com.apple.Maps.mapspushd')    # removed
+
+# =========================================================================
+# USER AGENTS — Experimental (keep for reference, untested on macOS 26.4)
+# =========================================================================
 # AGENTS+=('com.apple.security.cloudkeychainproxy3')
 # AGENTS+=('com.apple.security.idskeychainsyncingproxy')
 # AGENTS+=('com.apple.security.keychain-circle-notification')
@@ -122,26 +110,47 @@ AGENTS+=('com.apple.Maps.pushdaemon')
 # AGENTS+=('com.apple.geodMachServiceBridge')
 # AGENTS+=('com.apple.sharingd')
 
+# =========================================================================
+# USER AGENTS — [EXPERIMENTAL] Community recommended (b0gdanw Tahoe gist)
+# =========================================================================
+# AGENTS+=('com.apple.ScreenTimeAgent')
+# AGENTS+=('com.apple.siriactionsd')
+# AGENTS+=('com.apple.siriinferenced')
+# AGENTS+=('com.apple.generativeexperiencesd')    # Apple Intelligence
+# AGENTS+=('com.apple.intelligenceflowd')          # Apple Intelligence
+# AGENTS+=('com.apple.intelligencecontextd')        # Apple Intelligence
+# AGENTS+=('com.apple.intelligenceplatformd')       # Apple Intelligence
+# AGENTS+=('com.apple.UsageTrackingAgent')
+# AGENTS+=('com.apple.followupd')
+# AGENTS+=('com.apple.chronod')
+# AGENTS+=('com.apple.routined')
+# AGENTS+=('com.apple.triald')
+# AGENTS+=('com.apple.inputanalyticsd')
+# AGENTS+=('com.apple.biomesyncd')
+# AGENTS+=('com.apple.BiomeAgent')
+# AGENTS+=('com.apple.corespeechd')
+# AGENTS+=('com.apple.mediaanalysisd')
+# AGENTS+=('com.apple.newsweaverd')                # if exists
 
-#---------------------------------------------------------------------
-# Daemons
-#---------------------------------------------------------------------
-# [Sure Keep] Enable - keeping the default, dont disable
-# get rid of some garbage unwanted network services:
-# you'll need this if you want to snoop on network shares though.
-# DAEMONS=('com.apple.netbiosd')
-# Notifications
-# DAEMONS+=('com.apple.AOSNotificationOSX')
+# =========================================================================
+# SYSTEM DAEMONS — Active (exist on macOS 26.4)
+# =========================================================================
+# Diagnostics telemetry
+DAEMONS=('com.apple.SubmitDiagInfo')
+# CloudKit daemon (was misclassified as agent in old script)
+DAEMONS+=('com.apple.cloudd')
+# RTC reporting telemetry
+DAEMONS+=('com.apple.rtcreportingd')
 
-# [Sure Remove] Disabled - not keeping the default, disable
-# Diagnostics
-DAEMONS+=('com.apple.SubmitDiagInfo')
-# Location
-DAEMONS+=('com.apple.locationd')
-# same
-DAEMONS+=('com.apple.locationmenu')
+# =========================================================================
+# SYSTEM DAEMONS — Legacy (no longer exist on macOS 26.4, kept for reference)
+# =========================================================================
+# DAEMONS+=('com.apple.locationd')     # not in LaunchDaemons on this system
+# DAEMONS+=('com.apple.locationmenu')  # not in LaunchDaemons on this system
 
-# [EXPERIMENTAL] Enable - keeping the default, dont disable TODO: Try do disable this
+# =========================================================================
+# SYSTEM DAEMONS — Experimental (keep for reference, untested on macOS 26.4)
+# =========================================================================
 # DAEMONS+=('com.apple.familycontrols')
 # DAEMONS+=('com.apple.findmymac')
 # DAEMONS+=('com.apple.icloud.findmydeviced')
@@ -164,81 +173,43 @@ DAEMONS+=('com.apple.locationmenu')
 # DAEMONS+=('com.apple.laterscheduler')
 # DAEMONS+=('com.apple.awacsd')
 # DAEMONS+=('com.apple.eapolcfg_auth')
+# DAEMONS+=('com.apple.netbiosd')
 
-# TODO: Fix Calendar
-# com.apple.cloudd
-# com.apple.assistantd
-# sudo mv -vn /System/Library/LaunchAgents/com.apple.cloudd.plist.bkp /System/Library/LaunchAgents/com.apple.cloudd.plist
-# sudo launchctl load -w /System/Library/LaunchAgents/com.apple.cloudd.plist
-
-bot "Agents"
+COUNT=0
+bot "User Agents (${ACTION})"
 for agent in "${AGENTS[@]}"; do
-    running "disabling agent/${agent}"
-    {
-        sudo launchctl $CMD_TO_RUN -w /System/Library/LaunchAgents/${agent}.plist
-        launchctl $CMD_TO_RUN -w /System/Library/LaunchAgents/${agent}.plist
-    } &> /dev/null
+    running "${ACTION} gui/${UID}/${agent}"
+    if [[ $ACTION == "disable" ]]; then
+        launchctl bootout gui/${UID}/${agent} 2>/dev/null
+        launchctl disable gui/${UID}/${agent}
+    else
+        launchctl enable gui/${UID}/${agent}
+        launchctl bootstrap gui/${UID} /System/Library/LaunchAgents/${agent}.plist 2>/dev/null
+    fi
     ok
-    # moves only if dest file does not exist.
-    sudo mv -vn /System/Library/LaunchAgents/${agent}.plist /System/Library/LaunchAgents/${agent}.plist.bkp
-    ok
+    ((COUNT++))
 done
 
-bot "Daemons"
+DCOUNT=0
+bot "System Daemons (${ACTION})"
 for daemon in "${DAEMONS[@]}"; do
-    running "disabling daemons/${daemon}"
-    {
-        sudo launchctl $CMD_TO_RUN -w /System/Library/LaunchDaemons/${daemon}.plist;ok
-        launchctl $CMD_TO_RUN -w /System/Library/LaunchDaemons/${daemon}.plist
-    } &> /dev/null
+    running "${ACTION} system/${daemon}"
+    if [[ $ACTION == "disable" ]]; then
+        sudo launchctl bootout system/${daemon} 2>/dev/null
+        sudo launchctl disable system/${daemon}
+    else
+        sudo launchctl enable system/${daemon}
+        sudo launchctl bootstrap system /System/Library/LaunchDaemons/${daemon}.plist 2>/dev/null
+    fi
     ok
-    # moves only if dest file does not exist.
-    sudo mv -vn /System/Library/LaunchDaemons/${daemon}.plist /System/Library/LaunchDaemons/${daemon}.plist.bkp
-    ok
+    ((DCOUNT++))
 done
 
-bot "Backups saved on /System/Library/LaunchAgents/\*.plist.bkp"
-
-running "Deleting useless apps"
-#---------------------------------------------------------------------
-# Delete Automator
-#---------------------------------------------------------------------
-
-#sudo rm -rf /Applications/Automator.app/
-#sudo rm -rf /System/Library/Automator/
-#sudo rm -rf /System/Library/CoreServices/Automator\ Launcher.app
-#sudo rm -rf /System/Library/CoreServices/System\ Image\ Utility.app/Contents/Library/Automator/
-#sudo rm -rf /System/Library/Frameworks/Automator.framework/
-
-#---------------------------------------------------------------------
-# I dont use these Applications anyway.
-#---------------------------------------------------------------------
-
-# sudo rm -rf /Applications/FaceTime.app/
-# sudo rm -rf /Applications/Notes.app/
-# sudo rm -rf /Applications/Calculator.app/
-# sudo rm -rf /Applications/Automator.app/
-# sudo rm -rf /System/Library/Frameworks/Automator.framework/
-# sudo rm -rf /System/Library/CoreServices/System\ Image\ Utility.app/Contents/Library/Automator
-# sudo rm -rf /System/Library/CoreServices/Automator\ Runner.app
-# sudo rm -rf /System/Library/CoreServices/Automator\ Launcher.app/
-# sudo rm -rf /Applications/Calendar.app/
-# sudo rm -rf /System/Library/Screen\ Savers
-sudo rm -rf /Applications/TextEdit.app/
-sudo rm -rf /Applications/iBooks.app/
-sudo rm -rf /Applications/Reminders.app/
-sudo rm -rf /Applications/Stickies.app/
-sudo rm -rf /Applications/Photo\ Booth.app/
-sudo rm -rf /Applications/DVD\ Player.app/
-sudo rm -rf /Applications/Mission\ Control.app/
-sudo rm -rf /Applications/Dashboard.app/
-sudo rm -rf /Applications/Dictionary.app/
-sudo rm -rf /Applications/Game\ Center.app/
-sudo rm -rf /Applications/Chess.app/
-sudo rm -rf /Applications/Mail.app/
-sudo rm -rf /Applications/Messages.app/
-sudo rm -rf /Applications/Maps.app/
-
-ok
+echo ""
+bot "Done. ${ACTION}d ${COUNT} user agents and ${DCOUNT} system daemons."
+if [[ $ACTION == "disable" ]]; then
+    echo ""
+    bot "To revert ALL disables: sudo rm -r /private/var/db/com.apple.xpc.launchd/* && sudo reboot"
+fi
 
 exit 0

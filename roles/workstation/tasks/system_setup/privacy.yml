@@ -1,7 +1,7 @@
 ---
 # Privacy, telemetry, and Apple Intelligence hardening.
 # Supersedes most defaults-write commands previously only in tweak-system-root.sh.
-# See also: tweak-system-root.sh for launchctl unload/plist rename of agents/daemons.
+# See also: tweak-system-root.sh for interactive launchctl disable/enable of agents/daemons.
 
 # Apple Intelligence (macOS 26+)
 
@@ -72,3 +72,424 @@
   become: yes
   changed_when: false
   ignore_errors: true
+
+# ============================================================================
+# Additional services — commented out. Uncomment to enable.
+# Each entry shows the exact command that would be run.
+# Agent format: launchctl disable gui/$(id -u)/com.apple.domain
+# Daemon format: launchctl disable system/com.apple.domain
+# Requires: become: yes for system daemons
+# ============================================================================
+
+# --- Telemetry & Analytics ---
+
+# - name: privacy | disable analyticsd
+#   command: launchctl disable system/com.apple.analyticsd
+#   become: yes
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable audioanalyticsd
+#   command: launchctl disable system/com.apple.audioanalyticsd
+#   become: yes
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable ecosystemanalyticsd
+#   command: launchctl disable system/com.apple.ecosystemanalyticsd
+#   become: yes
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable biomed
+#   command: launchctl disable system/com.apple.biomed
+#   become: yes
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable wifianalyticsd
+#   command: launchctl disable system/com.apple.wifianalyticsd
+#   become: yes
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable triald
+#   command: launchctl disable gui/$(id -u)/com.apple.triald
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable triald.system
+#   command: launchctl disable system/com.apple.triald
+#   become: yes
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable UsageTrackingAgent
+#   command: launchctl disable gui/$(id -u)/com.apple.UsageTrackingAgent
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable inputanalyticsd
+#   command: launchctl disable gui/$(id -u)/com.apple.inputanalyticsd
+#   changed_when: false
+#   ignore_errors: true
+
+# --- Apple Intelligence (macOS 26+) ---
+
+# - name: privacy | disable generativeexperiencesd
+#   command: launchctl disable gui/$(id -u)/com.apple.generativeexperiencesd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable intelligenceflowd
+#   command: launchctl disable gui/$(id -u)/com.apple.intelligenceflowd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable intelligencecontextd
+#   command: launchctl disable gui/$(id -u)/com.apple.intelligencecontextd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable intelligenceplatformd
+#   command: launchctl disable gui/$(id -u)/com.apple.intelligenceplatformd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable modelmanagerd
+#   command: launchctl disable system/com.apple.modelmanagerd
+#   become: yes
+#   changed_when: false
+#   ignore_errors: true
+
+# --- Siri & Speech ---
+
+# - name: privacy | disable assistant_service
+#   command: launchctl disable gui/$(id -u)/com.apple.assistant_service
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable assistantd
+#   command: launchctl disable gui/$(id -u)/com.apple.assistantd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable siriactionsd
+#   command: launchctl disable gui/$(id -u)/com.apple.siriactionsd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable siriinferenced
+#   command: launchctl disable gui/$(id -u)/com.apple.siriinferenced
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable sirittsd
+#   command: launchctl disable gui/$(id -u)/com.apple.sirittsd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable Siri.agent
+#   command: launchctl disable gui/$(id -u)/com.apple.Siri.agent
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable SiriTTSTrainingAgent
+#   command: launchctl disable gui/$(id -u)/com.apple.SiriTTSTrainingAgent
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable siriknowledged
+#   command: launchctl disable gui/$(id -u)/com.apple.siriknowledged
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable corespeechd
+#   command: launchctl disable gui/$(id -u)/com.apple.corespeechd
+#   changed_when: false
+#   ignore_errors: true
+
+# --- iCloud & Sync ---
+
+# - name: privacy | disable cloudd
+#   command: launchctl disable system/com.apple.cloudd
+#   become: yes
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable cloudphotod
+#   command: launchctl disable gui/$(id -u)/com.apple.cloudphotod
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable cloudpaird
+#   command: launchctl disable gui/$(id -u)/com.apple.cloudpaird
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable icloud.searchpartyd
+#   command: launchctl disable system/com.apple.icloud.searchpartyd
+#   become: yes
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable icloud.searchpartyuseragent
+#   command: launchctl disable gui/$(id -u)/com.apple.icloud.searchpartyuseragent
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable findmymac
+#   command: launchctl disable system/com.apple.findmymac
+#   become: yes
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable findmymacmessenger
+#   command: launchctl disable system/com.apple.findmymacmessenger
+#   become: yes
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable findmy.findmybeaconingd
+#   command: launchctl disable system/com.apple.findmy.findmybeaconingd
+#   become: yes
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable findmy.findmylocateagent
+#   command: launchctl disable gui/$(id -u)/com.apple.findmy.findmylocateagent
+#   changed_when: false
+#   ignore_errors: true
+
+# --- Social & Gaming ---
+
+# - name: privacy | disable gamed
+#   command: launchctl disable gui/$(id -u)/com.apple.gamed
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable familycircled
+#   command: launchctl disable gui/$(id -u)/com.apple.familycircled
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable familynotificationd
+#   command: launchctl disable gui/$(id -u)/com.apple.familynotificationd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable familycontrols
+#   command: launchctl disable system/com.apple.familycontrols
+#   become: yes
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable familycontrols.useragent
+#   command: launchctl disable gui/$(id -u)/com.apple.familycontrols.useragent
+#   changed_when: false
+#   ignore_errors: true
+
+# --- Location & Tracking ---
+
+# - name: privacy | disable locationd
+#   command: launchctl disable system/com.apple.locationd
+#   become: yes
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable routined
+#   command: launchctl disable gui/$(id -u)/com.apple.routined
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable navd
+#   command: launchctl disable gui/$(id -u)/com.apple.navd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable CoreLocationAgent
+#   command: launchctl disable gui/$(id -u)/com.apple.CoreLocationAgent
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable geoanalyticsd
+#   command: launchctl disable gui/$(id -u)/com.apple.geoanalyticsd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable geodMachServiceBridge
+#   command: launchctl disable gui/$(id -u)/com.apple.geodMachServiceBridge
+#   changed_when: false
+#   ignore_errors: true
+
+# --- Content & Suggestions ---
+
+# - name: privacy | disable parsecd
+#   command: launchctl disable gui/$(id -u)/com.apple.parsecd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable knowledge-agent
+#   command: launchctl disable gui/$(id -u)/com.apple.knowledge-agent
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable knowledgeconstructiond
+#   command: launchctl disable gui/$(id -u)/com.apple.knowledgeconstructiond
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable suggestd
+#   command: launchctl disable gui/$(id -u)/com.apple.suggestd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable newsd
+#   command: launchctl disable gui/$(id -u)/com.apple.newsd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable weatherd
+#   command: launchctl disable gui/$(id -u)/com.apple.weatherd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable maps.destinationd
+#   command: launchctl disable gui/$(id -u)/com.apple.maps.destinationd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable Maps.pushdaemon
+#   command: launchctl disable gui/$(id -u)/com.apple.Maps.pushdaemon
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable Maps.mapssyncd
+#   command: launchctl disable gui/$(id -u)/com.apple.Maps.mapssyncd
+#   changed_when: false
+#   ignore_errors: true
+
+# --- Photo Analysis ---
+
+# - name: privacy | disable photoanalysisd
+#   command: launchctl disable gui/$(id -u)/com.apple.photoanalysisd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable photolibraryd
+#   command: launchctl disable gui/$(id -u)/com.apple.photolibraryd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable mediaanalysisd
+#   command: launchctl disable gui/$(id -u)/com.apple.mediaanalysisd
+#   changed_when: false
+#   ignore_errors: true
+
+# --- Communication ---
+
+# - name: privacy | disable imagent
+#   command: launchctl disable gui/$(id -u)/com.apple.imagent
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable imtransferagent
+#   command: launchctl disable gui/$(id -u)/com.apple.imtransferagent
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable imautomatichistorydeletionagent
+#   command: launchctl disable gui/$(id -u)/com.apple.imautomatichistorydeletionagent
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable telephonyutilities.callservicesd
+#   command: launchctl disable gui/$(id -u)/com.apple.telephonyutilities.callservicesd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable CommCenter-osx
+#   command: launchctl disable gui/$(id -u)/com.apple.CommCenter-osx
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable CallHistoryPluginHelper
+#   command: launchctl disable gui/$(id -u)/com.apple.CallHistoryPluginHelper
+#   changed_when: false
+#   ignore_errors: true
+
+# --- Biome & Data Collection ---
+
+# - name: privacy | disable BiomeAgent
+#   command: launchctl disable gui/$(id -u)/com.apple.BiomeAgent
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable biomesyncd
+#   command: launchctl disable gui/$(id -u)/com.apple.biomesyncd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable chronod
+#   command: launchctl disable gui/$(id -u)/com.apple.chronod
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable replicatord
+#   command: launchctl disable gui/$(id -u)/com.apple.replicatord
+#   changed_when: false
+#   ignore_errors: true
+
+# --- Screen Time & Monitoring ---
+
+# - name: privacy | disable ScreenTimeAgent
+#   command: launchctl disable gui/$(id -u)/com.apple.ScreenTimeAgent
+#   changed_when: false
+#   ignore_errors: true
+
+# --- Other ---
+
+# - name: privacy | disable followupd
+#   command: launchctl disable gui/$(id -u)/com.apple.followupd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable helpd
+#   command: launchctl disable gui/$(id -u)/com.apple.helpd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable tipsd
+#   command: launchctl disable gui/$(id -u)/com.apple.tipsd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable progressd
+#   command: launchctl disable gui/$(id -u)/com.apple.progressd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable identityservicesd
+#   command: launchctl disable gui/$(id -u)/com.apple.identityservicesd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable financed
+#   command: launchctl disable gui/$(id -u)/com.apple.financed
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable passd
+#   command: launchctl disable gui/$(id -u)/com.apple.passd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable watchlistd
+#   command: launchctl disable gui/$(id -u)/com.apple.watchlistd
+#   changed_when: false
+#   ignore_errors: true
+
+# - name: privacy | disable videosubscriptionsd
+#   command: launchctl disable gui/$(id -u)/com.apple.videosubscriptionsd
+#   changed_when: false
+#   ignore_errors: true

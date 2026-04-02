@@ -1,6 +1,7 @@
 # Taps
 tap "blacktop/tap"
 tap "deskflow/tap"
+tap "koekeishiya/formulae"
 tap "LizardByte/homebrew"
 
 brew "syncthing"
@@ -333,7 +334,7 @@ cask "macs-fan-control"
 cask "appcleaner"
 cask "ccleaner"
 cask "disk-inventory-x"
-cask "yabai"
+brew "koekeishiya/formulae/yabai"
 cask "diffmerge"
 cask "meld"
 cask "lepton"
