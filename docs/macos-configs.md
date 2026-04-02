@@ -135,7 +135,6 @@
 | oh-my-zsh | git clone | Framework zsh |
 | starship | brew | Prompt customizável |
 | z-zsh | git clone | Directory jumping |
-| hammerspoon | cask | Automation Lua |
 
 ## Linguagens & Runtimes
 

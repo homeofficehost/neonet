@@ -17,7 +17,3 @@
   when: ansible_system == "Darwin"
   tags: privacy
 
-- name: workstation | macOS | configure hammerspoon
-  import_tasks: system_setup/hammerspoon.yml
-  when: ansible_system == "Darwin"
-  tags: hammerspoon
