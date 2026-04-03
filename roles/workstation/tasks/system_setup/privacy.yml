@@ -18,7 +18,7 @@
 # Siri
 
 - name: privacy | disable Siri assistant
-  command: defaults write com.apple.assistant.support Assistant Enabled -bool false
+  command: defaults write com.apple.assistant.support 'Assistant Enabled' -bool false
   changed_when: false
   ignore_errors: true
 

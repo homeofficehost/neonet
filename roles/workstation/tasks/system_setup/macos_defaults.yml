@@ -311,7 +311,7 @@
   ignore_errors: true
 
 - name: system setup | macos defaults | disable Notification Center
-  command: launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist
+  command: launchctl disable gui/$(id -u)/com.apple.notificationcenterui
   changed_when: false
   ignore_errors: true
 

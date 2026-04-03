@@ -77,28 +77,14 @@ AGENTS+=('com.apple.identityservicesd')
 AGENTS+=('com.apple.Maps.pushdaemon')
 
 # =========================================================================
-# USER AGENTS — Legacy (no longer exist on macOS 26.4, kept for reference)
-# =========================================================================
-# AGENTS+=('com.apple.cloudphotosd')      # removed
-# AGENTS+=('com.apple.icloud.fmfd')       # removed
-# AGENTS+=('com.apple.soagent')           # removed
-# AGENTS+=('com.apple.librariand')        # removed
-# AGENTS+=('com.apple.icloud.AOSNotificationAgent')          # removed
-# AGENTS+=('com.apple.icloud.AOSNotificationLoginAgent')     # removed
-# AGENTS+=('com.apple.Maps.mapspushd')    # removed
-
-# =========================================================================
 # USER AGENTS — Experimental (keep for reference, untested on macOS 26.4)
 # =========================================================================
 # AGENTS+=('com.apple.security.cloudkeychainproxy3')
-# AGENTS+=('com.apple.security.idskeychainsyncingproxy')
 # AGENTS+=('com.apple.security.keychain-circle-notification')
 # AGENTS+=('com.apple.iCloudUserNotifications')
 # AGENTS+=('com.apple.familycircled')
 # AGENTS+=('com.apple.familynotificationd')
-# AGENTS+=('com.apple.cloudfamilyrestrictionsd-mac')
 # AGENTS+=('com.apple.syncdefaultsd')
-# AGENTS+=('com.apple.personad')
 # AGENTS+=('com.apple.passd')
 # AGENTS+=('com.apple.screensharing.MessagesAgent')
 # AGENTS+=('com.apple.CommCenter-osx')
@@ -106,7 +92,6 @@ AGENTS+=('com.apple.Maps.pushdaemon')
 # AGENTS+=('com.apple.cloudpaird')
 # AGENTS+=('com.apple.CallHistorySyncHelper')
 # AGENTS+=('com.apple.CallHistoryPluginHelper')
-# AGENTS+=('com.apple.IMLoggingAgent')
 # AGENTS+=('com.apple.geodMachServiceBridge')
 # AGENTS+=('com.apple.sharingd')
 
@@ -130,7 +115,6 @@ AGENTS+=('com.apple.Maps.pushdaemon')
 # AGENTS+=('com.apple.BiomeAgent')
 # AGENTS+=('com.apple.corespeechd')
 # AGENTS+=('com.apple.mediaanalysisd')
-# AGENTS+=('com.apple.newsweaverd')                # if exists
 
 # =========================================================================
 # SYSTEM DAEMONS — Active (exist on macOS 26.4)
@@ -141,12 +125,8 @@ DAEMONS=('com.apple.SubmitDiagInfo')
 DAEMONS+=('com.apple.cloudd')
 # RTC reporting telemetry
 DAEMONS+=('com.apple.rtcreportingd')
-
-# =========================================================================
-# SYSTEM DAEMONS — Legacy (no longer exist on macOS 26.4, kept for reference)
-# =========================================================================
-# DAEMONS+=('com.apple.locationd')     # not in LaunchDaemons on this system
-# DAEMONS+=('com.apple.locationmenu')  # not in LaunchDaemons on this system
+# Location services daemon
+DAEMONS+=('com.apple.locationd')
 
 # =========================================================================
 # SYSTEM DAEMONS — Experimental (keep for reference, untested on macOS 26.4)
@@ -154,24 +134,16 @@ DAEMONS+=('com.apple.rtcreportingd')
 # DAEMONS+=('com.apple.familycontrols')
 # DAEMONS+=('com.apple.findmymac')
 # DAEMONS+=('com.apple.icloud.findmydeviced')
-# DAEMONS+=('com.apple.iCloudStats')
-# DAEMONS+=('com.apple.mbicloudsetupd')
 # DAEMONS+=('com.apple.preferences.timezone.admintool')
-# DAEMONS+=('com.apple.preferences.timezone.auto')
 # DAEMONS+=('com.apple.remotepairtool')
-# DAEMONS+=('com.apple.rpmuxd')
 # DAEMONS+=('com.apple.security.FDERecoveryAgent')
 # DAEMONS+=('com.apple.findmymacmessenger')
 # DAEMONS+=('com.apple.screensharing')
 # DAEMONS+=('com.apple.appleseed.fbahelperd')
 # DAEMONS+=('com.apple.apsd')
-# DAEMONS+=('com.apple.FileSyncAgent.sshd')
-# DAEMONS+=('com.apple.ManagedClient.cloudconfigurationd')
 # DAEMONS+=('com.apple.ManagedClient.enroll')
 # DAEMONS+=('com.apple.ManagedClient')
 # DAEMONS+=('com.apple.ManagedClient.startup')
-# DAEMONS+=('com.apple.laterscheduler')
-# DAEMONS+=('com.apple.awacsd')
 # DAEMONS+=('com.apple.eapolcfg_auth')
 # DAEMONS+=('com.apple.netbiosd')
 
