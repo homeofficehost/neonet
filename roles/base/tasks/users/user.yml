@@ -257,6 +257,42 @@
   when: not dotfiles_bare_directory.stat.exists
   tags: dotfiles,users,personal
 
+- name: Shell | Ensure ~/.zprofile sources ~/.profile
+  lineinfile:
+    path: "{{ userhome }}/.zprofile"
+    line: '[ -f ~/.profile ] && source ~/.profile'
+    insertafter: EOF
+    create: yes
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: '0644'
+  tags: shell,users,zprofile
+
+- name: Shell | Ensure GPG homedir has correct permissions
+  file:
+    path: "{{ userhome }}/.gnupg"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: '0700'
+  tags: shell,users,gpg
+
+- name: Shell | Fix gopass source to check for GPG key
+  replace:
+    path: "{{ userhome }}/.shellvars"
+    regexp: '\[ -d \$PASSWORD_STORE_DIR \] && source <\(\$\(gopass shell/vars\)\)'
+    replace: '[ -d $PASSWORD_STORE_DIR ] && gpg --list-secret-keys >/dev/null 2>&1 && source <(gopass shell/vars)'
+  tags: shell,users,gopass
+
+- name: Shell | Create empty crontab file if missing
+  file:
+    path: "{{ userhome }}/.crontab"
+    state: touch
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: '0644'
+  tags: shell,users,crontab
+
 - name: Dotfiles | Mark provision as changed
   set_fact:
     provision_changed: true

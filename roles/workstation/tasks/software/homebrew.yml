@@ -28,7 +28,3 @@
     provision_changed: true
   when: blacklist_result is defined and blacklist_result.changed | bool
 
-- name: workstation | homebrew | codesign Python for TCC persistence
-  shell: find /opt/homebrew/Cellar/python* -name Python.app -type d -maxdepth 6 -exec codesign --force --sign - {} +
-  changed_when: false
-  ignore_errors: true
