@@ -33,18 +33,18 @@
       run_once: true
       when: hostvars[groups['all'][0]]['provision_changed'] | default(false)
 
-    - name: "🔊 success | voice announcement"
-      command: say "Provisioning complete"
-      ignore_errors: true
-      run_once: true
-      changed_when: false
-      when: hostvars[groups['all'][0]]['provision_changed'] | default(false)
+    # - name: "🔊 success | voice announcement"
+    #   command: say "Provisioning complete"
+    #   ignore_errors: true
+    #   run_once: true
+    #   changed_when: false
+    #   when: hostvars[groups['all'][0]]['provision_changed'] | default(false)
 
-    - name: "❌ failure | voice announcement"
-      command: say "Provisioning failed"
-      ignore_errors: true
-      run_once: true
-      when: ansible_failed_task is defined
+    # - name: "❌ failure | voice announcement"
+    #   command: say "Provisioning failed"
+    #   ignore_errors: true
+    #   run_once: true
+    #   when: ansible_failed_task is defined
 
     - name: "🔔 idempotent | system sound when no changes"
       shell: afplay /System/Library/Sounds/Tink.aiff

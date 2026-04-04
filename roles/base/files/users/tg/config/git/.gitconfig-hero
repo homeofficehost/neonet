@@ -8,6 +8,3 @@
 [github]
 	# https://github.com/blog/180-local-github-config
 	user = thomasgroch
-
-[credential]
-    helper = pass-git-helper -m ~/.config/pass-git-helper/git-pass-mapping.ini

@@ -39,9 +39,8 @@ The bootstrap script will:
 
 1. **Install Homebrew** (if not present)
 2. **Install Ansible** via Homebrew
-3. **Install `pass` (password store)**
-4. **Clone password store** from your GitLab repository
-5. **Run ansible-pull** to configure the system:
+3. **Install Bitwarden CLI** for password management
+4. **Run ansible-pull** to configure the system:
    - Set up user environment
    - Download SSH keys from GitHub (thomasgroch)
    - Install packages from Brewfile
