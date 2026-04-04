@@ -119,15 +119,6 @@
   with_items:
     ["users/{{ username }}/config/git/.gitconfig-personal", "users/{{ username }}/config/git/.gitconfig-hero", "users/{{ username }}/config/git/.gitconfig-company" ]
 
-- name: users | copy config directory pass
-  copy:
-    src: "{{ item }}"
-    dest: "{{ userhome }}/.config/pass-git-helper/"
-    owner: "{{ username }}"
-    group: "{{ username }}"
-  with_items:
-    ["users/{{ username }}/config/pass-git-helper/git-pass-mapping.ini" ]
-
 - name: Dotfiles - Clone z-zsh
   stat:
     path: "{{ userhome }}/z-zsh"
@@ -156,20 +147,6 @@
     update: yes
     track_submodules: yes
     recursive: yes
-  when: not subrepo_directory.stat.exists
-  tags: dotfiles,users,submodules
-
-- name: Dotfiles - Clone setup-keys
-  stat:
-    path: "{{ userhome }}/setup-keys"
-  register: subrepo_directory
-  check_mode: no
-  tags: dotfiles,users,submodules
-- name: Git | Checkout setup-keys repository
-  become_user: "{{ username }}"
-  git:
-    repo: "https://github.com/homeofficehost/setup-keys.git"
-    dest: "{{ userhome }}/setup-keys"
   when: not subrepo_directory.stat.exists
   tags: dotfiles,users,submodules
 
@@ -209,16 +186,17 @@
     path: "{{ userhome }}/site"
   register: subrepo_directory
   check_mode: no
+  when: site_upstream is defined and site_upstream | length > 0
   tags: dotfiles,users,submodules
 - name: Git | Clone personal
   become_user: "{{ username }}"
   git:
-    repo: "{{ site_upstream | default('https://github.com/homeofficehost/homeofficehost.github.io') }}"
+    repo: "{{ site_upstream }}"
     dest: "{{ userhome }}/site"
     update: yes
     track_submodules: yes
     recursive: yes
-  when: not subrepo_directory.stat.exists
+  when: site_upstream is defined and site_upstream | length > 0 and not subrepo_directory.stat.exists
   tags: dotfiles,users,submodules
 
 - name: Dotfiles | Check if dotfiles bare repo exists
@@ -277,12 +255,24 @@
     mode: '0700'
   tags: shell,users,gpg
 
-- name: Shell | Fix gopass source to check for GPG key
-  replace:
-    path: "{{ userhome }}/.shellvars"
-    regexp: '\[ -d \$PASSWORD_STORE_DIR \] && source <\(\$\(gopass shell/vars\)\)'
-    replace: '[ -d $PASSWORD_STORE_DIR ] && gpg --list-secret-keys >/dev/null 2>&1 && source <(gopass shell/vars)'
-  tags: shell,users,gopass
+- name: Shell | Ensure Bitwarden config directory exists
+  file:
+    path: "{{ userhome }}/.bwconfig/gpg"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: '0700'
+  tags: shell,users,bitwarden
+
+- name: Shell | Ensure Bitwarden GPG symlink is configured
+  file:
+    src: "{{ userhome }}/.gnupg/pubring.kbx"
+    dest: "{{ userhome }}/.bwconfig/gpg/pubring.kbx"
+    state: link
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: '0700'
+  tags: shell,users,bitwarden
 
 - name: Shell | Create empty crontab file if missing
   file:

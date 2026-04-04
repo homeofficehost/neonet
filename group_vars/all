@@ -1,6 +1,6 @@
 ---
 ###############################################################################
-# for dnscrypt-proxy role                                                     #
+# for dnscrypt-proxy role                                                     #
 ###############################################################################
 enable_dnscrypt_proxy:             false
 
@@ -10,7 +10,6 @@ enable_dnscrypt_proxy:             false
 username:                          "{{ansible_user|default(lookup('env', 'USER')) }}"
 userhome:                          "{{ lookup('env','HOME') }}"
 
-github_username: "thomasgroch"
 upstream: https://github.com/homeofficehost/neonet
 repo_dir: "{{ userhome }}/.bare-dotfiles/"
 work_dir: "{{ userhome }}/"

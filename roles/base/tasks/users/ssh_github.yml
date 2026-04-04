@@ -1,6 +1,7 @@
 ---
 - name: users | download SSH keys from GitHub
   tags: dotfiles,ssh,ssh-keys,users,github
+  when: github_username is defined and github_username | length > 0
   block:
     - name: users | fetch SSH keys from GitHub API
       uri:
