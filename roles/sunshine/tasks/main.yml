@@ -16,6 +16,7 @@
 - name: sunshine | ensure service is started
   command: brew services start lizardbyte/homebrew/sunshine-beta
   when: not (sunshine_running | default(false) | bool)
+  ignore_errors: true
   tags: sunshine
 
 - name: sunshine | wait for service
