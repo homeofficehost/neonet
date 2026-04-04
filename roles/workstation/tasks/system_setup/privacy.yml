@@ -3,6 +3,15 @@
 # Supersedes most defaults-write commands previously only in tweak-system-root.sh.
 # See also: tweak-system-root.sh for interactive launchctl disable/enable of agents/daemons.
 
+# Gatekeeper — disable authorization prompts for app downloads
+# WARNING: Allows apps from anywhere to run. Re-enable with: spctl --master-enable
+
+- name: privacy | disable Gatekeeper authorization prompts
+  command: spctl --master-disable
+  become: yes
+  changed_when: false
+  ignore_errors: true
+
 # Apple Intelligence (macOS 26+)
 
 - name: privacy | disable Apple Intelligence
