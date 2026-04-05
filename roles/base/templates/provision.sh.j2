@@ -7,7 +7,7 @@ BRANCH="{{ branch | default('master') }}"
 LOGFILE="${HOME}/ansible_provision.log"
 REPO="{{ upstream | default('https://github.com/homeofficehost/neonet') }}"
 
-COMMON_OPTS="--url $REPO --checkout $BRANCH"
+COMMON_OPTS="--url $REPO --checkout $BRANCH --clean"
 
 if pgrep -f ansible-pull > /dev/null; then
   printf "\n$(date +"%Y-%m-%d %H:%M:%S") A running ansible-pull process was found.\nExiting.\n" | tee -a "$LOGFILE"
