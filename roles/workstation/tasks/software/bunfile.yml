@@ -1,0 +1,32 @@
+---
+- name: workstation | bun | check if bun is installed
+  tags: bun
+  command: which bun
+  register: bun_installed
+  changed_when: false
+  failed_when: false
+
+- name: workstation | bun | install bun runtime
+  tags: bun
+  shell: curl -fsSL https://bun.sh/install | bash
+  when: bun_installed.rc | int != 0
+
+- name: workstation | bun | install packages from Bunfile
+  tags: bun,packages
+  shell: |
+    while IFS= read -r line; do
+      line=$(echo "$line" | xargs)
+      [ -z "$line" ] && continue
+      [[ "$line" == \#\#.* ]] && continue
+      [[ "$line" == \#* ]] && continue
+      bun install -g "$line"
+    done < {{ playbook_dir }}/Bunfile
+  register: bun_bundle_result
+  changed_when: "'saved' in bun_bundle_result.stdout.lower()"
+  when: bun_installed.rc == 0
+
+- name: workstation | bun | set changed flag
+  tags: bun
+  set_fact:
+    provision_changed: true
+  when: bun_bundle_result is defined and bun_bundle_result.changed | bool

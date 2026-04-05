@@ -1,5 +1,0 @@
----
-enable_dnscrypt_proxy: true
-site_upstream: https://github.com/thomasgroch/my-site.git
-blog_upstream: https://github.com/thomasgroch/my-blog.git
-healthcheck_uuid: 9d10210e-7457-4feb-aed4-8220e865c751

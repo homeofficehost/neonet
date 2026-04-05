@@ -80,7 +80,7 @@ ansible-pull --vault-password-file ~/.vault_key --url https://github.com/homeoff
 
 **Problema:** 
 - O arquivo `.vault_key` pode não existir
-- O limit usa `$(hostname -s).local` mas o hosts file tem `tgworkstation.local`
+- O limit usa `$(hostname -s).local` mas o hosts file tem `tgworkmac.local`
 - Se o hostname não for `tgworkstation`, o limit não matcha
 
 **Impacto:** Ansible não encontra o host ou falha no vault
@@ -154,7 +154,7 @@ Ou mover de volta para `playbooks/` na raiz
 [base]
 
 [workstation]
-tgworkstation.local ansible_sudo=True
+tgworkmac.local ansible_sudo=True
 ```
 
 **Problema:** O grupo `[base]` está vazio, mas o playbook `local.yml` usa `hosts: localhost`
@@ -162,7 +162,7 @@ tgworkstation.local ansible_sudo=True
 **Solução:**
 ```ini
 [workstation]
-tgworkstation.local ansible_sudo=True ansible_user=tg
+tgworkmac.local ansible_sudo=True ansible_user=tg
 
 [workstation:vars]
 ansible_connection=local

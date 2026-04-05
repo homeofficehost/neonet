@@ -1,6 +1,6 @@
 # dotfiles
 
-Configuration and automation for tgworkstation (macOS 26).
+Configuration and automation for tgworkmac (macOS 26).
 
 ## Prerequisites
 

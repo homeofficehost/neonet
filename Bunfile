@@ -1,0 +1,5 @@
+# Global bun packages
+# Usage: while read pkg; do [[ "$pkg" =~ ^#.*$ || -z "$pkg" ]] && continue; bun install -g "$pkg"; done < Bunfile
+
+## CLI Tools
+@gitlawb/openclaude

@@ -5,7 +5,6 @@ tap "koekeishiya/formulae"
 tap "LizardByte/homebrew"
 
 brew "syncthing"
-brew "lizardbyte/homebrew/sunshine-beta"
 cask "hiddenbar"
 cask "deskflow"
 
