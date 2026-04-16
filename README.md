@@ -51,14 +51,16 @@ The bootstrap script will:
 
 ### Run ansible-pull manually
 
+> **Nota:** O parâmetro `-i hosts` é obrigatório para usar o arquivo de inventário local que define o hostname.
+
 ```bash
 # With vault password (if you have encrypted files)
-ansible-pull --vault-password-file ~/.vault_key \
+ansible-pull -i hosts --vault-password-file ~/.vault_key \
   --url https://github.com/homeofficehost/neonet \
   --limit $(hostname -s).local
 
 # Without vault password
-ansible-pull --url https://github.com/homeofficehost/neonet \
+ansible-pull -i hosts --url https://github.com/homeofficehost/neonet \
   --limit $(hostname -s).local
 ```
 
@@ -66,11 +68,11 @@ ansible-pull --url https://github.com/homeofficehost/neonet \
 
 ```bash
 # Run only base role (system setup)
-ansible-pull --url https://github.com/homeofficehost/neonet \
+ansible-pull -i hosts --url https://github.com/homeofficehost/neonet \
   --limit $(hostname -s).local --tags base
 
 # Run only workstation role (applications)
-ansible-pull --url https://github.com/homeofficehost/neonet \
+ansible-pull -i hosts --url https://github.com/homeofficehost/neonet \
   --limit $(hostname -s).local --tags workstation
 ```
 
@@ -129,6 +131,20 @@ If you have encrypted files, create the vault key file:
 ```bash
 echo "your-vault-password" > ~/.vault_key
 chmod 600 ~/.vault_key
+```
+
+### Ansible reports "no hosts to target"
+
+Ensure you are using the local inventory file with `-i hosts`:
+```bash
+ansible-pull -i hosts --url https://github.com/homeofficehost/neonet \
+  --limit $(hostname -s).local
+```
+
+Also verify your hostname matches the inventory:
+```bash
+cat hosts
+hostname -s
 ```
 
 ### SSH keys not downloaded

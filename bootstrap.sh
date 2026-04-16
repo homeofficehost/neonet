@@ -70,4 +70,4 @@ fi
 sudo touch /var/log/ansible.log
 sudo chown $USER:$LOCAL_GROUP /var/log/ansible.log
 
-ansible-pull --url "$GITHUB_REPO" --limit localhost --checkout master
+ansible-pull -i hosts --url "$GITHUB_REPO" --limit "$(hostname -s).local" --checkout master
