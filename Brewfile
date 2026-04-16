@@ -4,6 +4,7 @@ tap "deskflow/tap"
 tap "koekeishiya/formulae"
 tap "LizardByte/homebrew"
 
+
 brew "syncthing"
 cask "hiddenbar"
 cask "deskflow"
@@ -331,12 +332,13 @@ cask "cryptomator"
 cask "qtpass"
 cask "macs-fan-control"
 cask "appcleaner"
-cask "ccleaner"
+cask "mo"
 cask "disk-inventory-x"
 brew "koekeishiya/formulae/yabai"
 cask "diffmerge"
 cask "meld"
 cask "lepton"
+cask "carbon-copy-cloner"
 
 ## macOS Casks - Communication
 cask "element"
