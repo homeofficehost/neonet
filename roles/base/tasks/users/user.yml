@@ -229,11 +229,19 @@
   when: not dotfiles_bare_directory.stat.exists
   tags: dotfiles,users,personal
 
-- name: Dotfiles | Set hide untracked files
+- name: Dotfiles | Ensure untracked files are hidden
   become_user: "{{ username }}"
   command: "git --git-dir={{ userhome }}/.dotfiles-bare --work-tree={{ userhome }} config status.showUntrackedFiles no"
-  when: not dotfiles_bare_directory.stat.exists
   tags: dotfiles,users,personal
+  changed_when: false
+
+- name: Dotfiles | Pull updates from bare repo
+  become_user: "{{ username }}"
+  command: "git --git-dir={{ userhome }}/.dotfiles-bare --work-tree={{ userhome }} pull"
+  when: dotfiles_bare_directory.stat.exists
+  tags: dotfiles,users,personal
+  ignore_errors: yes
+  changed_when: false
 
 - name: Shell | Ensure ~/.zprofile sources ~/.profile
   lineinfile:
