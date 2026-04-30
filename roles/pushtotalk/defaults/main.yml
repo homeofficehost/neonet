@@ -1,0 +1,7 @@
+---
+pushtotalk_enabled: true
+pushtotalk_daemon_name: audiobridge
+pushtotalk_install_path: "/usr/local/bin/audiobridge"
+pushtotalk_plist_path: "{{ ansible_env.HOME }}/Library/LaunchAgents/com.user.{{ pushtotalk_daemon_name }}.plist"
+pushtotalk_spoon_path: "{{ ansible_env.HOME }}/.hammerspoon/Spoons/PushToTalk.spoon"
+pushtotalk_src_path: "{{ role_path }}/files/src"

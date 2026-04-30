@@ -219,8 +219,8 @@
   poll: 1
   ignore_errors: true
 
-- name: system setup | macos defaults | disable automatic termination of inactive apps
-  command: defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
+- name: system setup | macos defaults | allow automatic termination of inactive apps
+  command: defaults write NSGlobalDomain NSDisableAutomaticTermination -bool false
   changed_when: false
   async: 10
   poll: 1
@@ -904,8 +904,8 @@
   poll: 1
   ignore_errors: true
 
-- name: system setup | macos defaults | enable focus follows mouse in Terminal
-  command: defaults write com.apple.Terminal FocusFollowsMouse -bool true
+- name: system setup | macos defaults | disable focus follows mouse in Terminal
+  command: defaults write com.apple.Terminal FocusFollowsMouse -bool false
   changed_when: false
   async: 10
   poll: 1

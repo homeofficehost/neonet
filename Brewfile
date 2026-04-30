@@ -1,29 +1,44 @@
-# Taps
+# =============================================================================
+# Brewfile - Homebrew Package Declaration
+# =============================================================================
+# Mantenha comentários de DESINSTALAR para referência futura.
+# Formato: brew "pacote" | cask "pacote" | tap "org/tap"
+# =============================================================================
+
+# =============================================================================
+# TAPS (fontes de pacotes adicionais)
+# =============================================================================
 tap "blacktop/tap"
 tap "deskflow/tap"
-tap "koekeishiya/formulae"
 tap "LizardByte/homebrew"
 
-
+# =============================================================================
+# ORPHAN PACKAGES (sem categoria definida - revisar)
+# =============================================================================
 brew "syncthing"
 cask "hiddenbar"
 cask "deskflow"
 cask "daisydisk"
 
-## Shell & Core
+# =============================================================================
+# SHELL & CORE
+# =============================================================================
 brew "zsh"
 brew "bash"
 brew "micro"
 brew "vim"
 brew "neovim"
 brew "nano"
-brew "emacs"
+# DESINSTALAR: Editor pesado, 134MB, neovim cobre bem
+# brew "emacs"
 brew "ed"
 cask "claude-code"
 brew "lazygit"
 brew "glow"
 
-## System Utilities
+# =============================================================================
+# SYSTEM UTILITIES (GNU replacements & core tools)
+# =============================================================================
 brew "coreutils"
 brew "findutils"
 brew "gnu-sed"
@@ -46,10 +61,11 @@ brew "gzip"
 brew "unzip"
 brew "unar"
 brew "readline"
-brew "openssl"
 brew "openssl@3"
 
-## File Management
+# =============================================================================
+# FILE MANAGEMENT & SEARCH
+# =============================================================================
 brew "yazi"
 brew "ranger"
 brew "broot"
@@ -61,7 +77,9 @@ brew "ag"
 brew "rg"
 brew "ripgrep-all"
 
-## Modern Replacements
+# =============================================================================
+# MODERN REPLACEMENTS (better defaults)
+# =============================================================================
 brew "lsd"
 brew "bat"
 brew "eza"
@@ -73,17 +91,20 @@ brew "hyperfine"
 brew "choose"
 brew "fdupes"
 
-## Diff & Comparison
+# =============================================================================
+# DIFF & COMPARISON
+# =============================================================================
 brew "diffutils"
 brew "colordiff"
 brew "diff-so-fancy"
 brew "icdiff"
 brew "wdiff"
 
-## Development Tools
+# =============================================================================
+# DEVELOPMENT TOOLS
+# =============================================================================
 brew "git"
 brew "gh"
-brew "lazygit"
 brew "git-extras"
 brew "git-flow"
 brew "git-lfs"
@@ -98,11 +119,14 @@ brew "gource"
 brew "ansible"
 brew "ansible-lint"
 
-## Languages & Version Managers
+# =============================================================================
+# LANGUAGES & VERSION MANAGERS
+# =============================================================================
 brew "rust"
 brew "go"
 brew "python3"
-brew "python@3.14"
+# DESINSTALAR: Python extra, uv já gerencia versões
+# brew "python@3.14"
 brew "pipx"
 brew "uv"
 brew "pyenv"
@@ -113,11 +137,16 @@ brew "yarn"
 brew "ruby"
 brew "rbenv"
 brew "ruby-build"
-brew "composer"
-brew "php-cs-fixer"
-brew "phpunit"
+# DESINSTALAR: PHP package manager, só se desenvolve PHP
+# brew "composer"
+# DESINSTALAR: Linter PHP, só se desenvolve PHP
+# brew "php-cs-fixer"
+# DESINSTALAR: Testes PHP, só se desenvolve PHP
+# brew "phpunit"
 
-## Build Dependencies
+# =============================================================================
+# BUILD DEPENDENCIES
+# =============================================================================
 brew "autoconf"
 brew "automake"
 brew "gmp"
@@ -129,12 +158,16 @@ brew "libpq"
 brew "fontconfig"
 brew "icu4c"
 
-## Databases
+# =============================================================================
+# DATABASES
+# =============================================================================
 brew "postgresql"
 brew "mariadb"
 brew "redis"
 
-## Network Tools
+# =============================================================================
+# NETWORK TOOLS
+# =============================================================================
 brew "doggo"
 brew "dnsmasq"
 brew "nmap"
@@ -159,7 +192,9 @@ brew "autossh"
 brew "mosh"
 brew "parallel"
 
-## Monitoring & System
+# =============================================================================
+# MONITORING & SYSTEM
+# =============================================================================
 brew "htop"
 brew "btop"
 brew "ctop"
@@ -174,14 +209,18 @@ brew "byobu"
 brew "expect"
 brew "starship"
 
-## Terminal Multiplexers & Tools
+# =============================================================================
+# TERMINAL HELPERS
+# =============================================================================
 brew "tealdeer"
 brew "howdoi"
 brew "thefuck"
 brew "translate-shell"
 brew "grc"
 
-## File Processors
+# =============================================================================
+# FILE PROCESSORS (JSON, CSV, etc.)
+# =============================================================================
 brew "exiftool"
 brew "jq"
 brew "yq"
@@ -190,35 +229,49 @@ brew "miller"
 brew "xsv"
 brew "qsv"
 
-## Media Processing
+# =============================================================================
+# MEDIA PROCESSING
+# =============================================================================
 brew "ffmpeg"
 brew "mpv"
 brew "mplayer"
 brew "imagemagick"
-brew "graphicsmagick"
+# DESINSTALAR: ImageMagick fork redundante
+# brew "graphicsmagick"
 brew "webp"
 brew "gifski"
-brew "bazarr"
-brew "navidrome"
+# DESINSTALAR: Arr suite, legendas automáticas
+# brew "bazarr"
+# DESINSTALAR: Music server, uso baixo
+# brew "navidrome"
 
-## Cloud & Deploy
+# =============================================================================
+# CLOUD & DEPLOY
+# =============================================================================
 brew "awscli"
-brew "heroku"
-brew "flyctl"
-brew "vercel-cli"
+# DESINSTALAR: CLI Heroku, 400MB+ pesado, uso raro
+# brew "heroku"
+# DESINSTALAR: CLI Fly.io, 72MB+ pesado, uso esporádico
+# brew "flyctl"
+# DESINSTALAR: CLI Vercel, 150MB+ pesado, uso esporádico
+# brew "vercel-cli"
 brew "netlify-cli"
 brew "rclone"
 
-## Security Tools
+# =============================================================================
+# SECURITY TOOLS
+# =============================================================================
 brew "gnupg"
 brew "pinentry-mac"
 brew "pass"
 brew "gopass"
 brew "gnutls"
-brew "hashcat"
+# DESINSTALAR: Ferramenta de pentest/CTF, uso nicho
+# brew "hashcat"
 brew "john"
 brew "hydra"
-brew "bettercap"
+# DESINSTALAR: Ferramenta de pentest, uso nicho
+# brew "bettercap"
 brew "sslsplit"
 brew "fcrackzip"
 brew "binwalk"
@@ -228,7 +281,9 @@ brew "spoof-mac"
 brew "nikto"
 brew "ncdu"
 
-## IRC & Email
+# =============================================================================
+# IRC & EMAIL
+# =============================================================================
 brew "irssi"
 brew "bitlbee"
 brew "neomutt"
@@ -238,14 +293,18 @@ brew "notmuch"
 brew "urlscan"
 brew "urlview"
 
-## Window Management & macOS Specific
+# =============================================================================
+# WINDOW MANAGEMENT & macOS SPECIFIC
+# =============================================================================
 brew "duti"
 brew "mas"
 brew "wifi-password"
 brew "tidy-html5"
 brew "reattach-to-user-namespace"
 
-## Misc Utilities
+# =============================================================================
+# MISC UTILITIES
+# =============================================================================
 brew "pwgen"
 brew "gpatch"
 brew "m4"
@@ -257,21 +316,31 @@ brew "todo-txt"
 brew "autojump"
 brew "z"
 
+# =============================================================================
+# NETWORKING CASKS
+# =============================================================================
 cask "zerotier-one"
 
-## macOS Casks - Development
+# =============================================================================
+# DEVELOPMENT CASKS
+# =============================================================================
 cask "kitty"
 cask "iterm2"
 cask "github"
 cask "visual-studio-code"
 cask "sublime-text"
-#cask "phpstorm"
-#cask "webstorm"
-cask "google-chrome"
-cask "firefox"
+# cask "phpstorm"
+# cask "webstorm"
+# DESINSTALAR: Brave já é Chromium, redundante
+# cask "google-chrome"
+# DESINSTALAR: Navegador extra, Brave cobre bem
+# cask "firefox"
 cask "brave-browser"
 cask "chromedriver"
-## Docker (CLI-only, no Desktop)
+
+# =============================================================================
+# DOCKER (CLI-only, no Desktop)
+# =============================================================================
 brew "docker"
 brew "docker-compose"
 brew "docker-credential-helper"
@@ -280,19 +349,26 @@ cask "postman"
 cask "ngrok"
 cask "fork"
 
-## macOS Casks - Productivity
+# =============================================================================
+# PRODUCTIVITY CASKS
+# =============================================================================
 cask "obsidian"
-cask "scrivener"
-cask "timing"
+# DESINSTALAR: Editor de longa escrita, uso ocasional
+# cask "scrivener"
+# DESINSTALAR: Time tracking automático, uso baixo
+# cask "timing"
 cask "hazel"
 cask "maccy"
 cask "maestral"
 cask "netnewswire"
 cask "numi"
 cask "typora"
-cask "zettlr"
+# DESINSTALAR: Editor Markdown redundante com Obsidian/Typora
+# cask "zettlr"
 
-## macOS Casks - Security
+# =============================================================================
+# SECURITY CASKS
+# =============================================================================
 cask "bitwarden"
 cask "arq"
 cask "little-snitch"
@@ -300,93 +376,125 @@ cask "knockknock"
 cask "onyx"
 cask "oversight"
 
-## macOS Casks - Utilities
+# =============================================================================
+# UTILITIES CASKS
+# =============================================================================
 cask "keka"
 cask "dupeguru"
 cask "cyberduck"
-cask "dbvisualizer"
+# DESINSTALAR: GUI DB pesada, DBeaver cobre tudo
+# cask "dbvisualizer"
 cask "dbeaver-community"
 cask "sequel-ace"
 cask "postico"
-cask "mysqlworkbench"
-cask "db-browser-for-sqlite"
+# DESINSTALAR: MySQL GUI pesado, DBeaver cobre melhor
+# cask "mysqlworkbench"
+# DESINSTALAR: GUI SQLite, DBeaver cobre
+# cask "db-browser-for-sqlite"
 cask "sdformatter"
-cask "balenaetcher"
+# DESINSTALAR: Gravação de ISO, uso raro
+# cask "balenaetcher"
 cask "unetbootin"
 cask "transmission"
 cask "vlc"
 cask "iina"
 cask "audio-hijack"
-cask "xquartz"
+# DESINSTALAR: X11 server, raramente necessário no macOS moderno
+# cask "xquartz"
 cask "karabiner-elements"
 cask "keyboard-maestro"
 cask "macfuse"
-cask "fujitsu-scansnap-home"
+# DESINSTALAR: Software scanner Fujitsu, 1GB+ pesado
+# cask "fujitsu-scansnap-home"
 cask "superduper"
-cask "tabula"
+# DESINSTALAR: Extração de tabelas PDF, uso raro
+# cask "tabula"
 cask "utm"
 cask "microsoft-remote-desktop"
 cask "vnc-viewer"
 cask "transmit"
-cask "cryptomator"
-cask "qtpass"
+# DESINSTALAR: Criptografia de nuvem, uso baixo
+# cask "cryptomator"
+# DESINSTALAR: GUI para pass, Bitwarden é mais prático
+# cask "qtpass"
 cask "macs-fan-control"
-cask "appcleaner"
 brew "mole"
 cask "disk-inventory-x"
-brew "koekeishiya/formulae/yabai"
 cask "diffmerge"
-cask "meld"
-cask "lepton"
+# DESINSTALAR: Diff GUI, uso raro
+# cask "meld"
+# DESINSTALAR: Snippet manager, uso baixo
+# cask "lepton"
 cask "carbon-copy-cloner"
 
-## macOS Casks - Communication
+# =============================================================================
+# COMMUNICATION CASKS
+# =============================================================================
 cask "element"
 cask "discord"
 cask "telegram"
 cask "signal"
-cask "rocket-chat"
-cask "volt-app"
 cask "podcastmenu"
 
-## macOS Casks - Media & Entertainment
-cask "spotify"
-cask "tidal"
+# =============================================================================
+# MEDIA & ENTERTAINMENT CASKS
+# =============================================================================
+# DESINSTALAR: App de streaming pesado, usar web
+# cask "tidal"
 cask "ytmdesktop-youtube-music"
-cask "plex"
-cask "plex-media-server"
-cask "kodi"
-cask "jellyfin-media-player"
-cask "handbrake-app"
-cask "makemkv"
-cask "sabnzbd"
-cask "sonarr"
-cask "radarr"
-cask "lidarr"
-cask "prowlarr"
-cask "embyserver"
-cask "jellyfin"
-cask "retroarch"
+# DESINSTALAR: Player dedicado Jellyfin, uso ocasional
+# cask "jellyfin-media-player"
+# DESINSTALAR: Transcodificação de vídeo, uso raro
+# cask "handbrake-app"
+# DESINSTALAR: Rip de Blu-ray/DVD, uso esporádico
+# cask "makemkv"
+# DESINSTALAR: Usenet downloader, uso esporádico
+# cask "sabnzbd"
+# DESINSTALAR: Arr suite, automação de downloads
+# cask "sonarr"
+# DESINSTALAR: Arr suite, automação de downloads
+# cask "radarr"
+# DESINSTALAR: Arr suite, automação de downloads
+# cask "lidarr"
+# DESINSTALAR: Arr suite, indexer aggregator
+# cask "prowlarr"
+# DESINSTALAR: Media server, Jellyfin é open-source
+# cask "embyserver"
+# DESINSTALAR: Media server, uso ocasional
+# cask "jellyfin"
+# DESINSTALAR: Emulador multi-sistema, OpenEmu mais simples
+# cask "retroarch"
 cask "openemu"
-cask "dolphin"
-cask "pcsx2"
-cask "cemu"
+# DESINSTALAR: Emulador GameCube/Wii, uso esporádico
+# cask "dolphin"
+# DESINSTALAR: Emulador PS2, uso esporádico
+# cask "pcsx2"
+# DESINSTALAR: Emulador Wii U, uso esporádico
+# cask "cemu"
 cask "steam"
 cask "epic-games"
-cask "battle-net"
-cask "ea"
+# DESINSTALAR: Launcher Blizzard, uso esporádico
+# cask "battle-net"
+# DESINSTALAR: Launcher EA, uso esporádico
+# cask "ea"
 
-## QuickLook Plugins
+# =============================================================================
+# QUICKLOOK PLUGINS
+# =============================================================================
 cask "qlcolorcode"
-cask "qlmarkdown"
+# DESINSTALAR: QuickLook plugin, macOS já preview Markdown
+# cask "qlmarkdown"
 cask "qlprettypatch"
 cask "qlstephen"
-cask "quicklook-video"
+# DESINSTALAR: QuickLook plugin, macOS já preview vídeo
+# cask "quicklook-video"
 cask "quicklook-csv"
 cask "suspicious-package"
 cask "webpquicklook"
 
-## Fonts
+# =============================================================================
+# FONTS
+# =============================================================================
 cask "font-fontawesome"
 cask "font-awesome-terminal-fonts"
 cask "font-hack"

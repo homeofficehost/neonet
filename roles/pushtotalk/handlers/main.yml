@@ -1,0 +1,4 @@
+---
+- name: restart karabiner-elements
+  shell: killall karabiner-elements 2>/dev/null; sleep 1; open -a "Karabiner-Elements"
+  listen: restart karabiner

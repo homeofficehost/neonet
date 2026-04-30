@@ -306,10 +306,10 @@
 #   changed_when: false
 #   ignore_errors: true
 
-# - name: privacy | disable routined
-#   command: launchctl disable gui/$(id -u)/com.apple.routined
-#   changed_when: false
-#   ignore_errors: true
+- name: privacy | disable routined
+  shell: launchctl disable gui/$(id -u)/com.apple.routined
+  changed_when: false
+  ignore_errors: true
 
 # - name: privacy | disable navd
 #   command: launchctl disable gui/$(id -u)/com.apple.navd
@@ -380,20 +380,20 @@
 
 # --- Photo Analysis ---
 
-# - name: privacy | disable photoanalysisd
-#   command: launchctl disable gui/$(id -u)/com.apple.photoanalysisd
-#   changed_when: false
-#   ignore_errors: true
+- name: privacy | disable photoanalysisd
+  shell: launchctl disable gui/$(id -u)/com.apple.photoanalysisd
+  changed_when: false
+  ignore_errors: true
 
 # - name: privacy | disable photolibraryd
 #   command: launchctl disable gui/$(id -u)/com.apple.photolibraryd
 #   changed_when: false
 #   ignore_errors: true
 
-# - name: privacy | disable mediaanalysisd
-#   command: launchctl disable gui/$(id -u)/com.apple.mediaanalysisd
-#   changed_when: false
-#   ignore_errors: true
+- name: privacy | disable mediaanalysisd
+  shell: launchctl disable gui/$(id -u)/com.apple.mediaanalysisd
+  changed_when: false
+  ignore_errors: true
 
 # --- Communication ---
 
@@ -434,15 +434,15 @@
 #   changed_when: false
 #   ignore_errors: true
 
-# - name: privacy | disable biomesyncd
-#   command: launchctl disable gui/$(id -u)/com.apple.biomesyncd
-#   changed_when: false
-#   ignore_errors: true
+- name: privacy | disable biomesyncd
+  shell: launchctl disable gui/$(id -u)/com.apple.biomesyncd
+  changed_when: false
+  ignore_errors: true
 
-# - name: privacy | disable chronod
-#   command: launchctl disable gui/$(id -u)/com.apple.chronod
-#   changed_when: false
-#   ignore_errors: true
+- name: privacy | disable chronod
+  shell: launchctl disable gui/$(id -u)/com.apple.chronod
+  changed_when: false
+  ignore_errors: true
 
 # - name: privacy | disable replicatord
 #   command: launchctl disable gui/$(id -u)/com.apple.replicatord

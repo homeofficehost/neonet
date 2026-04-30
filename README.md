@@ -92,6 +92,7 @@ ansible-pull -i hosts --url https://github.com/homeofficehost/neonet \
 - **Git**: Personal configs and aliases
 - **Cron**: Automatic daily updates
 - **Applications**: All packages from Brewfile
+- **Push-to-Talk**: Exclusive mic routing for Discord ([docs](docs/push-to-talk.md))
 
 ### Automatic Features
 
@@ -105,14 +106,16 @@ ansible-pull -i hosts --url https://github.com/homeofficehost/neonet \
 neonet/
 ├── ansible.cfg          # Ansible configuration
 ├── bootstrap.sh         # Initial setup script
-├── Brewfile             # Homebrew packages
+├── Brewfile             # Homebrew packages (secoes visuais)
 ├── hosts                # Ansible inventory
 ├── local.yml            # Main playbook
 ├── README.md            # This file
 ├── roles/
-│   ├── base/            # Base system configuration
-│   └── workstation/     # User applications
+│   ├── base/            # Base system configuration (tags: base,ansible,user,cron)
+│   ├── pushtotalk/      # Push-to-Talk para Discord
+│   └── workstation/     # User applications (tags: homebrew,bun,macos,privacy)
 ├── group_vars/all       # Variables (GitHub username, etc.)
+├── docs/                # Documentacao (PTT, CI, etc.)
 └── linux/               # Linux-specific files (reference)
 ```
 

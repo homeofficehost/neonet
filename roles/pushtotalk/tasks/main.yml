@@ -1,0 +1,53 @@
+---
+- name: pushtotalk | build audiobridge binary
+  command: make build
+  args:
+    chdir: "{{ pushtotalk_src_path }}"
+  environment:
+    GOROOT: ""
+  when: pushtotalk_enabled
+  register: build_result
+  changed_when: build_result.rc == 0
+  tags: pushtotalk
+
+- name: pushtotalk | install audiobridge binary
+  copy:
+    src: "{{ pushtotalk_src_path }}/build/audiobridge"
+    dest: "{{ pushtotalk_install_path }}"
+    mode: "0755"
+    force: true
+  when: pushtotalk_enabled
+  become: true
+  tags: pushtotalk
+
+- name: pushtotalk | deploy LaunchAgent plist
+  template:
+    src: com.user.audiobridge.plist.j2
+    dest: "{{ pushtotalk_plist_path }}"
+    mode: "0644"
+  when: pushtotalk_enabled
+  tags: pushtotalk
+
+- name: pushtotalk | load LaunchAgent
+  command: "launchctl load -w {{ pushtotalk_plist_path }}"
+  when: pushtotalk_enabled
+  ignore_errors: true
+  changed_when: false
+  tags: pushtotalk
+
+- name: pushtotalk | deploy Karabiner-Elements config
+  copy:
+    src: "karabiner.json"
+    dest: "{{ ansible_env.HOME }}/.config/karabiner/karabiner.json"
+    mode: "0644"
+    force: true
+  when: pushtotalk_enabled
+  notify: restart karabiner
+  tags: pushtotalk
+
+- name: pushtotalk | mark provision changed
+  set_fact:
+    provision_changed: true
+  when: pushtotalk_enabled
+  changed_when: false
+  tags: pushtotalk
