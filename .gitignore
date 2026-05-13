@@ -1,1 +1,20 @@
 .sisyphus/
+
+# Databases and personal data files
+*.db
+*.sqlite
+*.sqlite3
+*.kmmacros
+
+# Log files
+*.log
+
+# Personal scripts and configs (not part of project automation)
+scripts/tts-proxy.py
+scripts/falar-toggle.sh
+scripts/voices.json
+
+# Personal docs and lists
+docs/analise-git-modifications.md
+docs/kokoro-tts.md
+uninstall-list.txt

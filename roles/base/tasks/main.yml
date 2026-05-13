@@ -11,6 +11,14 @@
   import_tasks: users/user.yml
   tags: base,user
 
+- name: base | macOS | setup sudo
+  import_tasks: system_setup/sudo.yml
+  tags: base,sudo
+
+- name: base | macOS | setup login
+  import_tasks: system_setup/login.yml
+  tags: base,login
+
 - name: base | macOS | setup cron
   import_tasks: system_setup/cron.yml
   tags: base,cron

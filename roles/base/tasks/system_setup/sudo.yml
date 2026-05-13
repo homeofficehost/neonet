@@ -1,0 +1,21 @@
+---
+- name: system setup | sudo | enable passwordless sudo for user
+  tags: sudo
+  lineinfile:
+    dest: /etc/sudoers
+    regexp: "^{{ username }}\\s+ALL="
+    line: "{{ username }} ALL=(ALL) NOPASSWD: ALL"
+    validate: "visudo -cf %s"
+    state: present
+  become: yes
+  when: enable_passwordless_sudo | default(false)
+
+- name: system setup | sudo | disable passwordless sudo for user
+  tags: sudo
+  lineinfile:
+    dest: /etc/sudoers
+    regexp: "^{{ username }}\\s+ALL=\\(ALL\\)\\s+NOPASSWD:"
+    state: absent
+    validate: "visudo -cf %s"
+  become: yes
+  when: not (enable_passwordless_sudo | default(false))

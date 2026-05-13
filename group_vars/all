@@ -10,6 +10,13 @@ enable_dnscrypt_proxy:             false
 username:                          "{{ansible_user|default(lookup('env', 'USER')) }}"
 userhome:                          "{{ lookup('env','HOME') }}"
 
+###############################################################################
+# SECURITY WARNING: Setting these to true reduces system security.            #
+# Only enable in trusted, single-user environments.                            #
+###############################################################################
+enable_passwordless_sudo:          false
+enable_auto_login:                 false
+
 upstream: https://github.com/homeofficehost/neonet
 repo_dir: "{{ userhome }}/.bare-dotfiles/"
 work_dir: "{{ userhome }}/"

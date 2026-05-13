@@ -1,0 +1,27 @@
+---
+- name: system setup | login | enable auto-login for user
+  tags: login
+  command: defaults write /Library/Preferences/com.apple.loginwindow autoLoginUser -string "{{ username }}"
+  become: yes
+  when: enable_auto_login | default(false)
+  changed_when: false
+
+- name: system setup | login | disable auto-login
+  tags: login
+  command: defaults delete /Library/Preferences/com.apple.loginwindow autoLoginUser
+  become: yes
+  when: not (enable_auto_login | default(false))
+  ignore_errors: true
+  changed_when: false
+
+- name: system setup | login | disable screensaver password prompt
+  tags: login
+  command: defaults write com.apple.screensaver askForPassword -int 0
+  when: enable_auto_login | default(false)
+  changed_when: false
+
+- name: system setup | login | enable screensaver password prompt
+  tags: login
+  command: defaults write com.apple.screensaver askForPassword -int 1
+  when: not (enable_auto_login | default(false))
+  changed_when: false

@@ -93,6 +93,7 @@ ansible-pull -i hosts --url https://github.com/homeofficehost/neonet \
 - **Cron**: Automatic daily updates
 - **Applications**: All packages from Brewfile
 - **Push-to-Talk**: Exclusive mic routing for Discord ([docs](docs/push-to-talk.md))
+- **Authentication**: Optional passwordless sudo and auto-login ([docs](docs/security.md))
 
 ### Automatic Features
 
