@@ -6,11 +6,18 @@
 # Gatekeeper — disable authorization prompts for app downloads
 # WARNING: Allows apps from anywhere to run. Re-enable with: spctl --master-enable
 
+- name: privacy | check if spctl exists
+  stat:
+    path: /usr/sbin/spctl
+  register: spctl_stat
+  changed_when: false
+
 - name: privacy | disable Gatekeeper authorization prompts
   command: spctl --master-disable
   become: yes
   changed_when: false
   ignore_errors: true
+  when: spctl_stat.stat.exists | default(false)
 
 # Apple Intelligence (macOS 26+)
 

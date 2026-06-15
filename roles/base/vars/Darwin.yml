@@ -1,0 +1,3 @@
+---
+cron_package: "cron"
+sudo_group: "admin"

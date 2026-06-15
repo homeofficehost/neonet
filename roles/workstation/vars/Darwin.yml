@@ -1,0 +1,4 @@
+---
+# macOS (Darwin) specific variables for workstation
+# Desktop environments (MATE/GNOME) are not applicable on macOS
+# Browser extensions and user configs are applicable

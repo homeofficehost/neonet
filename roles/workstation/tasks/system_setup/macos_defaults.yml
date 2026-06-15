@@ -50,6 +50,13 @@
 
 # Trackpad, mouse, keyboard, Bluetooth accessories, and input
 
+- name: system setup | macos defaults | set mouse tracking speed to high
+  command: defaults write NSGlobalDomain com.apple.mouse.scaling -int 20
+  changed_when: false
+  async: 10
+  poll: 1
+  ignore_errors: true
+
 - name: system setup | macos defaults | set trackpad haptic feedback click threshold to light
   command: defaults write com.apple.AppleMultitouchTrackpad FirstClickThreshold -int 0
   changed_when: false
@@ -233,12 +240,19 @@
   poll: 1
   ignore_errors: true
 
+- name: system setup | macos defaults | check if universalaccess domain is accessible
+  shell: defaults read com.apple.universalaccess > /dev/null 2>&1
+  register: universalaccess_readable
+  changed_when: false
+  ignore_errors: true
+
 - name: system setup | macos defaults | disable transparency in menu bar and elsewhere
   command: defaults write com.apple.universalaccess reduceTransparency -bool true
   changed_when: false
   async: 10
   poll: 1
   ignore_errors: true
+  when: universalaccess_readable.rc | default(1) == 0
 
 - name: system setup | macos defaults | set highlight color to green
   command: defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600"
@@ -311,7 +325,7 @@
   ignore_errors: true
 
 - name: system setup | macos defaults | disable Notification Center
-  command: launchctl disable gui/$(id -u)/com.apple.notificationcenterui
+  shell: launchctl disable gui/$(id -u)/com.apple.notificationcenterui
   changed_when: false
   ignore_errors: true
 
@@ -867,10 +881,17 @@
   poll: 1
   ignore_errors: true
 
+- name: system setup | macos defaults | check if Dock directory exists
+  stat:
+    path: "{{ ansible_env.HOME }}/Library/Application Support/Dock"
+  register: dock_dir_stat
+  changed_when: false
+
 - name: system setup | macos defaults | reset Launchpad but keep wallpaper intact
   command: find "{{ ansible_env.HOME }}/Library/Application Support/Dock" -name "*-*.db" -maxdepth 1 -delete
   changed_when: false
   ignore_errors: true
+  when: dock_dir_stat.stat.exists | default(false) and dock_dir_stat.stat.isdir | default(false)
 
 # Safari & WebKit
 
