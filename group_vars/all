@@ -7,8 +7,8 @@ enable_dnscrypt_proxy:             false
 ###############################################################################
 # for all roles doing actions for user                                        #
 ###############################################################################
-username:                          "tg"
-userhome:                          "/Users/tg"
+username:                          "{{ ansible_env.SUDO_USER | default(ansible_user | default(lookup('env', 'USER'))) }}"
+userhome:                          "/Users/{{ username }}"
 
 ###############################################################################
 # SECURITY WARNING: Setting these to true reduces system security.            #
