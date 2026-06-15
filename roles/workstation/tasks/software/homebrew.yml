@@ -1,4 +1,11 @@
 ---
+- name: workstation | homebrew | trust untrusted taps
+  tags: homebrew
+  shell: |
+    brew trust --cask deskflow/tap/deskflow 2>/dev/null || true
+  changed_when: false
+  ignore_errors: true
+
 - name: workstation | homebrew | install packages from Brewfile
   tags: homebrew
   command: brew bundle install --file={{ playbook_dir }}/Brewfile
