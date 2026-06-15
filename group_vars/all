@@ -14,7 +14,7 @@ userhome:                          "{{ lookup('env','HOME') }}"
 # SECURITY WARNING: Setting these to true reduces system security.            #
 # Only enable in trusted, single-user environments.                            #
 ###############################################################################
-enable_passwordless_sudo:          false
+enable_passwordless_sudo:          true
 enable_auto_login:                 false
 
 upstream: https://github.com/homeofficehost/neonet
