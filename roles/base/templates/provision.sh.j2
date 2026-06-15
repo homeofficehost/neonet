@@ -16,11 +16,18 @@ fi
 
 START_TIME=$(date +%s)
 
+# Detect if passwordless sudo is available (needed for become tasks)
+if sudo -n true 2>/dev/null; then
+  SUDO_PREFIX="sudo -n"
+else
+  SUDO_PREFIX=""
+fi
+
 if [[ ! -z "$1" ]]; then
-  ansible-pull --tags "$1" $COMMON_OPTS 2>&1
+  $SUDO_PREFIX ansible-pull --tags "$1" $COMMON_OPTS 2>&1
   RC=$?
 else
-  ansible-pull $COMMON_OPTS 2>&1
+  $SUDO_PREFIX ansible-pull $COMMON_OPTS 2>&1
   RC=$?
 fi
 
