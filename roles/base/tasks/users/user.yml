@@ -17,11 +17,6 @@
     comment: "user"
     shell: /bin/zsh
 
-- name: users | add sudoers file
-  tags: settings,sudo,system,users
-  become: yes
-  command: "rm -f /etc/sudoers.d/{{ username }}; echo '{{ username }} ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/{{ username }}"
-
 - name: users | create .ssh directory
   tags: dotfiles,ssh,users
   file:
@@ -281,15 +276,6 @@
     group: "{{ username }}"
     mode: '0700'
   tags: shell,users,bitwarden
-
-- name: Shell | Create empty crontab file if missing
-  file:
-    path: "{{ userhome }}/.crontab"
-    state: touch
-    owner: "{{ username }}"
-    group: "{{ username }}"
-    mode: '0644'
-  tags: shell,users,crontab
 
 - name: Dotfiles | Mark provision as changed
   set_fact:
