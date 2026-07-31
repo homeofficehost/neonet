@@ -7,8 +7,8 @@ enable_dnscrypt_proxy:             false
 ###############################################################################
 # for all roles doing actions for user                                        #
 ###############################################################################
-username:                          "{{ ansible_env.SUDO_USER | default(ansible_user | default(lookup('env', 'USER'))) }}"
-userhome:                          "/Users/{{ username }}"
+username:                          "{{ ansible_user_id }}"
+userhome:                          "{{ ansible_user_dir }}"
 
 ###############################################################################
 # SECURITY WARNING: Setting these to true reduces system security.            #
@@ -20,5 +20,3 @@ enable_auto_login:                 false
 upstream: https://github.com/homeofficehost/neonet
 repo_dir: "{{ userhome }}/.bare-dotfiles/"
 work_dir: "{{ userhome }}/"
-ansible_cron_hour: "*"
-ansible_cron_minute: "*/5"
