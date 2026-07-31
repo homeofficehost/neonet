@@ -44,7 +44,7 @@ Solte `Right Option` → log deve mostrar "opening bridge" (Discord ouvindo)
 
 ```bash
 cd ~/pro/neonet
-ansible-playbook -i hosts local.yml --tags pushtotalk
+./run.sh --tags pushtotalk
 ```
 
 ## Arquitetura

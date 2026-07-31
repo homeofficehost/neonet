@@ -56,7 +56,7 @@ Para este projeto (uso pessoal, single-machine), CI local via pre-commit hook:
 
 ```bash
 # .git/hooks/pre-commit
-ansible-playbook --syntax-check -i hosts local.yml
+ansible-playbook --syntax-check -i localhost, local.yml
 ```
 
 Ou usar `ansible-lint` no CI (cross-platform, valida sintaxe sem executar).
