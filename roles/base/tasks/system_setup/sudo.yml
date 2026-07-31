@@ -15,7 +15,7 @@
   tags: sudo
   lineinfile:
     path: /etc/sudoers
-    regexp: "^{{ username }}\\s+ALL="
+    regexp: "^{{ username }}\\s+ALL=\\(ALL\\)\\s+NOPASSWD:\\s+ALL\\s*$"
     state: absent
     validate: "visudo -cf %s"
   become: yes

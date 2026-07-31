@@ -13,7 +13,7 @@ COMMON_OPTS=(--url "$REPO" --checkout "$BRANCH" --clean)
 : >> "$LOGFILE"
 
 # Overlap guard: refuse to run while another ansible-pull is in progress
-if pgrep -f ansible-pull > /dev/null; then
+if pgrep -u "$(id -u)" -f ansible-pull > /dev/null; then
   printf "\n%s A running ansible-pull process was found.\nExiting.\n" "$(date +"%Y-%m-%d %H:%M:%S")" | tee -a "$LOGFILE"
   exit 1
 fi
