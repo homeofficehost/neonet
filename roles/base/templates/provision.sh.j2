@@ -1,34 +1,32 @@
 #!/bin/bash
+set -uo pipefail
 
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
-LOCALUSER="{{ username | default('tg') }}"
 BRANCH="{{ branch | default('master') }}"
 LOGFILE="${HOME}/ansible_provision.log"
 REPO="{{ upstream | default('https://github.com/homeofficehost/neonet') }}"
 
-COMMON_OPTS="--url $REPO --checkout $BRANCH --clean"
+COMMON_OPTS=(--url "$REPO" --checkout "$BRANCH" --clean)
 
+# Ensure the log file exists so we can append to it
+: >> "$LOGFILE"
+
+# Overlap guard: refuse to run while another ansible-pull is in progress
 if pgrep -f ansible-pull > /dev/null; then
-  printf "\n$(date +"%Y-%m-%d %H:%M:%S") A running ansible-pull process was found.\nExiting.\n" | tee -a "$LOGFILE"
+  printf "\n%s A running ansible-pull process was found.\nExiting.\n" "$(date +"%Y-%m-%d %H:%M:%S")" | tee -a "$LOGFILE"
   exit 1
 fi
 
 START_TIME=$(date +%s)
+printf "\n%s provision start\n" "$(date +"%Y-%m-%d %H:%M:%S")" | tee -a "$LOGFILE"
 
-# Detect if passwordless sudo is available (needed for become tasks)
-if sudo -n true 2>/dev/null; then
-  SUDO_PREFIX="sudo -n"
+if [[ -n ${1:-} ]]; then
+  ansible-pull -i localhost, --tags "$1" "${COMMON_OPTS[@]}" 2>&1 | tee -a "$LOGFILE"
+  RC=${PIPESTATUS[0]}
 else
-  SUDO_PREFIX=""
-fi
-
-if [[ ! -z "$1" ]]; then
-  $SUDO_PREFIX ansible-pull --tags "$1" $COMMON_OPTS 2>&1
-  RC=$?
-else
-  $SUDO_PREFIX ansible-pull $COMMON_OPTS 2>&1
-  RC=$?
+  ansible-pull -i localhost, "${COMMON_OPTS[@]}" 2>&1 | tee -a "$LOGFILE"
+  RC=${PIPESTATUS[0]}
 fi
 
 END_TIME=$(date +%s)
@@ -36,10 +34,12 @@ ELAPSED=$(( END_TIME - START_TIME ))
 MINUTES=$(( ELAPSED / 60 ))
 SECONDS=$(( ELAPSED % 60 ))
 
-if [ $RC -eq 0 ]; then
+printf "%s provision finish: %dm %ds, exit code %d\n" "$(date +"%Y-%m-%d %H:%M:%S")" "$MINUTES" "$SECONDS" "$RC" | tee -a "$LOGFILE"
+
+if [ "$RC" -eq 0 ]; then
   osascript -e "display notification \"Completed in ${MINUTES}m ${SECONDS}s — all roles applied\" with title \"🚀 Dotfiles Provisioned!\" sound name \"Glass\"" 2>/dev/null || true
 else
   osascript -e "display notification \"Exit code ${RC} — check ansible_provision.log\" with title \"❌ Provisioning Failed\" sound name \"Basso\"" 2>/dev/null || true
 fi
 
-exit $RC
+exit "$RC"
