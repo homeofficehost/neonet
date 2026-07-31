@@ -1,6 +1,8 @@
 # Authentication & Security Options
 
-This project includes optional configurations to reduce authentication prompts. **These features are disabled by default for security reasons.**
+This project includes optional configurations to reduce authentication prompts.
+Passwordless sudo is enabled by default so the daily cron run can execute
+privileged Ansible tasks without interaction. Auto-login remains disabled.
 
 ## Available Options
 
@@ -8,7 +10,7 @@ Controlled via `group_vars/all`:
 
 ```yaml
 # WARNING: Reduces system security. Only enable in trusted environments.
-enable_passwordless_sudo: false
+enable_passwordless_sudo: true
 enable_auto_login:        false
 ```
 
@@ -18,7 +20,7 @@ When enabled, the user will not be prompted for a password when running `sudo` c
 
 **Security impact**: Any process running as your user can execute commands with root privileges without authentication. This includes compromised applications or malicious scripts.
 
-**Use case**: Development workstations where frequent sudo commands are needed and physical access is controlled.
+**Use case**: Unattended provisioning on a trusted, single-user workstation.
 
 ### Auto-Login (`enable_auto_login`)
 
@@ -34,14 +36,23 @@ When enabled, macOS will boot directly to the desktop without requiring a passwo
 2. Set the desired variable(s) to `true`
 3. Re-run the playbook:
    ```bash
-   ansible-playbook -i hosts local.yml --limit $(hostname -s).local --tags base
+   ansible-playbook -i localhost, local.yml --tags base
+   ```
+
+   Or, from a checkout of the repository, use the wrapper:
+   ```bash
+   ./run.sh --tags base
    ```
 
 Or run only the specific tag:
 ```bash
-ansible-playbook -i hosts local.yml --limit $(hostname -s).local --tags sudo
-ansible-playbook -i hosts local.yml --limit $(hostname -s).local --tags login
+./run.sh --tags sudo
+./run.sh --tags login
 ```
+
+The playbook runs as your user against `localhost`; only the individual tasks that
+require root escalate privileges (via `become`). The provisioning run itself is not
+executed with sudo.
 
 ## Reverting
 

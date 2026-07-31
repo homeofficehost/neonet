@@ -9,7 +9,7 @@ Before running the setup, ensure you have:
 1. **macOS 26** (or later)
 2. **Administrator access** (sudo privileges)
 3. **Internet connection**
-4. **GitHub account** with SSH keys (for automatic SSH key download)
+4. **GitHub account** with access to the configured repositories
 5. **Optional**: `~/.vault_key` file if you have encrypted Ansible vault files
 
 ## Quick Setup
@@ -40,40 +40,57 @@ The bootstrap script will:
 1. **Install Homebrew** (if not present)
 2. **Install Ansible** via Homebrew
 3. **Install Bitwarden CLI** for password management
-4. **Run ansible-pull** to configure the system:
+4. **Run ansible-pull against localhost** to configure the system:
    - Set up user environment
-   - Download SSH keys from GitHub (thomasgroch)
    - Install packages from Brewfile
    - Configure dotfiles bare repository
-   - Set up cron jobs for automatic updates
+   - Install the generated `/usr/local/bin/provision` script
+   - Schedule a cron job that runs it daily at 06:00
 
 ## Manual Usage
 
-### Run ansible-pull manually
+Ansible runs once and exits — it does not stay running in the background. The
+cron job simply re-triggers provisioning daily at 06:00 by running
+`/usr/local/bin/provision`, which re-runs ansible-pull against localhost and
+reapplies any configuration that has drifted.
 
-> **Nota:** O parâmetro `-i hosts` é obrigatório para usar o arquivo de inventário local que define o hostname.
+All entrypoints (bootstrap, `run.sh`, `/usr/local/bin/provision`, cron) append
+their output to `~/ansible_provision.log`.
+
+### Run the playbook manually
+
+Run the local wrapper, which calls `ansible-playbook -i localhost, local.yml`:
 
 ```bash
-# With vault password (if you have encrypted files)
-ansible-pull -i hosts --vault-password-file ~/.vault_key \
-  --url https://github.com/homeofficehost/neonet \
-  --limit $(hostname -s).local
+./run.sh
+```
 
-# Without vault password
-ansible-pull -i hosts --url https://github.com/homeofficehost/neonet \
-  --limit $(hostname -s).local
+With a vault password (if you have encrypted files):
+
+```bash
+./run.sh --vault-password-file ~/.vault_key
+```
+
+Or run the generated provision script — the same one cron triggers:
+
+```bash
+/usr/local/bin/provision
 ```
 
 ### Using tags to run specific parts
 
 ```bash
-# Run only base role (system setup)
-ansible-pull -i hosts --url https://github.com/homeofficehost/neonet \
-  --limit $(hostname -s).local --tags base
+# Run only the base role (system setup)
+./run.sh --tags base
 
-# Run only workstation role (applications)
-ansible-pull -i hosts --url https://github.com/homeofficehost/neonet \
-  --limit $(hostname -s).local --tags workstation
+# Run only the workstation role (applications)
+./run.sh --tags workstation
+```
+
+The provision script also accepts a single tag argument:
+
+```bash
+/usr/local/bin/provision base
 ```
 
 ## Whats Included
@@ -97,9 +114,8 @@ ansible-pull -i hosts --url https://github.com/homeofficehost/neonet \
 
 ### Automatic Features
 
-- **SSH Key Sync**: Downloads public keys from GitHub (thomasgroch)
-- **Daily Updates**: Cron job runs ansible-pull every 30 minutes
-- **Self-healing**: Reapplies configuration if drift detected
+- **Daily Updates**: Cron runs `/usr/local/bin/provision` once a day at 06:00
+- **Self-healing**: Each run reapplies configuration if drift is detected
 
 ## Project Structure
 
@@ -108,7 +124,7 @@ neonet/
 ├── ansible.cfg          # Ansible configuration
 ├── bootstrap.sh         # Initial setup script
 ├── Brewfile             # Homebrew packages (secoes visuais)
-├── hosts                # Ansible inventory
+├── hosts                # Ansible inventory (localhost)
 ├── local.yml            # Main playbook
 ├── README.md            # This file
 ├── roles/
@@ -139,26 +155,17 @@ chmod 600 ~/.vault_key
 
 ### Ansible reports "no hosts to target"
 
-Ensure you are using the local inventory file with `-i hosts`:
+The playbook targets `localhost` directly, so run it through the wrapper:
+
 ```bash
-ansible-pull -i hosts --url https://github.com/homeofficehost/neonet \
-  --limit $(hostname -s).local
+./run.sh
 ```
 
-Also verify your hostname matches the inventory:
+or explicitly against the local inventory:
+
 ```bash
-cat hosts
-hostname -s
+ansible-playbook -i localhost, local.yml
 ```
-
-### SSH keys not downloaded
-
-Check if `github_username` is set correctly in `group_vars/all`:
-```bash
-grep github_username group_vars/all
-```
-
-Should show: `github_username: "thomasgroch"`
 
 ### Homebrew not found after installation
 
@@ -182,10 +189,10 @@ eval "$(/usr/local/bin/brew shellenv)"
 ./docker-test.sh
 
 # Check syntax
-ansible-playbook --syntax-check -i hosts local.yml
+ansible-playbook --syntax-check -i localhost, local.yml
 
 # Dry run
-ansible-playbook --check -i hosts local.yml
+ansible-playbook --check -i localhost, local.yml
 ```
 
 ### CI/CD
@@ -201,7 +208,7 @@ See `.github/workflows/test-macos.yml`
 
 - **SSH Keys**: Downloaded only from trusted GitHub account
 - **Vault**: Sensitive data encrypted with Ansible Vault
-- **Sudo**: Script requests sudo only when needed
+- **Sudo**: Ansible runs as your user; only individual tasks escalate privileges with sudo when needed
 - **Permissions**: Proper file permissions enforced
 
 ## License
