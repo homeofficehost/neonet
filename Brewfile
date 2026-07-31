@@ -116,7 +116,7 @@ brew "yamllint"
 brew "cloc"
 brew "tokei"
 brew "gource"
-brew "ansible"
+# bootstrap.sh owns Ansible so it cannot be upgraded during a playbook run.
 brew "ansible-lint"
 
 # =============================================================================

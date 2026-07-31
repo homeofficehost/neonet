@@ -10,7 +10,10 @@
   tags: homebrew
   command: brew bundle install --file={{ playbook_dir }}/Brewfile
   register: brew_bundle_result
-  changed_when: "'Installing' in brew_bundle_result.stdout"
+  changed_when: >
+    brew_bundle_result.rc | default(1) == 0 and
+    ('Installing' in (brew_bundle_result.stdout | default('')) or
+    'Upgrading' in (brew_bundle_result.stdout | default('')))
 
 - name: workstation | homebrew | set changed flag
   set_fact:
@@ -34,4 +37,3 @@
   set_fact:
     provision_changed: true
   when: blacklist_result is defined and blacklist_result.changed | bool
-
