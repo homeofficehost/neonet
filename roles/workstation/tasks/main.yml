@@ -5,19 +5,18 @@
 
 - name: workstation | macOS | install homebrew packages
   import_tasks: software/homebrew.yml
-  tags: homebrew
+  tags: workstation,homebrew
 
 - name: workstation | macOS | install bun global packages
   import_tasks: software/bunfile.yml
-  tags: bun
+  tags: workstation,bun
 
 - name: workstation | macOS | apply system defaults
   import_tasks: system_setup/macos_defaults.yml
   when: ansible_system == "Darwin"
-  tags: macos,defaults
+  tags: workstation,macos,defaults
 
 - name: workstation | macOS | apply privacy hardening
   import_tasks: system_setup/privacy.yml
   when: ansible_system == "Darwin"
-  tags: privacy
-
+  tags: workstation,privacy
