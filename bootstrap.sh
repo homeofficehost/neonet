@@ -1,73 +1,47 @@
 #!/bin/bash
+set -euo pipefail
 
-LOCAL_USER=${2:-tg}
-LOCAL_GROUP=$(id -gn 2>/dev/null || echo "staff")
-GITHUB_REPO=${1:-https://github.com/homeofficehost/neonet}
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
-# Check if sudo is installed and the user has sudo privileges
-if sudo -v &>/dev/null; then
-    echo "User has sudo privileges"
-else
-    echo "sudo is not installed or user does not have sudo privileges"
+REPO="https://github.com/homeofficehost/neonet"
+LOGFILE="$HOME/ansible_provision.log"
+
+# Ensure ~/.ssh exists with secure permissions
+mkdir -p "$HOME/.ssh"
+chmod 700 "$HOME/.ssh"
+echo "Ensured $HOME/.ssh (mode 700)"
+
+# Validate sudo interactively; provisioning needs an administrator account
+if ! sudo -v; then
+    echo "This user does not have sudo privileges. Provisioning requires an administrator account." >&2
+    exit 1
 fi
+echo "sudo privileges confirmed."
 
-# Ensure .ssh directory exists with correct permissions
-if [ ! -d ~/.ssh ]; then
-    mkdir -p ~/.ssh
-    chown $LOCAL_USER:$LOCAL_GROUP ~/.ssh
-    chmod 700 ~/.ssh
-    echo "Created ~/.ssh directory"
-fi
-
-# Install Homebrew if not installed on macOS
-if [[ $(uname) == "Darwin" ]] && ! command -v brew &> /dev/null; then
+# Install Homebrew if missing
+if ! command -v brew &> /dev/null; then
+    echo "Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# Install Bitwarden CLI
+# Install Bitwarden CLI if missing
 if ! command -v bw &> /dev/null; then
-    if command -v brew &> /dev/null; then
-        brew install bitwarden-cli
-    elif command -v pacman &> /dev/null; then
-        sudo pacman -S --noconfirm bitwarden-cli
-    elif command -v apt &> /dev/null; then
-        sudo apt-get update
-        sudo apt-get install -y bitwarden-cli
-    else
-        echo "Unsupported package manager. Please install 'bitwarden-cli' manually."
-    fi
+    echo "Installing Bitwarden CLI..."
+    brew install bitwarden-cli
 fi
 
-# Install Ansible
+# Install Ansible if missing
 if ! command -v ansible-pull &> /dev/null; then
-    if [[ $(uname) == "Darwin" ]] && command -v brew &> /dev/null; then
-        brew install ansible
-    elif command -v pacman &> /dev/null; then
-        sudo pacman -S --noconfirm ansible
-    elif command -v apt &> /dev/null; then
-        sudo apt-get update
-        sudo apt-get install -y ansible
-    else
-        echo "Unsupported package manager. Please install 'ansible' manually."
-    fi
+    echo "Installing Ansible..."
+    brew install ansible
 fi
 
-# Update system
-if command -v brew &> /dev/null; then
-    echo "Updating Homebrew..."
-    brew update
-    brew upgrade
-    brew cleanup
-elif command -v pacman &> /dev/null; then
-    sudo sed -i "s/#ParallelDownloads = 5/ParallelDownloads = 50/g" /etc/pacman.conf
-    sudo sed -i "s/#Color/Color/g" /etc/pacman.conf
-    sudo pacman -Syyu --noconfirm
-elif command -v apt &> /dev/null; then
-    sudo apt-get update
-    sudo apt-get upgrade -y
-fi
-
-sudo touch /var/log/ansible.log
-sudo chown $USER:$LOCAL_GROUP /var/log/ansible.log
-
-ansible-pull -i hosts --url "$GITHUB_REPO" --limit "$(hostname -s).local" --checkout master
+# Run ansible-pull as the current user against localhost, appending all
+# output to the home log while keeping terminal output for manual runs.
+: >> "$LOGFILE"
+printf "\n%s bootstrap: starting ansible-pull\n" "$(date +"%Y-%m-%d %H:%M:%S")" | tee -a "$LOGFILE"
+RC=0
+ansible-pull -i localhost, --url "$REPO" --checkout master 2>&1 | tee -a "$LOGFILE" || RC=${PIPESTATUS[0]}
+printf "%s bootstrap: ansible-pull finished with exit code %d\n" "$(date +"%Y-%m-%d %H:%M:%S")" "$RC" | tee -a "$LOGFILE"
+exit "$RC"
