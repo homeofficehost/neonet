@@ -1,4 +1,6 @@
 .sisyphus/
+.cortexkit/
+.omo/
 
 # Databases and personal data files
 *.db
