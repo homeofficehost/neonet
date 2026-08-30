@@ -5,6 +5,9 @@
 
 # Gatekeeper — disable authorization prompts for app downloads
 # WARNING: Allows apps from anywhere to run. Re-enable with: spctl --master-enable
+# Since macOS 15 the CLI can only REQUEST the disable; it must then be confirmed
+# once, manually, in System Settings → Privacy & Security → "Allow applications
+# from" → Anywhere. Until confirmed, spctl --status keeps reporting "enabled".
 
 - name: privacy | check if spctl exists
   stat:
@@ -12,12 +15,30 @@
   register: spctl_stat
   changed_when: false
 
-- name: privacy | disable Gatekeeper authorization prompts
+- name: privacy | check Gatekeeper status
+  command: spctl --status
+  register: gatekeeper_status
+  changed_when: false
+  failed_when: false
+  when: spctl_stat.stat.exists | default(false)
+
+- name: privacy | request Gatekeeper disable (unlocks "Anywhere" in System Settings)
   command: spctl --master-disable
   become: yes
   changed_when: false
-  ignore_errors: true
-  when: spctl_stat.stat.exists | default(false)
+  failed_when: false
+  when:
+    - spctl_stat.stat.exists | default(false)
+    - "'assessments enabled' in (gatekeeper_status.stdout | default(''))"
+
+- name: privacy | Gatekeeper still enabled — needs one-time manual confirmation
+  debug:
+    msg: >-
+      Gatekeeper ainda ativo. Confirme uma vez em Ajustes do Sistema →
+      Privacidade e Segurança → "Permitir aplicativos de" → Em qualquer lugar.
+  when:
+    - spctl_stat.stat.exists | default(false)
+    - "'assessments enabled' in (gatekeeper_status.stdout | default(''))"
 
 # Apple Intelligence (macOS 26+)
 
