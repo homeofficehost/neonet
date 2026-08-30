@@ -16,7 +16,3 @@ userhome:                          "{{ ansible_user_dir }}"
 ###############################################################################
 enable_passwordless_sudo:          true
 enable_auto_login:                 false
-
-upstream: https://github.com/homeofficehost/neonet
-repo_dir: "{{ userhome }}/.bare-dotfiles/"
-work_dir: "{{ userhome }}/"
