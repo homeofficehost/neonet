@@ -1,7 +1,9 @@
 ---
 - name: ansible setup | ensure ansible is installed
   tags: ansible,ansible-setup
-  when: ansible_user_id | default('root') != "root"
+  when:
+    - ansible_user_id | default('root') != "root"
+    - ansible_system == "Darwin"
   homebrew:
     name: ansible
     state: present

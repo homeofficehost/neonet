@@ -7,6 +7,6 @@
   roles:
     - base
     - workstation
-    - pushtotalk
-    - docker
-    - zerotier
+    - { role: pushtotalk, when: ansible_system == "Darwin" }
+    - { role: docker, when: ansible_system == "Darwin" }
+    - { role: zerotier, when: ansible_system == "Darwin" }

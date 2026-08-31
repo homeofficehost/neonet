@@ -12,7 +12,7 @@
   user:
     name: "{{ username }}"
     group: "{{ username }}"
-    groups: "{{ username }},staff,{{ sudo_group | default('admin') }}"
+    groups: "{{ username }},{{ extra_user_groups | default(sudo_group | default('admin')) }}"
     state: present
     comment: "user"
     shell: /bin/zsh

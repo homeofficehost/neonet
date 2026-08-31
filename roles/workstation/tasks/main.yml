@@ -5,10 +5,12 @@
 
 - name: workstation | macOS | install homebrew packages
   import_tasks: software/homebrew.yml
+  when: ansible_system == "Darwin"
   tags: workstation,homebrew
 
 - name: workstation | macOS | install bun global packages
   import_tasks: software/bunfile.yml
+  when: ansible_system == "Darwin"
   tags: workstation,bun
 
 - name: workstation | macOS | apply system defaults

@@ -18,24 +18,26 @@ if ! sudo -v; then
 fi
 echo "sudo privileges confirmed."
 
-# Install Homebrew if missing
-if ! command -v brew &> /dev/null; then
-    echo "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
-# Install Bitwarden CLI if missing
-if ! command -v bw &> /dev/null; then
-    echo "Installing Bitwarden CLI..."
-    brew install bitwarden-cli
-fi
-
-# Install Ansible if missing
-if ! command -v ansible-pull &> /dev/null; then
-    echo "Installing Ansible..."
-    brew install ansible
-fi
+# Install package manager deps per OS (macOS → brew, Arch → pacman)
+case "$(uname -s)" in
+    Darwin)
+        if ! command -v brew &> /dev/null; then
+            echo "Installing Homebrew..."
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        fi
+        command -v bw &> /dev/null || brew install bitwarden-cli
+        command -v ansible-pull &> /dev/null || brew install ansible
+        ;;
+    Linux)
+        if command -v pacman &> /dev/null; then
+            sudo pacman -Sy --needed --noconfirm ansible git bitwarden-cli
+        else
+            echo "Unsupported Linux distro (expected Arch/pacman)." >&2
+            exit 1
+        fi
+        ;;
+esac
 
 # Run ansible-pull as the current user against localhost, appending all
 # output to the home log while keeping terminal output for manual runs.

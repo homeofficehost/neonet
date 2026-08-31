@@ -17,6 +17,7 @@
 
 - name: base | macOS | setup login
   import_tasks: system_setup/login.yml
+  when: ansible_system == "Darwin"
   tags: base,login
 
 - name: base | macOS | setup cron

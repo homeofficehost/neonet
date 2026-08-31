@@ -36,10 +36,16 @@ SECONDS=$(( ELAPSED % 60 ))
 
 printf "%s provision finish: %dm %ds, exit code %d\n" "$(date +"%Y-%m-%d %H:%M:%S")" "$MINUTES" "$SECONDS" "$RC" | tee -a "$LOGFILE"
 
+# Desktop notification (osascript no macOS, notify-send no Linux)
 if [ "$RC" -eq 0 ]; then
-  osascript -e "display notification \"Completed in ${MINUTES}m ${SECONDS}s — all roles applied\" with title \"🚀 Dotfiles Provisioned!\" sound name \"Glass\"" 2>/dev/null || true
+  TITLE="🚀 Dotfiles Provisioned!"; MSG="Completed in ${MINUTES}m ${SECONDS}s — all roles applied"
 else
-  osascript -e "display notification \"Exit code ${RC} — check ansible_provision.log\" with title \"❌ Provisioning Failed\" sound name \"Basso\"" 2>/dev/null || true
+  TITLE="❌ Provisioning Failed"; MSG="Exit code ${RC} — check ansible_provision.log"
+fi
+if command -v osascript >/dev/null; then
+  osascript -e "display notification \"$MSG\" with title \"$TITLE\"" 2>/dev/null || true
+elif command -v notify-send >/dev/null; then
+  notify-send "$TITLE" "$MSG" 2>/dev/null || true
 fi
 
 exit "$RC"

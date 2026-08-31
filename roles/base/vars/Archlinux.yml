@@ -1,0 +1,3 @@
+---
+cron_package: "cronie"
+sudo_group: "wheel"
