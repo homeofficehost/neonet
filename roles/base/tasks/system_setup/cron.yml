@@ -1,4 +1,13 @@
 ---
+- name: system setup | cron | ensure cron daemon is enabled (Linux)
+  tags: cron
+  service:
+    name: "{{ cron_package }}"
+    state: started
+    enabled: yes
+  become: yes
+  when: ansible_system == "Linux"
+
 - name: system setup | cron | schedule automatic ansible provisioning
   tags: cron
   cron:
