@@ -1,0 +1,8 @@
+---
+homeassistant_dir: "{{ ansible_env.HOME }}/homelab/homeassistant"
+homeassistant_image: ghcr.io/home-assistant/home-assistant:2026.10.4
+homeassistant_host: ha.home.arpa
+# Integração para controlar aparelhos Tuya só pela LAN (sem nuvem)
+tuya_local_version: "2026.10.0"
+# Stack do Caddy que publica *.home.arpa; o HA entra na rede "caddy" dele
+caddy_dir: "{{ ansible_env.HOME }}/homelab/caddy"

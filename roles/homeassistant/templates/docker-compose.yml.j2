@@ -1,0 +1,19 @@
+# {{ ansible_managed }}
+# Home Assistant em https://{{ homeassistant_host }}
+services:
+  homeassistant:
+    image: {{ homeassistant_image }}
+    restart: unless-stopped
+    environment:
+      TZ: America/Sao_Paulo
+    volumes:
+      - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
+    networks: [caddy]
+    labels:
+      caddy: {{ homeassistant_host }}
+      caddy.reverse_proxy: "{{ '{{' }}upstreams 8123{{ '}}' }}"
+
+networks:
+  caddy:
+    external: true

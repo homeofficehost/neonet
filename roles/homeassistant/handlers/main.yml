@@ -1,0 +1,6 @@
+---
+- name: homeassistant | restart
+  community.docker.docker_compose_v2:
+    project_src: "{{ homeassistant_dir }}"
+    state: restarted
+  become: true

@@ -1,0 +1,101 @@
+---
+- name: homeassistant | docker service enabled and running
+  systemd:
+    name: docker
+    enabled: true
+    state: started
+  become: true
+  tags: homeassistant
+
+- name: homeassistant | caddy stack up (creates the "caddy" network)
+  community.docker.docker_compose_v2:
+    project_src: "{{ caddy_dir }}"
+    state: present
+  become: true
+  tags: homeassistant
+
+- name: homeassistant | config directories
+  file:
+    path: "{{ homeassistant_dir }}/{{ item }}"
+    state: directory
+    mode: "0755"
+  loop: ["", "config", "config/custom_components"]
+  become: true
+  tags: homeassistant
+
+- name: homeassistant | compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ homeassistant_dir }}/docker-compose.yml"
+    mode: "0644"
+  become: true
+  tags: homeassistant
+
+# O HA não reescreve o configuration.yaml; só criamos se faltar e garantimos o bloco http.
+- name: homeassistant | base configuration
+  copy:
+    dest: "{{ homeassistant_dir }}/config/configuration.yaml"
+    content: "default_config:\n"
+    force: false
+    mode: "0644"
+  become: true
+  tags: homeassistant
+
+- name: homeassistant | trust the caddy reverse proxy
+  blockinfile:
+    path: "{{ homeassistant_dir }}/config/configuration.yaml"
+    marker: "# {mark} ANSIBLE MANAGED: http"
+    block: |
+      http:
+        use_x_forwarded_for: true
+        trusted_proxies:
+          - 172.16.0.0/12
+  become: true
+  notify: homeassistant | restart
+  tags: homeassistant
+
+- name: homeassistant | tuya_local installed version
+  stat:
+    path: "{{ homeassistant_dir }}/config/custom_components/tuya_local/.version-{{ tuya_local_version }}"
+  register: tuya_local_marker
+  tags: homeassistant
+
+- name: homeassistant | install tuya_local {{ tuya_local_version }}
+  when: not tuya_local_marker.stat.exists
+  become: true
+  notify: homeassistant | restart
+  tags: homeassistant
+  block:
+    - name: homeassistant | remove old tuya_local
+      file:
+        path: "{{ homeassistant_dir }}/config/custom_components/tuya_local"
+        state: absent
+
+    - name: homeassistant | tuya_local directory
+      file:
+        path: "{{ homeassistant_dir }}/config/custom_components/tuya_local"
+        state: directory
+        mode: "0755"
+
+    - name: homeassistant | unpack tuya_local
+      unarchive:
+        src: "https://github.com/make-all/tuya-local/archive/refs/tags/{{ tuya_local_version }}.tar.gz"
+        dest: "{{ homeassistant_dir }}/config/custom_components/tuya_local"
+        remote_src: true
+        extra_opts:
+          - --strip-components=3
+          - "tuya-local-{{ tuya_local_version }}/custom_components/tuya_local"
+
+    - name: homeassistant | mark tuya_local version
+      file:
+        path: "{{ homeassistant_dir }}/config/custom_components/tuya_local/.version-{{ tuya_local_version }}"
+        state: touch
+        mode: "0644"
+
+- name: homeassistant | container up
+  community.docker.docker_compose_v2:
+    project_src: "{{ homeassistant_dir }}"
+    state: present
+    pull: missing
+  become: true
+  tags: homeassistant
