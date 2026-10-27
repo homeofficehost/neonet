@@ -40,6 +40,24 @@
   become: true
   tags: homeassistant
 
+# Automações criadas pela interface/API ficam em automations.yaml; o conteúdo é do HA, não do Ansible.
+- name: homeassistant | automations file
+  copy:
+    dest: "{{ homeassistant_dir }}/config/automations.yaml"
+    content: "[]\n"
+    force: false
+    mode: "0644"
+  become: true
+  tags: homeassistant
+
+- name: homeassistant | include UI automations
+  lineinfile:
+    path: "{{ homeassistant_dir }}/config/configuration.yaml"
+    line: "automation: !include automations.yaml"
+  become: true
+  notify: homeassistant | restart
+  tags: homeassistant
+
 # Desde o 2026.10 o HA ignora "http:" no YAML; a config fica em .storage/http.
 - name: homeassistant | drop legacy http block from YAML
   blockinfile:
