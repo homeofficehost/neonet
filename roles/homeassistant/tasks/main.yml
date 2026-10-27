@@ -155,6 +155,63 @@
         state: touch
         mode: "0644"
 
+# Sensores de consumo do devworkstation (RAPL da CPU + GPU via nvidia-smi)
+- name: homeassistant | packages and host directories
+  file:
+    path: "{{ homeassistant_dir }}/config/{{ item }}"
+    state: directory
+    mode: "0755"
+  loop: [packages, host]
+  become: true
+  tags: homeassistant
+
+- name: homeassistant | enable packages
+  blockinfile:
+    path: "{{ homeassistant_dir }}/config/configuration.yaml"
+    marker: "# {mark} ANSIBLE MANAGED: packages"
+    block: |
+      homeassistant:
+        packages: !include_dir_named packages
+  become: true
+  notify: homeassistant | restart
+  tags: homeassistant
+
+- name: homeassistant | devworkstation power sensors
+  copy:
+    src: devworkstation_power.yaml
+    dest: "{{ homeassistant_dir }}/config/packages/devworkstation_power.yaml"
+    mode: "0644"
+  become: true
+  notify: homeassistant | restart
+  tags: homeassistant
+
+- name: homeassistant | gpu power export script
+  copy:
+    src: ha-gpu-power
+    dest: /usr/local/bin/ha-gpu-power
+    mode: "0755"
+  become: true
+  notify: homeassistant | restart gpu power export
+  tags: homeassistant
+
+- name: homeassistant | gpu power export service
+  template:
+    src: ha-gpu-power.service.j2
+    dest: /etc/systemd/system/ha-gpu-power.service
+    mode: "0644"
+  become: true
+  notify: homeassistant | restart gpu power export
+  tags: homeassistant
+
+- name: homeassistant | gpu power export running
+  systemd:
+    name: ha-gpu-power
+    enabled: true
+    state: started
+    daemon_reload: true
+  become: true
+  tags: homeassistant
+
 - name: homeassistant | container up
   community.docker.docker_compose_v2:
     project_src: "{{ homeassistant_dir }}"
