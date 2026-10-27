@@ -31,7 +31,6 @@
   become: true
   tags: homeassistant
 
-# O HA não reescreve o configuration.yaml; só criamos se faltar e garantimos o bloco http.
 - name: homeassistant | base configuration
   copy:
     dest: "{{ homeassistant_dir }}/config/configuration.yaml"
@@ -41,18 +40,64 @@
   become: true
   tags: homeassistant
 
-- name: homeassistant | trust the caddy reverse proxy
+# Desde o 2026.10 o HA ignora "http:" no YAML; a config fica em .storage/http.
+- name: homeassistant | drop legacy http block from YAML
   blockinfile:
     path: "{{ homeassistant_dir }}/config/configuration.yaml"
     marker: "# {mark} ANSIBLE MANAGED: http"
-    block: |
-      http:
-        use_x_forwarded_for: true
-        trusted_proxies:
-          - 172.16.0.0/12
+    state: absent
   become: true
-  notify: homeassistant | restart
   tags: homeassistant
+
+- name: homeassistant | stored http config
+  stat:
+    path: "{{ homeassistant_dir }}/config/.storage/http"
+  register: ha_http_store_file
+  become: true
+  tags: homeassistant
+
+- name: homeassistant | read stored http config
+  slurp:
+    src: "{{ homeassistant_dir }}/config/.storage/http"
+  register: ha_http_store_raw
+  when: ha_http_store_file.stat.exists
+  become: true
+  tags: homeassistant
+
+- name: homeassistant | compute http config trusting the caddy proxy
+  vars:
+    current: "{{ (ha_http_store_raw.content | b64decode | from_json) if ha_http_store_file.stat.exists else homeassistant_http_store_default }}"
+  set_fact:
+    ha_http_store_current: "{{ current }}"
+    ha_http_store_desired: >-
+      {{ current | combine({'data': {
+           'stable': current.data.stable | combine(homeassistant_http_proxy),
+           'pending': None,
+           'yaml_migration_done': true}}, recursive=true) }}
+  tags: homeassistant
+
+- name: homeassistant | write http config
+  when: ha_http_store_desired != ha_http_store_current
+  become: true
+  tags: homeassistant
+  block:
+    - name: homeassistant | stop before editing storage
+      community.docker.docker_compose_v2:
+        project_src: "{{ homeassistant_dir }}"
+        state: stopped
+      when: ha_http_store_file.stat.exists
+
+    - name: homeassistant | storage directory
+      file:
+        path: "{{ homeassistant_dir }}/config/.storage"
+        state: directory
+        mode: "0755"
+
+    - name: homeassistant | save http config
+      copy:
+        dest: "{{ homeassistant_dir }}/config/.storage/http"
+        content: "{{ ha_http_store_desired | to_nice_json(indent=2) }}"
+        mode: "0600"
 
 - name: homeassistant | tuya_local installed version
   stat:
