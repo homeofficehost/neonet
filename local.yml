@@ -10,4 +10,3 @@
     - { role: pushtotalk, when: ansible_system == "Darwin" }
     - { role: docker, when: ansible_system == "Darwin" }
     - { role: zerotier, when: ansible_system == "Darwin" }
-    - { role: homeassistant, when: ansible_system == "Linux" }

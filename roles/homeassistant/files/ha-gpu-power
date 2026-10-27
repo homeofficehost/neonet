@@ -1,9 +1,0 @@
-#!/bin/sh
-# Grava a potência da GPU (W) num arquivo para o Home Assistant ler;
-# a imagem do HA (Alpine) não consegue rodar o nvidia-smi.
-out=$1
-while :; do
-  nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits \
-    | awk "{s += \$1} END {print s}" > "$out.tmp" && mv "$out.tmp" "$out"
-  sleep 10
-done
